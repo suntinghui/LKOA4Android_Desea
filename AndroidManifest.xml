@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.desea.lkoa4android_desea"
+    package="com.lkoa"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -8,20 +8,74 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <!-- Push service 运行需要的权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    
+    <!-- 防止手机休眠 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    <!-- 手机访问网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    
+    <!-- 以下是使用wifi访问网络所需要的权限 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    
+    <!-- 允许一个程序安装packages -->
+    <!-- <uses-permission android:name="android.permission.INSTALL_PACKAGES" /> -->
+    <!-- 关闭整个应用程序，对２.１之前的有效 -->
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <!-- 开机自动启动 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+   <supports-screens android:anyDensity="true" android:largeScreens="true"
+       android:normalScreens="true" android:smallScreens="true" >
+   </supports-screens>
+   
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.desea.lkoa4android_desea.LoginActivity"
+        <!-- <activity
+            android:name="com.lkoa.activity.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity> -->
+        
+        <activity
+            android:name=".activity.SplashActivity" android:theme="@android:style/Theme.Translucent" 
+            android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustPan">
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        
+        <activity android:name=".activity.LoginActivity"  android:exported="true" android:launchMode="singleTask"
+          android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustPan">
+       		<intent-filter >
+                <action android:name="com.lkoa.LoginActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+      </activity>
     </application>
 
 </manifest>

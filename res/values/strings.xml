@@ -1,8 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LKOA4Android_Desea</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="app_name">帝海</string>
+    
+    <string name="noNetTips">请您确认已开通手机上网功能，并在手机上设置正确的上网方式</string>
+	<string name="setting">设置</string>
+	<string name="imageviewcontent">contentDescription</string>
+	<string name="versionstr">帝海 Android V2.0.0</string>
+	<string name="mailleft">电子邮箱：</string>
+	<string name="mailright">int@crbcint.com</string>
+	<string name="addressright">北京市东城区东中街9号东环广场A座路桥建设有限公司</string>
+	<string name="faxright">010-64182080</string>
+	<string name="copyright">Copyright © 2010　www.crbcint.com　All Rights Reserved\n帝海建设有限公司 版权所有</string>
+	<string name="username">用户名：</string>
+	<string name="pwd">密码：</string>
+	<string name="usernamehint">请输入用户名</string>
+	<string name="pwdhint">请输入密码</string>
+	<string name="remberpwd">记住密码</string>
+	<string name="autologin">自动登录</string>
+	<string name="login">登	录</string>
+	<string name="serveraddress">服务器地址：</string>
+	<string name="tips">请不要随意更改服务器地址，否则无法登录！</string>
+	<string name="title_alert">提示</string>
+	<string name="title_waitting">请稍候</string>
+	<string name="title_progressbar">正在下载文件</string>
+	<string name="ok">确定</string>
+	<string name="cancel">取消</string>
+	<string name="catalogtitle">帝海</string>
+	<string name="xtsztitle">系统设置</string>
+	<string name="feedbacktitle">意见反馈</string>
+	<string name="back">  返回</string>
+	<string name="accesstitle">访问官网</string>
+	<string name="abouttitle">关于</string>
+	<string name="helptitle">帮助</string>
+	<string name="notice">通知</string>
+	<string name="messagecenter">信息中心</string>
+	<string name="qsbgtitle">请示报告</string>
+	<string name="qhtitle">签 核</string>
+	<string name="filemessage">文件信息</string>
+	<string name="path">办理轨迹</string>
+	<string name="qhlztitle">签核流转</string>
+	<string name="branch">部门</string>
+	<string name="workgroup">工作组</string>
 </resources>
