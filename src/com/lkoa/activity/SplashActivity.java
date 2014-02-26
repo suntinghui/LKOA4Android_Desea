@@ -58,7 +58,7 @@ public class SplashActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(Object result) {
-			if (ApplicationEnvironment.getInstance().checkNetworkAvailable()){
+			/*if (ApplicationEnvironment.getInstance().checkNetworkAvailable()){
 				Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
 				SplashActivity.this.startActivity(intent);
 				SplashActivity.this.finish();
@@ -84,7 +84,11 @@ public class SplashActivity extends BaseActivity {
 				});
 				
 				dialog.create().show();
-			}
+			}*/
+			
+			Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+			SplashActivity.this.startActivity(intent);
+			SplashActivity.this.finish();
 		}
 		
 	}
