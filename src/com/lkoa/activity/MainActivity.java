@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 	
 	private TextView mTvWelcome;
 	private ImageView mIvPhoto;
+	private LinearLayout mLayoutCenterMgr;
 	private ImageView mIvCenterMgr, mIvCenterMsg, mIvProcessWork;
 	private ImageView mIvDocHanding, mIvSchedule, mIvContacts;
 	private ImageView mIvMyEmail, mIvMyMsg, mIvMgrPeople;
@@ -30,7 +32,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		mTvWelcome = (TextView)findViewById(R.id.tv_welcome);
 		mIvPhoto = (ImageView)findViewById(R.id.iv_photo);
 		
-		mIvCenterMgr = (ImageView)findViewById(R.id.iv_center_mgr);
+		mLayoutCenterMgr = (LinearLayout)findViewById(R.id.iv_center_mgr);
 		mIvCenterMsg = (ImageView)findViewById(R.id.iv_center_msg);
 		mIvProcessWork = (ImageView)findViewById(R.id.iv_process_work);
 		
@@ -47,7 +49,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		String welcome = getResources().getString(R.string.hello_user_and_time, "佳佳", "2013-12-12 12:12");
 		mTvWelcome.setText(welcome);
 		
-		mIvCenterMgr.setOnClickListener(this);
+		mLayoutCenterMgr.setOnClickListener(this);
 		mIvCenterMsg.setOnClickListener(this);
 		mIvProcessWork.setOnClickListener(this);
 		

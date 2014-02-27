@@ -1,5 +1,6 @@
 package com.lkoa.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -70,6 +71,9 @@ public class LoginActivity extends BaseActivity {
 		cancelButton = (Button) this.findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(listener);
 
+		Button btn_login = (Button)this.findViewById(R.id.loginbutton);
+		btn_login.setOnClickListener(listener);
+		
 		// 记住密码按钮
 		remeberIV = (ImageView) this.findViewById(R.id.selectIV_left);
 		remeberIV.setOnClickListener(listener);
@@ -181,6 +185,8 @@ private OnClickListener listener = new OnClickListener() {
 	}
 	
 	private void doLogin(){
+		Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+		LoginActivity.this.startActivity(intent);
 		if(this.checkValue()){
 //			Editor editor = ApplicationEnvironment.getInstance().getPreferences().edit();
 //			editor.putString(Constants.kUSERNAME, userNameET.getText().toString());
