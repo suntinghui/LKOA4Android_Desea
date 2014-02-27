@@ -29,10 +29,10 @@ public class CenterMsgHomeActivity extends Activity implements OnClickListener {
 	};
 	
 	private static final int [] mBackgroundResIds = new int [] {
-		R.drawable.center_msg_news_item_bg_n,
-		R.drawable.center_msg_public_item_bg_n,
-		R.drawable.center_msg_notice_item_bg_n,
-		R.drawable.center_msg_window_dep_item_bg_n,
+		R.drawable.center_msg_news_item_bg,
+		R.drawable.center_msg_public_item_bg,
+		R.drawable.center_msg_notice_item_bg,
+		R.drawable.center_msg_window_dep_item_bg,
 	};
 	
 	private View mNews, mPublic, mNotice, mWindowDepartment;
