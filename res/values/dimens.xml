@@ -5,6 +5,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     
     <dimen name="activity_main_center_mgr_margin">10dp</dimen>
-    <dimen name="activity_main_common_margin">12dp</dimen>
+    <dimen name="activity_main_common_margin">8dp</dimen>
 
 </resources>
