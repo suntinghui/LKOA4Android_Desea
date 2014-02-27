@@ -1,15 +1,15 @@
 package com.lkoa.activity;
 
-import com.lkoa.R;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.lkoa.R;
 
 public class MainActivity extends Activity implements OnClickListener {
 	
@@ -71,6 +71,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		case R.id.iv_center_msg:
 			//信息中心
+			startActivity(new Intent(this, CenterMsgHomeActivity.class));
 			break;
 			
 		case R.id.iv_process_work:

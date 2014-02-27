@@ -48,4 +48,10 @@
 	<string name="center_msg">信息中心    （%1$s）</string>
 	<string name="schedule">日程安排    （%1$s）</string>
 	<string name="my_email">我的邮件    （%1$s）</string>
+	
+	<!-- 信息中心 -->
+	<string name="center_msg_news">集团新闻</string>
+	<string name="center_msg_public">集团公告</string>
+	<string name="center_msg_notice">通知信息</string>
+	<string name="center_msg_window_department">部门之窗</string>
 </resources>
