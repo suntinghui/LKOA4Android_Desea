@@ -50,7 +50,7 @@
             <LinearLayout 
                 android:id="@+id/iv_center_mgr"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:paddingTop="58dip"
                 android:orientation="vertical"
@@ -125,14 +125,14 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:layout_marginLeft="10dip"
+                android:layout_marginLeft="@dimen/activity_main_common_margin"
                 android:background="@drawable/ic_schedule_n"
                 />
             <ImageView android:id="@+id/iv_contacts"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:layout_marginLeft="10dip"
+                android:layout_marginLeft="@dimen/activity_main_common_margin"
                 android:background="@drawable/ic_contacts_n"/>
 		</LinearLayout>
 		
