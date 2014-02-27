@@ -55,7 +55,7 @@
                 android:paddingTop="58dip"
                 android:orientation="vertical"
                 android:layout_marginRight="@dimen/activity_main_common_margin"
-                android:background="@drawable/center_mgr_bg_n" >
+                android:background="@drawable/center_mgr_bg" >
                 <!-- 我的待办 -->
 	            <TextView android:id="@+id/tv_my_todo"
 	                android:layout_width="wrap_content"
@@ -99,12 +99,12 @@
                     android:layout_height="0dip"
                     android:layout_marginBottom="@dimen/activity_main_common_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/ic_center_msg_n"/>
+                    android:background="@drawable/ic_center_msg"/>
                 <ImageView android:id="@+id/iv_process_work"
                     android:layout_width="fill_parent"
                     android:layout_height="0dip"
                     android:layout_weight="1"
-                    android:background="@drawable/ic_process_work_n"/>
+                    android:background="@drawable/ic_process_work"/>
             </LinearLayout>
         </LinearLayout>
         
@@ -120,20 +120,20 @@
                     android:layout_width="0dip"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/ic_doc_handing_n"/>
+                    android:background="@drawable/ic_doc_handing"/>
             <ImageView android:id="@+id/iv_schedule"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/activity_main_common_margin"
-                android:background="@drawable/ic_schedule_n"
+                android:background="@drawable/ic_schedule"
                 />
             <ImageView android:id="@+id/iv_contacts"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/activity_main_common_margin"
-                android:background="@drawable/ic_contacts_n"/>
+                android:background="@drawable/ic_contacts"/>
 		</LinearLayout>
 		
 		<!-- 我的邮件、我的短信、人事管理 -->
@@ -149,20 +149,20 @@
                     android:layout_width="0dip"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/ic_my_email_n"/>
+                    android:background="@drawable/ic_my_email"/>
             <ImageView android:id="@+id/iv_my_msg"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/activity_main_common_margin"
-                android:background="@drawable/ic_my_msg_n"
+                android:background="@drawable/ic_my_msg"
                 />
             <ImageView android:id="@+id/iv_mgr_people"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/activity_main_common_margin"
-                android:background="@drawable/ic_mgr_people_n"/>
+                android:background="@drawable/ic_mgr_people"/>
 		</LinearLayout>
         
     </LinearLayout>
