@@ -17,4 +17,16 @@
     <color name="transparent_background">#50000000</color>
     <color name="clear">#00000000</color>
     <color name="instructions">#828282</color>
+    
+    <color name="center_msg_news_tab_bg">#d8e2ee</color>
+    <color name="center_msg_news_tab_selected">#4691f7</color>
+    <color name="center_msg_news_tab_unselected">#2973cc</color>
+    <color name="center_msg_news_tab_text_selected">#2d74c7</color>
+    <color name="center_msg_news_tab_text_unselected">#6f7274</color>
+    
+    <drawable name="list_view_divider">#cbcbcb</drawable>
+    <drawable name="center_msg_news_item_bg_135_n">#f1f1f1</drawable>
+    <drawable name="center_msg_news_item_bg_135_p">#cccccc</drawable>
+    <drawable name="center_msg_news_item_bg_246_n">#b7dcec</drawable>
+    <drawable name="center_msg_news_item_bg_246_p">#9fc8d7</drawable>
 </resources>

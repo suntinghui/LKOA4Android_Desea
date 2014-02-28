@@ -1,6 +1,7 @@
 package com.lkoa.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +13,7 @@ import com.lkoa.R;
 /**
  * 信息中心首页
  */
-public class CenterMsgHomeActivity extends Activity implements OnClickListener {
+public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnClickListener {
 	
 	private static final int [] mTitleResIds = new int[] {
 		R.string.center_msg_news,
@@ -46,14 +47,18 @@ public class CenterMsgHomeActivity extends Activity implements OnClickListener {
 		setupViews();
 	}
 	
-	private void findViews() {
+	@Override
+	protected void findViews() {
+		super.findViews();
 		mNews = findViewById(R.id.center_msg_news);
 		mPublic = findViewById(R.id.center_msg_public);
 		mNotice = findViewById(R.id.center_msg_notice);
 		mWindowDepartment = findViewById(R.id.center_msg_window_department);
 	}
 	
-	private void setupViews() {
+	@Override
+	protected void setupViews() {
+		super.setupViews();
 		setupItem(mNews, 0);
 		setupItem(mPublic, 1);
 		setupItem(mNotice, 2);
@@ -79,6 +84,7 @@ public class CenterMsgHomeActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.center_msg_news:
 			//集团新闻
+			startActivity(new Intent(this, CenterMsgNewsActivity.class));
 			break;
 			
 		case R.id.center_msg_public:

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <!-- 最新消息和更多消息的tab -->
+    <RelativeLayout android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:background="@color/center_msg_news_tab_bg" >
+        
+        <View android:layout_width="fill_parent"
+	        android:layout_height="1dip"
+	        android:background="@color/center_msg_news_tab_unselected"
+	        android:layout_alignBottom="@+id/news_tab_content" />
+        
+	    <LinearLayout 
+	        android:id="@+id/news_tab_content"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="horizontal"
+	        >
+	        <RelativeLayout 
+	            android:id="@+id/vg_latest_news"
+	            android:layout_width="0dip"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1">
+	            <TextView android:id="@+id/tv_latest_news"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerInParent="true"
+	                android:text="@string/latest_news"
+	                style="@style/CenterMsgNewsTabText" />
+	            <View
+			        android:id="@+id/v_latest_news_line_selected"
+			        android:layout_width="fill_parent"
+			        android:layout_height="3dip"
+			        android:layout_alignParentBottom="true"
+			        android:background="@color/center_msg_news_tab_selected"/>
+	        </RelativeLayout>
+	        <RelativeLayout 
+	            android:id="@+id/vg_more_news"
+	            android:layout_width="0dip"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1">
+	            <TextView android:id="@+id/tv_more_news"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerInParent="true"
+	                android:text="@string/more_news"
+	                style="@style/CenterMsgNewsTabUnSelectedText" />
+	            <View
+			        android:id="@+id/v_more_news_line_selected"
+			        android:layout_width="fill_parent"
+			        android:layout_height="3dip"
+			        android:layout_alignParentBottom="true"
+			        android:background="@color/center_msg_news_tab_selected" 
+			        android:visibility="gone" />
+	        </RelativeLayout>
+	    </LinearLayout>
+    </RelativeLayout>
+    
+    <ViewSwitcher android:id="@+id/view_switcher"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+	    <ListView android:id="@+id/lv_latest_news"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:cacheColorHint="#00000000"
+	        android:divider="@drawable/list_view_divider"
+	        android:dividerHeight="1px" />
+	    
+	    <ListView android:id="@+id/lv_more_news"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:cacheColorHint="#00000000"
+	        android:divider="@drawable/list_view_divider"
+	        android:dividerHeight="1px" />
+    </ViewSwitcher>
+</LinearLayout>
