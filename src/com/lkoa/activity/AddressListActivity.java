@@ -4,19 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.lkoa.R;
-import com.lkoa.model.LinkManModel;
-import com.lkoa.util.Pinyin4j;
-import com.lkoa.view.AlphaView;
-import com.lkoa.view.AlphaView.OnAlphaChangedListener;
-
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -25,9 +18,16 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.lkoa.R;
+import com.lkoa.model.LinkManModel;
+import com.lkoa.util.Pinyin4j;
+import com.lkoa.view.AlphaView;
+import com.lkoa.view.AlphaView.OnAlphaChangedListener;
 
 public class AddressListActivity extends Activity implements OnAlphaChangedListener {
 	private ListView listView;
@@ -53,80 +53,20 @@ public class AddressListActivity extends Activity implements OnAlphaChangedListe
 		setContentView(R.layout.activity_adresslist);
 
 		list = new ArrayList<LinkManModel>();
-		LinkManModel model0 = new LinkManModel();
-		model0.setName("佳佳");
-		model0.setPhone("15972009300");
-		model0.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model0.getName()).charAt(0)));
-		LinkManModel model1 = new LinkManModel();
-		model1.setName("王佳");
-		model1.setPhone("15972009300");
-		model1.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model1.getName()).charAt(0)));
-		LinkManModel model2 = new LinkManModel();
-		model2.setName("李佳");
-		model2.setPhone("15972009300");
-		model2.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model2.getName()).charAt(0)));
-		LinkManModel model3 = new LinkManModel();
-		model3.setName("张佳");
-		model3.setPhone("15972009300");
-		model3.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model3.getName()).charAt(0)));
-		LinkManModel model4 = new LinkManModel();
-		model4.setName("成佳");
-		model4.setPhone("15972009300");
-		model4.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model4.getName()).charAt(0)));
-		LinkManModel model5 = new LinkManModel();
-		model5.setName("韦佳");
-		model5.setPhone("15972009300");
-		model5.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model5.getName()).charAt(0)));
-		LinkManModel model6 = new LinkManModel();
-		model6.setName("文佳");
-		model6.setPhone("15972009300");
-		model6.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model6.getName()).charAt(0)));
-		LinkManModel model7 = new LinkManModel();
-		model7.setName("刘佳");
-		model7.setPhone("15972009300");
-		model7.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model7.getName()).charAt(0)));
-		LinkManModel model8 = new LinkManModel();
-		model8.setName("龙佳");
-		model8.setPhone("15972009300");
-		model8.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model8.getName()).charAt(0)));
-		LinkManModel model9 = new LinkManModel();
-		model9.setName("彬佳");
-		model9.setPhone("15972009300");
-		model9.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model9.getName()).charAt(0)));
-		LinkManModel model10 = new LinkManModel();
-		model10.setName("大佳");
-		model10.setPhone("15972009300");
-		model10.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model10.getName()).charAt(0)));
 		
-		LinkManModel model11 = new LinkManModel();
-		model11.setName("a佳");
-		model11.setPhone("15972009300");
-		model11.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model11.getName()).charAt(0)));
-		list.add(model0);
-		list.add(model1);
-		list.add(model2);
-		list.add(model3);
-		list.add(model4);
-		list.add(model5);
-		list.add(model6);
-		list.add(model7);
-		list.add(model8);
-		list.add(model9);
-		list.add(model10);
-		list.add(model11);
 		
 		alphaIndexer = new HashMap<String, Integer>();
 		overlayThread = new OverlayThread();
 		intitWidget();
 		initOverlay();
-		setAdapter();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		startQuery();
-	}
+		new GetBankTask().execute();
+		
+		}
 
 	@Override
 	protected void onStop() {
@@ -264,6 +204,21 @@ public class AddressListActivity extends Activity implements OnAlphaChangedListe
 
 	}
 
+	class GetBankTask extends AsyncTask<Object, Object, Object>{
+
+		@Override
+		protected void onPostExecute(Object result) {
+
+			setAdapter();
+		}
+
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			initData();
+			return null;
+		}
+		
+	}
 	private final class ViewHolder {
 		TextView alpha;
 		TextView name;
@@ -295,11 +250,77 @@ public class AddressListActivity extends Activity implements OnAlphaChangedListe
 			overlay.setVisibility(View.VISIBLE);
 			handler.removeCallbacks(overlayThread);
 			handler.postDelayed(overlayThread, 700);
-			if (alphaIndexer.get(s) != null) {
-				int position = alphaIndexer.get(s);
+			if (alphaIndexer.get(s.toLowerCase()) != null) {
+				int position = alphaIndexer.get(s.toLowerCase());
 				listView.setSelection(position);
 			}
 		}
 	}
 
+	private void initData(){
+		LinkManModel model0 = new LinkManModel();
+		model0.setName("啊佳");
+		model0.setPhone("15972009300");
+		model0.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model0.getName()).charAt(0)));
+		LinkManModel model1 = new LinkManModel();
+		model1.setName("彬佳");
+		model1.setPhone("15972009300");
+		model1.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model1.getName()).charAt(0)));
+		LinkManModel model2 = new LinkManModel();
+		model2.setName("才佳");
+		model2.setPhone("15972009300");
+		model2.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model2.getName()).charAt(0)));
+		LinkManModel model3 = new LinkManModel();
+		model3.setName("大佳");
+		model3.setPhone("15972009300");
+		model3.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model3.getName()).charAt(0)));
+		LinkManModel model4 = new LinkManModel();
+		model4.setName("方佳");
+		model4.setPhone("15972009300");
+		model4.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model4.getName()).charAt(0)));
+		LinkManModel model5 = new LinkManModel();
+		model5.setName("房佳");
+		model5.setPhone("15972009300");
+		model5.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model5.getName()).charAt(0)));
+		LinkManModel model6 = new LinkManModel();
+		model6.setName("官佳");
+		model6.setPhone("15972009300");
+		model6.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model6.getName()).charAt(0)));
+		LinkManModel model7 = new LinkManModel();
+		model7.setName("猛佳");
+		model7.setPhone("15972009300");
+		model7.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model7.getName()).charAt(0)));
+		LinkManModel model8 = new LinkManModel();
+		model8.setName("牛佳");
+		model8.setPhone("15972009300");
+		model8.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model8.getName()).charAt(0)));
+		LinkManModel model9 = new LinkManModel();
+		model9.setName("欧佳");
+		model9.setPhone("15972009300");
+		model9.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model9.getName()).charAt(0)));
+		LinkManModel model10 = new LinkManModel();
+		model10.setName("皮");
+		model10.setPhone("15972009300");
+		model10.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model10.getName()).charAt(0)));
+		
+		LinkManModel model11 = new LinkManModel();
+		model11.setName("齐佳");
+		model11.setPhone("15972009300");
+		model11.setAlpha(String.valueOf(Pinyin4j.getHanyuPinyin(model11.getName()).charAt(0)));
+		
+		
+		list.add(model0);
+		list.add(model1);
+		list.add(model2);
+		list.add(model3);
+		list.add(model4);
+		list.add(model5);
+		list.add(model6);
+		list.add(model7);
+		list.add(model8);
+		list.add(model9);
+		list.add(model10);
+		list.add(model11);
+		
+	}
 }
