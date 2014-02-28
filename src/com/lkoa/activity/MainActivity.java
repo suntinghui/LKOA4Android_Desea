@@ -88,6 +88,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		case R.id.iv_contacts:
 			//通讯录
+			Intent intent5 = new Intent(MainActivity.this, AddressListActivity.class);
+			MainActivity.this.startActivity(intent5);
 			break;
 			
 		case R.id.iv_my_email:
