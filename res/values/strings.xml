@@ -56,4 +56,13 @@
 	<string name="center_msg_window_department">部门之窗</string>
 	<string name="latest_news">最新消息</string>
 	<string name="more_news">更多消息</string>
+	
+	<!-- 流程办理 -->
+	<string name="process_work_title">流程管理</string>
+	<string name="process_work_handle_title">流程办理</string>
+	<string name="process_work_my_todo">我的待办</string>
+	<string name="process_work_doing">正在办理</string>
+	<string name="process_work_record_history">历史记录</string>
+	<string name="process_work_file_special">特批文件</string>
+	<string name="process_work_revocation_box">撤销箱</string>
 </resources>

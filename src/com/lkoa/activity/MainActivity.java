@@ -76,6 +76,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		case R.id.iv_process_work:
 			//流程办理
+			startActivity(new Intent(this, ProcessWorkHomeActivity.class));
 			break;
 			
 		case R.id.iv_doc_handing:

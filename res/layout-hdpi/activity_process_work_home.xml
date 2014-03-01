@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <!-- 我的待办 -->
+    <include 
+        android:id="@+id/process_work_my_todo"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 正在办理 -->
+    <include 
+        android:id="@+id/process_work_doing"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 历史记录 -->
+    <include 
+        android:id="@+id/process_work_record_history"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 特批文件 -->
+    <include 
+        android:id="@+id/process_work_file_special"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 撤销箱 -->
+    <include 
+        android:id="@+id/process_work_revocation_box"
+        layout="@layout/center_msg_home_item" />
+</LinearLayout>
