@@ -1,15 +1,18 @@
 package com.lkoa.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import com.lkoa.R;
 import com.lkoa.adapter.CenterMsgNewsAdapter;
@@ -20,6 +23,9 @@ import com.lkoa.model.CenterMsgNewsItem;
  * 信息中心-集团新闻
  */
 public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnClickListener {
+	private static final int INDEX_LATEST_NEWS = 0;
+	private static final int INDEX_MORE_NEWS = 1;
+	
 	private View mParentLatestNews, mParentMoreNews;
 	private TextView mTvLatestNews, mTvMoreNews;
 	private View mLineLatestNews, mLineMoreNews;
@@ -27,7 +33,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 	private int mTextColorSelected;
 	private int mTextColorUnselected;
 	
-	private ViewSwitcher mViewSwitcher;
+	private ViewPager mViewPager;
 	private ListView mLatestNewsLv, mMoreNewsLv;
 	private CenterMsgNewsAdapter mLatestNewsAdapter, mMoreNewsAdapter;
 	
@@ -68,9 +74,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		mLineLatestNews = findViewById(R.id.v_latest_news_line_selected);
 		mLineMoreNews = findViewById(R.id.v_more_news_line_selected);
 		
-		mViewSwitcher = (ViewSwitcher)findViewById(R.id.view_switcher);
-		mLatestNewsLv = (ListView)findViewById(R.id.lv_latest_news);
-		mMoreNewsLv = (ListView)findViewById(R.id.lv_more_news);
+		mViewPager = (ViewPager)findViewById(R.id.view_pager);
+		mLatestNewsLv = (ListView)mLayoutInflater.inflate(R.layout.layout_list_view, null);
+		mMoreNewsLv = (ListView)mLayoutInflater.inflate(R.layout.layout_list_view, null);
 	}
 	
 	@Override
@@ -80,6 +86,12 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		mTvTitle.setText(R.string.center_msg_news);
 		mParentLatestNews.setOnClickListener(this);
 		mParentMoreNews.setOnClickListener(this);
+		
+		List<View> list = new ArrayList<View>();
+		list.add(mLatestNewsLv);
+		list.add(mMoreNewsLv);
+		mViewPager.setAdapter(new MyPagerAdapter(list));
+		mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
 	}
 	
 	private void execAsyncTask(TabType type) {
@@ -94,13 +106,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		}
 	}
 	
-	private void switchTo(View active) {
-		if(active != getSelectedParentView()) {
-			mViewSwitcher.showNext();
-		}
-		
+	private void switchTo(int activeIdx) {
 		TabType type = null;
-		if(active == mParentMoreNews) {
+		if(activeIdx == INDEX_MORE_NEWS) {
 			mTvLatestNews.setTextColor(mTextColorUnselected);
 			mTvMoreNews.setTextColor(mTextColorSelected);
 			mLineMoreNews.setVisibility(View.VISIBLE);
@@ -115,15 +123,8 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 			type = TabType.TabLatestNews;
 		}
 		
+		mViewPager.setCurrentItem(activeIdx);
 		execAsyncTask(type);
-	}
-	
-	private View getSelectedParentView() {
-		if(mLineMoreNews.getVisibility() == View.VISIBLE) {
-			return mParentMoreNews;
-		} else {
-			return mParentLatestNews;
-		}
 	}
 	
 	@Override
@@ -131,12 +132,12 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		switch (v.getId()) {
 		case R.id.vg_latest_news:
 			//最新消息
-			switchTo(mParentLatestNews);
+			switchTo(INDEX_LATEST_NEWS);
 			break;
 			
 		case R.id.vg_more_news:
 			//更多消息
-			switchTo(mParentMoreNews);
+			switchTo(INDEX_MORE_NEWS);
 			break;
 
 		default:
@@ -192,6 +193,52 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		public TabType getType() {
 			return this.type;
 		}
+	}
+	
+	private class MyPagerAdapter extends PagerAdapter {
+		List<View> mViews = null;
+
+		public MyPagerAdapter(List<View> views) {
+			mViews = views;
+		}
+		
+		@Override
+		public int getCount() {
+			return mViews.size();
+		}
+		
+		@Override
+		public Object instantiateItem(View arg0, int arg1) {
+			View view = mViews.get(arg1);
+			mViewPager.addView(view, 0);
+			return mViews.get(arg1);
+		}
+		
+		@Override
+		public void destroyItem(View container, int position, Object object) {
+			mViewPager.removeView(mViews.get(position));
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+	}
+	
+	private class MyOnPageChangeListener implements OnPageChangeListener {
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+		}
+
+		@Override
+		public void onPageSelected(int index) {
+			switchTo(index);
+		}
 		
 	}
+	
 }

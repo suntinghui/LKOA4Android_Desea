@@ -97,6 +97,7 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 			
 		case R.id.center_msg_window_department:
 			//部门之窗
+			startActivity(new Intent(this, CenterMsgWindowDepartmentActivity.class));
 			break;
 
 		default:
