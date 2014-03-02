@@ -65,4 +65,8 @@
 	<string name="process_work_record_history">历史记录</string>
 	<string name="process_work_file_special">特批文件</string>
 	<string name="process_work_revocation_box">撤销箱</string>
+	<string name="process_work_handle_forms">表单</string>
+	<string name="process_work_handle_text">正文</string>
+	<string name="process_work_handle_attachment">附件</string>
+	<string name="process_work_handle_attachment_added">已添加%1$s个附件</string>
 </resources>

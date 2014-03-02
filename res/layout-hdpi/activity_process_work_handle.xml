@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include android:id="@+id/navigation" layout="@layout/navigation" />
+    
+    <!-- 表单、正文、附件tab -->
+    <RelativeLayout 
+        android:id="@+id/tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_below="@id/navigation"
+        android:background="@color/center_msg_news_tab_bg" >
+        
+        <View android:layout_width="fill_parent"
+	        android:layout_height="1dip"
+	        android:background="@color/center_msg_news_tab_unselected"
+	        android:layout_alignBottom="@+id/news_tab_content" />
+        
+	    <LinearLayout
+	        android:id="@+id/news_tab_content"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="horizontal" >
+	        
+	        <include android:id="@+id/process_work_handle_forms" 
+	            layout="@layout/process_work_tab_item"/>
+	        
+	        <include android:id="@+id/process_work_handle_text" 
+	            layout="@layout/process_work_tab_item"/>
+	        
+	        <include android:id="@+id/process_work_handle_attachment" 
+	            layout="@layout/process_work_tab_item"/>
+	        
+	    </LinearLayout>
+    </RelativeLayout>
+    
+    <!-- 表单、正文、附件content -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/process_work_handle_content"
+        android:layout_below="@id/tabs"
+        android:layout_width="fill_parent"
+        android:persistentDrawingCache="animation"
+        android:layout_height="fill_parent" />
+</RelativeLayout>

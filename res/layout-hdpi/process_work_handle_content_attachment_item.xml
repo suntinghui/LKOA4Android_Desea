@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="31dip"
+    android:layout_marginBottom="14dip"
+    android:background="@color/white" >
+
+    <ImageView
+        android:id="@+id/iv_attachment_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_attachment_60x60" />
+
+    <TextView
+        android:id="@+id/tv_attachment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_12"
+        android:layout_toRightOf="@id/iv_attachment_icon"
+        android:text="帝海集团OA验收系统.doc"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_14"
+        android:src="@drawable/ic_to_right_arrow" />
+
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/process_work_handle_forms_item_left_margin"
+    android:paddingRight="@dimen/process_work_handle_forms_item_left_margin"
+    android:background="@drawable/process_work_handle_forms_item_bg" >
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="35dip"
+        android:layout_marginBottom="@dimen/process_work_handle_forms_item_left_margin" >
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="附件列表"
+            android:layout_centerVertical="true"
+            style="@style/ProcessWorkFormsTag" />
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已添加4个附件"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="3dip"
+            android:textColor="#6d6d6d"
+            android:textSize="10sp" />
+        
+    </RelativeLayout>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+        
+        <include layout="@layout/process_work_handle_content_attachment_item"/>
+        <include layout="@layout/process_work_handle_content_attachment_item"/>
+        <include layout="@layout/process_work_handle_content_attachment_item"/>
+        <include layout="@layout/process_work_handle_content_attachment_item"/>
+        
+    </LinearLayout>
+
+
+</LinearLayout>

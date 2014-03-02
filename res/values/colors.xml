@@ -29,4 +29,7 @@
     <drawable name="center_msg_news_item_bg_135_p">#cccccc</drawable>
     <drawable name="center_msg_news_item_bg_246_n">#b7dcec</drawable>
     <drawable name="center_msg_news_item_bg_246_p">#9fc8d7</drawable>
+    
+    <drawable name="process_work_handle_forms_item_bg">#f1f1f1</drawable>
+    <drawable name="ic_cursor">#4691f7</drawable>
 </resources>
