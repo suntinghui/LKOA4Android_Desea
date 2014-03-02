@@ -2,7 +2,10 @@ package com.lkoa.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -10,8 +13,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
+import com.lkoa.business.MainManager;
+import com.lkoa.client.LKAsyncHttpResponseHandler;
 
 public class MainActivity extends Activity implements OnClickListener {
+	private static final String TAG = "MainActivity";
+	
+	private static int [] mCenterMgrResIds = new int [] {
+		R.string.my_todo,
+		R.string.received_today,
+		R.string.center_msg,
+		R.string.schedule,
+		R.string.my_email
+	};
 	
 	private TextView mTvWelcome;
 	private ImageView mIvPhoto;
@@ -19,11 +33,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	private ImageView mIvCenterMgr, mIvCenterMsg, mIvProcessWork;
 	private ImageView mIvDocHanding, mIvSchedule, mIvContacts;
 	private ImageView mIvMyEmail, mIvMyMsg, mIvMgrPeople;
+	
+	private TextView [] mCenterMgrTextViews;
+	
+	private MainManager mMainMgr;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		mMainMgr = new MainManager();
+		
 		findViews();
 		setupViews();
 	}
@@ -32,7 +53,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		mTvWelcome = (TextView)findViewById(R.id.tv_welcome);
 		mIvPhoto = (ImageView)findViewById(R.id.iv_photo);
 		
-		mLayoutCenterMgr = (LinearLayout)findViewById(R.id.iv_center_mgr);
+		mLayoutCenterMgr = (LinearLayout)findViewById(R.id.linear_center_mgr);
 		mIvCenterMsg = (ImageView)findViewById(R.id.iv_center_msg);
 		mIvProcessWork = (ImageView)findViewById(R.id.iv_process_work);
 		
@@ -43,6 +64,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		mIvMyEmail = (ImageView)findViewById(R.id.iv_my_email);
 		mIvMyMsg = (ImageView)findViewById(R.id.iv_my_msg);
 		mIvMgrPeople = (ImageView)findViewById(R.id.iv_mgr_people);
+		
+		LinearLayout linear = (LinearLayout)findViewById(R.id.linear_center_mgr);
+		mCenterMgrTextViews = new TextView[linear.getChildCount()];
+		for(int i=0; i<linear.getChildCount(); i++) {
+			mCenterMgrTextViews[i] = (TextView)linear.getChildAt(i);
+		}
 	}
 	
 	private void setupViews() {
@@ -60,12 +87,36 @@ public class MainActivity extends Activity implements OnClickListener {
 		mIvMyEmail.setOnClickListener(this);
 		mIvMyMsg.setOnClickListener(this);
 		mIvMgrPeople.setOnClickListener(this);
-	}
+		
+		final Resources res = getResources();
+		mMainMgr.getGLZXCount("1", new LKAsyncHttpResponseHandler() {
 
+			@Override
+			public void successAction(Object obj) {
+				/*for(int i=0; i<mCenterMgrTextViews.length; i++) {
+					mCenterMgrTextViews[i].setText(res.getString(
+							mCenterMgrResIds[i], counts[i]));
+				}*/
+				Log.i(TAG, obj.toString());
+			}
+			
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				
+				for(int i=0; i<mCenterMgrTextViews.length; i++) {
+				mCenterMgrTextViews[i].setText(res.getString(
+						mCenterMgrResIds[i], 0));
+				}
+			}
+			
+		});
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.iv_center_mgr:
+		case R.id.linear_center_mgr:
 			//管理中心
 			break;
 			
@@ -81,6 +132,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		case R.id.iv_doc_handing:
 			//公文办理
+			startActivity(new Intent(this, DocMgrHomeActivity.class));
 			break;
 			
 		case R.id.iv_schedule:

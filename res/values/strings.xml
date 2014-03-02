@@ -43,11 +43,11 @@
 	<string name="workgroup">工作组</string>
 	
 	<string name="hello_user_and_time">%1$s，您好。上次登录时间%2$s</string>
-	<string name="my_todo">我的待办    （%1$s）</string>
-	<string name="received_today">今日收文    （%1$s）</string>
-	<string name="center_msg">信息中心    （%1$s）</string>
-	<string name="schedule">日程安排    （%1$s）</string>
-	<string name="my_email">我的邮件    （%1$s）</string>
+	<string name="my_todo">我的待办&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
+	<string name="received_today">今日收文&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
+	<string name="center_msg">信息中心&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
+	<string name="schedule">日程安排&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
+	<string name="my_email">我的邮件&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
 	
 	<!-- 信息中心 -->
 	<string name="center_msg_news">集团新闻</string>
@@ -69,4 +69,10 @@
 	<string name="process_work_handle_text">正文</string>
 	<string name="process_work_handle_attachment">附件</string>
 	<string name="process_work_handle_attachment_added">已添加%1$s个附件</string>
+	
+	<!-- 公文办理 -->
+	<string name="doc_mgr_title">公文管理</string>
+	<string name="doc_mgr_received_today">今日收文</string>
+	<string name="doc_mgr_received_management">收文管理</string>
+	<string name="doc_mgr_sent_management">发文管理</string>
 </resources>

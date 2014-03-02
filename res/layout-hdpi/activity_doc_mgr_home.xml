@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <!-- 今日收文 -->
+    <include 
+        android:id="@+id/doc_mgr_received_today"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 收文管理-->
+    <include 
+        android:id="@+id/doc_mgr_received_management"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 发文管理 -->
+    <include 
+        android:id="@+id/doc_mgr_sent_management"
+        layout="@layout/center_msg_home_item" />
+</LinearLayout>
