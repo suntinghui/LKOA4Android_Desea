@@ -2,7 +2,7 @@ package com.lkoa.business;
 
 import java.util.HashMap;
 
-import com.lkoa.client.Constants;
+import com.lkoa.client.Constant;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.client.LKHttpRequest;
 import com.lkoa.client.LKHttpRequestQueue;
@@ -17,12 +17,12 @@ public class MainManager {
 	 */
 	public void getGLZXCount(String sUserId, LKAsyncHttpResponseHandler handler) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put(Constants.kWEBSERVICENAME, "WebService.asmx");
-		map.put(Constants.kMETHODNAME, "GetGLZXCount");
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, "GetGLZXCount");
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("sUserId", sUserId);
-		map.put(Constants.kPARAMNAME, paramMap);
+		map.put(Constant.kPARAMNAME, paramMap);
 		
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)

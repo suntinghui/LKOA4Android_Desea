@@ -33,7 +33,7 @@ public class ParseResponseXML {
 		
 		try{
 			switch(reqType){
-			case TransferRequestTag.GETLOGININFOSERVICE:
+			case TransferRequestTag.LOGIN:
 				return login();
 				
 				
@@ -64,6 +64,7 @@ public class ParseResponseXML {
 		// 如果程序存在Qry标签，则说明登录成功，返回HASHMAP；如果没有Qry标签，则说明登录失败，则返回String，代表错误码。
 		HashMap<String, String> respMap = null;
 		String errorCode = null;
+		String returnObject = null;
 		boolean isLoginSuccess = false;
 		
 		XmlPullParser parser = Xml.newPullParser();
@@ -72,63 +73,15 @@ public class ParseResponseXML {
         while(eventType!=XmlPullParser.END_DOCUMENT){  
             switch(eventType){
             case XmlPullParser.START_TAG:
-            	if ("Qry".equalsIgnoreCase(parser.getName())){
-            		isLoginSuccess = true;
-            		respMap = new HashMap<String, String>();
-            	} else if ("UserID_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("UserID_LK", parser.nextText());
-            	} else if ("UserName_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("UserName_LK", parser.nextText());
-            	} else if ("DeptID_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("DeptID_LK", parser.nextText());
-            	} else if ("DeptName_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("DeptName_LK", parser.nextText());
-            	} else if ("PosID_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("PosID_LK", parser.nextText());
-            	} else if ("ClassID_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("ClassID_LK", parser.nextText());
-            	} else if ("LoginName".equalsIgnoreCase(parser.getName())){
-            		respMap.put("LoginName", parser.nextText());
-            	} else if ("UserPassWord_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("UserPassWord_LK", parser.nextText());
-            	} else if ("UserPassWordDecode_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("UserPassWordDecode_LK", parser.nextText());
-            	} else if ("EnableIdentity_LK".equalsIgnoreCase(parser.getName())){
-            		respMap.put("EnableIdentity_LK", parser.nextText());
-            	} else if ("WebService".equalsIgnoreCase(parser.getName())){
-            		respMap.put("WebService", parser.nextText());
-            	}
-            	
-            	break;
-            	
-            case XmlPullParser.TEXT:
-            	// 不止一个，但是最后一个最我想要的。
-            	errorCode = parser.getText();
-            	break;
-            	
-            case XmlPullParser.END_TAG:
-            	if ("getLoginInfoServiceResult".equalsIgnoreCase(parser.getName())){
-            		if (isLoginSuccess){
-            			Editor editor = ApplicationEnvironment.getInstance().getPreferences().edit();
-            			editor.putString(Constants.kUSERID, respMap.get("UserID_LK"));
-            			editor.putString(Constants.kDEPTID, respMap.get("DeptID_LK"));
-            			editor.putString(Constants.kPASSWORD_MD5, respMap.get("UserPassWord_LK"));
-            			editor.putString(Constants.kREALHOST, respMap.get("WebService"));
-            			Log.e("联网地址：", null==respMap.get("WebService")?"":respMap.get("WebService"));
-            			editor.commit();
-            			
-            			return respMap;
-            		} else {
-            			return errorCode;
-            		}
-            	}
-            	break;
-            }
-            
+				if ("LoginResult".equalsIgnoreCase(parser.getName())){
+					returnObject = parser.nextText();
+				} 
+				break;
+			}
             eventType = parser.next();
         }
 		
-		return null;
+		return returnObject;
 	}
 	
 }

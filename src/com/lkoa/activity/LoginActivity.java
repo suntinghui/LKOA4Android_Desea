@@ -1,5 +1,7 @@
 package com.lkoa.activity;
 
+import java.util.HashMap;
+
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -17,7 +19,12 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.client.ApplicationEnvironment;
-import com.lkoa.client.Constants;
+import com.lkoa.client.Constant;
+import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.client.LKHttpRequest;
+import com.lkoa.client.LKHttpRequestQueue;
+import com.lkoa.client.LKHttpRequestQueueDone;
+import com.lkoa.client.TransferRequestTag;
 import com.lkoa.view.TextWithIconView;
 
 public class LoginActivity extends BaseActivity {
@@ -47,13 +54,15 @@ public class LoginActivity extends BaseActivity {
 
 		tv_username = (TextWithIconView)this.findViewById(R.id.tv_username);
 		tv_username.setHintString("用户名");
+		tv_username.setText("test");
 		tv_pwd = (TextWithIconView)this.findViewById(R.id.tv_pwd);
 		tv_pwd.setHintString("密码");
+		tv_pwd.setText("68528888qg");
 		tv_pwd.setIcon(R.drawable.icon_pwd);
 		
 		ipET = (EditText) this.findViewById(R.id.ipET);
 		ipET.setText(ApplicationEnvironment.getInstance().getPreferences()
-				.getString(Constants.kHOSTNAME, Constants.DEFAULTHOST));
+				.getString(Constant.kHOSTNAME, Constant.DEFAULTHOST));
 
 		ipLayout = (LinearLayout) this.findViewById(R.id.toplayout);
 
@@ -78,7 +87,7 @@ public class LoginActivity extends BaseActivity {
 		remeberIV = (ImageView) this.findViewById(R.id.selectIV_left);
 		remeberIV.setOnClickListener(listener);
 		isRemeberPwd = ApplicationEnvironment.getInstance().getPreferences()
-				.getBoolean(Constants.kREMEBERPWD, false);
+				.getBoolean(Constant.kREMEBERPWD, false);
 		if (isRemeberPwd) {
 			remeberIV.setBackgroundResource(R.drawable.select_button_s);
 		} else {
@@ -92,7 +101,7 @@ public class LoginActivity extends BaseActivity {
 		autoLoginIV = (ImageView) this.findViewById(R.id.selectIV_right);
 		autoLoginIV.setOnClickListener(listener);
 		isAutoLogin = ApplicationEnvironment.getInstance().getPreferences()
-				.getBoolean(Constants.kAUTOLOGIN, false);
+				.getBoolean(Constant.kAUTOLOGIN, false);
 		if (isAutoLogin) {
 			autoLoginIV.setBackgroundResource(R.drawable.select_button_s);
 			this.disableRemberPwdButton();
@@ -127,7 +136,7 @@ private OnClickListener listener = new OnClickListener() {
 //					LoginActivity.this.showToast("服务器地址不能为空！");
 				}else{
 					Editor editor = ApplicationEnvironment.getInstance().getPreferences().edit();
-					editor.putString(Constants.kHOSTNAME, ipET.getText().toString());
+					editor.putString(Constant.kHOSTNAME, ipET.getText().toString());
 					editor.commit();
 					
 //					LoginActivity.this.showToast("服务器地址已更改并生效!");
@@ -185,53 +194,55 @@ private OnClickListener listener = new OnClickListener() {
 	}
 	
 	private void doLogin(){
-		Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-		LoginActivity.this.startActivity(intent);
+
 		if(this.checkValue()){
-//			Editor editor = ApplicationEnvironment.getInstance().getPreferences().edit();
-//			editor.putString(Constants.kUSERNAME, userNameET.getText().toString());
-//			editor.putBoolean(Constants.kAUTOLOGIN, isAutoLogin);
-//			editor.putBoolean(Constants.kREMEBERPWD, isRemeberPwd);
-//			if(isRemeberPwd){
-//				editor.putString(Constants.kPASSWORD, pwdET.getText().toString());
-//			}else{
-//				editor.putString(Constants.kPASSWORD, "");
-//			}
-//			editor.commit();
-//			
-//			HashMap<String, Object> map = new HashMap<String, Object>();
-//			map.put(Constants.kWEBSERVICENAME, "LoginService.asmx");
-//			map.put(Constants.kMETHODNAME, TransferRequestTag.GETLOGININFOSERVICE);
-//			
-//			HashMap<String, Object> tempMap = new HashMap<String, Object>();
-//			tempMap.put("Function", "LogIn");
-//			tempMap.put("UserName", userNameET.getText().toString());
-//			tempMap.put("PassWord", pwdET.getText().toString());
-//			tempMap.put("LoginType", "WAP");
-//			tempMap.put("Function", "LogIn");
-//			
-//			HashMap<String, Object> qryMap = new HashMap<String, Object>();
-//			qryMap.put("Qry", tempMap);
-//			
-//			HashMap<String, Object> paramMap = new HashMap<String, Object>();
-//			paramMap.put("sLoginXML", qryMap);
-//			paramMap.put("keyid", PhoneUtil.getIMEI());
-//			map.put(Constants.kPARAMNAME, paramMap);
-//			
-//			LKHttpRequest req1 = new LKHttpRequest(map, getLoginHandler());
-//			
-//			new LKHttpRequestQueue().addHttpRequest(req1)
-//			.executeQueue("正在登录请稍候...", new LKHttpRequestQueueDone(){
-//
-//				@Override
-//				public void onComplete() {
-//					super.onComplete();
-//					
-//				}
-//				
-//			});	
+			
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+			map.put(Constant.kMETHODNAME, TransferRequestTag.LOGIN);
+			
+			HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		    paramMap.put("LoginName", tv_username.getText().toString());
+			paramMap.put("Pwd", tv_pwd.getText().toString()); 
+			map.put(Constant.kPARAMNAME, paramMap);
+			
+			LKHttpRequest req1 = new LKHttpRequest(map, loginHandler());
+			
+			new LKHttpRequestQueue().addHttpRequest(req1)
+			.executeQueue("正在登录...", new LKHttpRequestQueueDone(){
+
+				@Override
+				public void onComplete() {
+					super.onComplete();
+					
+				}
+				
+			});
 		}
 		
+	}
+	
+	private LKAsyncHttpResponseHandler loginHandler(){
+		return new LKAsyncHttpResponseHandler(){
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public void successAction(Object obj) {
+				String str = (String) obj;
+				String status = (String) str.subSequence(0, 1);
+				if(status.equals("0")){//登录成功
+					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+					LoginActivity.this.startActivity(intent);
+				}else if(status.equals("1")){//密码错误
+					LoginActivity.this.showToast("密码错误！");
+				}else if(status.equals("2")){//此帐号已删除
+					LoginActivity.this.showToast("此帐号已删除！");
+				}else if(status.equals("3")){//此帐号不存在
+					LoginActivity.this.showToast("此帐号不存在！");
+				}
+				
+			}
+		};
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

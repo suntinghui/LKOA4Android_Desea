@@ -31,12 +31,12 @@ public class LKHttpRequest {
 	
 	public String getRequestURL(){
 		SharedPreferences pre = ApplicationEnvironment.getInstance().getPreferences();
-		String hostStr = pre.getString(Constants.kREALHOST, null);
+		String hostStr = pre.getString(Constant.kREALHOST, null);
 		if (null == hostStr || hostStr.trim().equals("")){
-			hostStr = pre.getString(Constants.kHOSTNAME, Constants.DEFAULTHOST);
+			hostStr = pre.getString(Constant.kHOSTNAME, Constant.DEFAULTHOST);
 		}
 		
-		return hostStr + requestDataMap.get(Constants.kWEBSERVICENAME);
+		return hostStr + requestDataMap.get(Constant.kWEBSERVICENAME);
 	}
 	
 	public int getTag(){
@@ -71,7 +71,7 @@ public class LKHttpRequest {
 	/****************************************/
 	
 	public void post(){
-		this.client.addHeader("SOAPAction", "http://tempuri.org/"+TransferRequestTag.getRequestTagMap().get(this.getRequestDataMap().get(Constants.kMETHODNAME)));
+		this.client.addHeader("SOAPAction", "http://oa.desea.cn/"+TransferRequestTag.getRequestTagMap().get(this.getRequestDataMap().get(Constant.kMETHODNAME)));
 		this.client.post(ApplicationEnvironment.getInstance().getApplication(), this.getRequestURL(), this.getHttpEntity(this), "text/xml; charset=utf-8", this.responseHandler);
 	}
 	
@@ -84,11 +84,11 @@ public class LKHttpRequest {
 				+ "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
 				+ "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" "
 				+ "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><");
-		bodySB.append(TransferRequestTag.getRequestTagMap().get(reqMap.get(Constants.kMETHODNAME)));
-		bodySB.append(" xmlns=\"http://tempuri.org/\">");
-		bodySB.append(this.param2String((HashMap<String, Object>)reqMap.get(Constants.kPARAMNAME)));
+		bodySB.append(TransferRequestTag.getRequestTagMap().get(reqMap.get(Constant.kMETHODNAME)));
+		bodySB.append(" xmlns=\"http://oa.desea.cn/\">");
+		bodySB.append(this.param2String((HashMap<String, Object>)reqMap.get(Constant.kPARAMNAME)));
 		bodySB.append("</");
-		bodySB.append(TransferRequestTag.getRequestTagMap().get(reqMap.get(Constants.kMETHODNAME)));
+		bodySB.append(TransferRequestTag.getRequestTagMap().get(reqMap.get(Constant.kMETHODNAME)));
 		bodySB.append("></soap:Body></soap:Envelope>");
 		
 		request.getClient().addHeader("Content-Length", bodySB.length()+"");

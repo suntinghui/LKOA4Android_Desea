@@ -4,13 +4,15 @@ public class Constant {
 	
 	// 要相应的更新string.xml中的 versionstr 字段
 	// 当前系统的版本号
-	public static final String VERSION			= "4";
+	public static final String VERSION			= "1";
 	
 	// http://124.205.53.178:9596/lkoa5/WapService/
-	public static final String DEFAULTHOST		= "http://mobile.crbcint.com/WapService/";
+	public static final String DEFAULTHOST		= "http://oa.desea.cn:8080/LKOA6/";
 	
 	public static final String kHOSTNAME 		= "hostName";
 	public static final String kWEBSERVICENAME	= "WebServiceName";
+	public static final String kREALHOST		= "RealHost"; // 存储真正的连网地址
+
 	
 	public static final String kUSERID 			= "userId";
 	public static final String KUSERNAM			= "userName";
