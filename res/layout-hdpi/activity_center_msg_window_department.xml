@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <ScrollView android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1">
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+	    <!-- 总裁办公室 -->
+	    <include 
+	        android:id="@+id/window_d_office_president"
+	        layout="@layout/center_msg_home_item" />
+	    
+	    <!-- 法律事务部 -->
+	    <include 
+	        android:id="@+id/window_d_legal_affairs"
+	        layout="@layout/center_msg_home_item" />
+	    
+	    <!-- 人力资源部 -->
+	    <include 
+	        android:id="@+id/window_d_human_resources"
+	        layout="@layout/center_msg_home_item" />
+	    
+	    <!-- 财务管理部 -->
+	    <include 
+	        android:id="@+id/window_d_finance_management"
+	        layout="@layout/center_msg_home_item" />
+	    
+	    <!-- 企业管理部 -->
+	    <include 
+	        android:id="@+id/window_d_business_management"
+	        layout="@layout/center_msg_home_item" />
+	    
+	    <!-- 经营管理部 -->
+	    <include 
+	        android:id="@+id/window_d_run_management"
+	        layout="@layout/center_msg_home_item" />
+	    
+	    <!-- 规划设计部 -->
+	    <include 
+	        android:id="@+id/window_d_planning_design"
+	        layout="@layout/center_msg_home_item" />
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

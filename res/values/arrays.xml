@@ -1,0 +1,12 @@
+<resources>
+	
+    <string-array name="window_d_items">
+        <item >总裁办公室</item>
+        <item >法律事务部</item>
+        <item >人力资源部</item>
+        <item >财务管理部</item>
+        <item >企业管理部</item>
+        <item >经营管理部</item>
+        <item >规划设计部</item>
+    </string-array>
+</resources>
