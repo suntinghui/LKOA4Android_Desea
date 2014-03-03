@@ -1,11 +1,12 @@
 package com.lkoa.activity;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -14,9 +15,15 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.MainManager;
+import com.lkoa.client.Constant;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.client.LKHttpRequest;
+import com.lkoa.client.LKHttpRequestQueue;
+import com.lkoa.client.LKHttpRequestQueueDone;
+import com.lkoa.client.TransferRequestTag;
+import com.lkoa.util.LogUtil;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "MainActivity";
 	
 	private static int [] mCenterMgrResIds = new int [] {
@@ -26,6 +33,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		R.string.schedule,
 		R.string.my_email
 	};
+	
+	public static final String USER_ID = "1";
 	
 	private TextView mTvWelcome;
 	private ImageView mIvPhoto;
@@ -93,11 +102,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void successAction(Object obj) {
-				/*for(int i=0; i<mCenterMgrTextViews.length; i++) {
-					mCenterMgrTextViews[i].setText(res.getString(
-							mCenterMgrResIds[i], counts[i]));
-				}*/
-				Log.i(TAG, obj.toString());
+				LogUtil.i(TAG, "successAction(), " + obj.toString());
+				String str = (String)obj;
+				if(!TextUtils.isEmpty(str)) {
+					String [] subs = str.split("[;]");
+					for(int i=0; i<mCenterMgrTextViews.length; i++) {
+						mCenterMgrTextViews[i].setText(res.getString(
+								mCenterMgrResIds[i], subs[i]));
+						}
+				}
 			}
 			
 			@Override

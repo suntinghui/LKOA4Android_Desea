@@ -1,30 +1,45 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.lkoa.R;
 import com.lkoa.adapter.CenterMsgNewsAdapter;
-import com.lkoa.business.CenterMsgNewsManager;
+import com.lkoa.business.CenterMsgManager;
+import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.CenterMsgNewsItem;
+import com.lkoa.model.IdCountItem;
+import com.lkoa.util.LogUtil;
 
 /**
  * 信息中心-集团新闻
  */
-public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnClickListener {
+public class CenterMsgNewsActivity extends CenterMsgBaseActivity 
+	implements OnClickListener, OnItemClickListener {
+	private static final String TAG = "CenterMsgNewsActivity";
+	
 	private static final int INDEX_LATEST_NEWS = 0;
 	private static final int INDEX_MORE_NEWS = 1;
+	
+	private static final String NEWS_UNREAD = "0";
+	private static final String NEWS_READED = "1";
 	
 	private View mParentLatestNews, mParentMoreNews;
 	private TextView mTvLatestNews, mTvMoreNews;
@@ -37,20 +52,23 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 	private ListView mLatestNewsLv, mMoreNewsLv;
 	private CenterMsgNewsAdapter mLatestNewsAdapter, mMoreNewsAdapter;
 	
-	private CenterMsgNewsManager mNewsMgr;
-	
-	private NewsAsyncTask mNewsTask;
+	private CenterMsgManager mNewsMgr;
+	private boolean mLatestNewsLoaded, mMoreNewsLoaded;
 	
 	enum TabType {
 		TabLatestNews, TabMoreNews
 	}
+	
+	private String mId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_center_msg_news);
 		
-		mNewsMgr = new CenterMsgNewsManager();
+		mId = getIntent().getStringExtra("sId");
+		
+		mNewsMgr = new CenterMsgManager();
 		
 		Resources res = getResources();
 		mTextColorSelected = res.getColor(R.color.center_msg_news_tab_text_selected);
@@ -58,7 +76,6 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		
 		findViews();
 		setupViews();
-		execAsyncTask(TabType.TabLatestNews);
 	}
 	
 	@Override
@@ -77,6 +94,8 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		mViewPager = (ViewPager)findViewById(R.id.view_pager);
 		mLatestNewsLv = (ListView)mLayoutInflater.inflate(R.layout.layout_list_view, null);
 		mMoreNewsLv = (ListView)mLayoutInflater.inflate(R.layout.layout_list_view, null);
+		mLatestNewsLv.setOnItemClickListener(this);
+		mMoreNewsLv.setOnItemClickListener(this);
 	}
 	
 	@Override
@@ -92,39 +111,69 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		list.add(mMoreNewsLv);
 		mViewPager.setAdapter(new MyPagerAdapter(list));
 		mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
-	}
-	
-	private void execAsyncTask(TabType type) {
-		if(mNewsTask == null || mNewsTask.getStatus() == AsyncTask.Status.FINISHED) {
-			mNewsTask = new NewsAsyncTask(type);
-			mNewsTask.execute();
-		} else if(mNewsTask.getStatus() == AsyncTask.Status.RUNNING 
-				&& type != mNewsTask.getType()) {
-			mNewsTask.cancel(true);
-			mNewsTask = new NewsAsyncTask(type);
-			mNewsTask.execute();
-		}
+		
+		//获取数据
+		loadNewsList(NEWS_UNREAD);
 	}
 	
 	private void switchTo(int activeIdx) {
-		TabType type = null;
 		if(activeIdx == INDEX_MORE_NEWS) {
 			mTvLatestNews.setTextColor(mTextColorUnselected);
 			mTvMoreNews.setTextColor(mTextColorSelected);
 			mLineMoreNews.setVisibility(View.VISIBLE);
 			mLineLatestNews.setVisibility(View.GONE);
-			type = TabType.TabMoreNews;
+			if(mMoreNewsLoaded == false) {
+				loadNewsList(NEWS_READED);
+			}
 			
 		} else {
 			mTvLatestNews.setTextColor(mTextColorSelected);
 			mTvMoreNews.setTextColor(mTextColorUnselected);
 			mLineLatestNews.setVisibility(View.VISIBLE);
 			mLineMoreNews.setVisibility(View.GONE);
-			type = TabType.TabLatestNews;
+			if(mLatestNewsLoaded == false) {
+				loadNewsList(NEWS_UNREAD);
+			}
 		}
-		
 		mViewPager.setCurrentItem(activeIdx);
-		execAsyncTask(type);
+	}
+	
+	private void loadNewsList(String state) {
+		final String finalState = state;
+		//获取数据
+		mNewsMgr.getXXList(finalState, mId, "1", new LKAsyncHttpResponseHandler() {
+			
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, "successAction(), " + obj.toString());
+				ArrayList<CenterMsgNewsItem> list = (ArrayList<CenterMsgNewsItem>)obj;
+				
+				if(TextUtils.equals(finalState, "0")) {
+					//最新消息
+					mLatestNewsLoaded = true;
+					if(mLatestNewsAdapter == null) {
+						mLatestNewsAdapter = new CenterMsgNewsAdapter(
+								CenterMsgNewsActivity.this, 0, list);
+						mLatestNewsLv.setAdapter(mLatestNewsAdapter);
+					} else {
+						mLatestNewsAdapter.setData(list);
+					}
+					mLatestNewsAdapter.notifyDataSetChanged();
+					
+				} else {
+					//更多消息
+					mMoreNewsLoaded = true;
+					if(mMoreNewsAdapter == null) {
+						mMoreNewsAdapter = new CenterMsgNewsAdapter(
+								CenterMsgNewsActivity.this, 0, list);
+						mMoreNewsLv.setAdapter(mMoreNewsAdapter);
+					} else {
+						mMoreNewsAdapter.setData(list);
+					}
+					mMoreNewsAdapter.notifyDataSetChanged();
+				}
+			}
+		});
 	}
 	
 	@Override
@@ -133,65 +182,18 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 		case R.id.vg_latest_news:
 			//最新消息
 			switchTo(INDEX_LATEST_NEWS);
+			loadNewsList(NEWS_UNREAD);
+			
 			break;
 			
 		case R.id.vg_more_news:
 			//更多消息
 			switchTo(INDEX_MORE_NEWS);
+			loadNewsList(NEWS_READED);
 			break;
 
 		default:
 			break;
-		}
-	}
-	
-	private class NewsAsyncTask extends AsyncTask<Void, Void, List<CenterMsgNewsItem>> {
-		private TabType type;
-		
-		NewsAsyncTask(TabType type) {
-			this.type = type;
-		}
-
-		@Override
-		protected List<CenterMsgNewsItem> doInBackground(Void... params) {
-			if(this.type == TabType.TabLatestNews) {
-				//最新消息
-				return mNewsMgr.getLatestNewsData();
-			} else {
-				//更多消息
-				return mNewsMgr.getMoreNewsData();
-			}
-		}
-		
-		@Override
-		protected void onPostExecute(List<CenterMsgNewsItem> result) {
-			super.onPostExecute(result);
-			if(this.type == TabType.TabLatestNews) {
-				//最新消息
-				if(mLatestNewsAdapter == null) {
-					mLatestNewsAdapter = new CenterMsgNewsAdapter(
-							CenterMsgNewsActivity.this, 0, result);
-					mLatestNewsLv.setAdapter(mLatestNewsAdapter);
-				} else {
-					mLatestNewsAdapter.setData(result);
-				}
-				mLatestNewsAdapter.notifyDataSetChanged();
-				
-			} else {
-				//更多消息
-				if(mMoreNewsAdapter == null) {
-					mMoreNewsAdapter = new CenterMsgNewsAdapter(
-							CenterMsgNewsActivity.this, 0, result);
-					mMoreNewsLv.setAdapter(mMoreNewsAdapter);
-				} else {
-					mMoreNewsAdapter.setData(result);
-				}
-				mMoreNewsAdapter.notifyDataSetChanged();
-			}
-		}
-		
-		public TabType getType() {
-			return this.type;
 		}
 	}
 	
@@ -239,6 +241,24 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity implements OnCl
 			switchTo(index);
 		}
 		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+		CenterMsgNewsItem item = null;
+		if(adapterView == mLatestNewsLv) {
+			item = mLatestNewsAdapter.getData().get(position);
+		} else if(adapterView == mMoreNewsLv) {
+			item = mMoreNewsAdapter.getData().get(position);
+		}
+		
+		if(item != null) {
+			String id = item.id;
+			Intent intent = new Intent(this, CenterMsgContentActivity.class);
+			intent.putExtra("sId", id);
+			intent.putExtra("titleResId", R.string.center_msg_news);
+			startActivity(intent);
+		}
 	}
 	
 }

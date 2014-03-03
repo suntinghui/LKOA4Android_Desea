@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 
-public class CenterMsgBaseActivity extends Activity{
+public class CenterMsgBaseActivity extends BaseActivity{
 	protected ImageView mIvBack;
 	protected TextView mTvTitle;
 	

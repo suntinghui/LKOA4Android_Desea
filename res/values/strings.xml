@@ -56,6 +56,7 @@
 	<string name="center_msg_window_department">部门之窗</string>
 	<string name="latest_news">最新消息</string>
 	<string name="more_news">更多消息</string>
+	<string name="center_msg_news_content_date">帝海集团&#160;&#160;&#160;&#160;&#160;%1$s</string>
 	
 	
 	<!-- 流程办理 -->

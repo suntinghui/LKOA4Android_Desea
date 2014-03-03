@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.lkoa.R;
 import com.lkoa.model.CenterMsgNewsItem;
@@ -56,14 +57,18 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 		}
 		
 		CenterMsgNewsItem item = getItem(position);
-		holder.title.setText(item.getTitle());
-		holder.date.setText(item.getDate());
-		holder.details.setText(item.getDetails());
+		holder.title.setText(item.title);
+		holder.date.setText(item.date);
+		holder.details.setText(item.content);
 		return convertView;
 	}
 	
 	public void setData(List<CenterMsgNewsItem> data) {
 		this.mDataList = data;
+	}
+	
+	public List<CenterMsgNewsItem> getData() {
+		return mDataList;
 	}
 	
 	private class ViewHolder {

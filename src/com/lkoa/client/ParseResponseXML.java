@@ -6,13 +6,17 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.util.Xml;
+
+import com.lkoa.model.CenterMsgNewsItem;
+import com.lkoa.model.IdCountItem;
 
 public class ParseResponseXML {
 	
@@ -34,9 +38,24 @@ public class ParseResponseXML {
 		try{
 			switch(reqType){
 			case TransferRequestTag.LOGIN:
+				//登陆
 				return login();
 				
+			case TransferRequestTag.GET_GLZX_COUNT:
+				//获取管理中心条数
+				return getGLZXCount();
 				
+			case TransferRequestTag.GET_XXZX_COUNT:
+				//获取信息中心条数
+				return getXXZXCount();
+				
+			case TransferRequestTag.GET_XX_LIST:
+				//信息中心-集团新闻列表
+				return getXXList();
+				
+			case TransferRequestTag.GET_XX:
+				//信息中心-集团新闻内容
+				return getXX();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -54,7 +73,6 @@ public class ParseResponseXML {
 				e.printStackTrace();
 			}
 		}
-		
 		
 		return null;
 	}
@@ -84,4 +102,162 @@ public class ParseResponseXML {
 		return returnObject;
 	}
 	
+	/**
+	 * 管理中心-条数
+	 */
+	private static Object getGLZXCount() throws XmlPullParserException, IOException{
+		Object retObj = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("GetGLZXCountResult".equalsIgnoreCase(parser.getName())) {
+					retObj = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+
+		return retObj;
+	}
+	
+	/**
+	 * 信息中心-条数
+	 */
+	private static Object getXXZXCount() throws XmlPullParserException, IOException{
+		Map<String, IdCountItem> retMap = new HashMap<String, IdCountItem>();
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		IdCountItem item = null;
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("JDXW".equalsIgnoreCase(parser.getName())) {
+					item = new IdCountItem();
+					retMap.put("JDXW", item);
+				} else if("JDGG".equalsIgnoreCase(parser.getName())) {
+					item = new IdCountItem();
+					retMap.put("JDGG", item);
+				} else if("TZXX".equalsIgnoreCase(parser.getName())) {
+					item = new IdCountItem();
+					retMap.put("TZXX", item);
+				} else if("id".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+				} else if("count".equalsIgnoreCase(parser.getName())) {
+					item.count = Integer.parseInt(parser.nextText());
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if("JDXW".equalsIgnoreCase(parser.getName()) 
+						|| "JDGG".equalsIgnoreCase(parser.getName())
+						|| "TZXX".equalsIgnoreCase(parser.getName())) {
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+
+		return retMap;
+	}
+
+	/**
+	 * 信息中心-集团新闻列表
+	 */
+	private static Object getXXList() throws XmlPullParserException, IOException{
+		List<CenterMsgNewsItem> list = new ArrayList<CenterMsgNewsItem>();
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		CenterMsgNewsItem item = null;
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new CenterMsgNewsItem();
+					
+				} else if("IFC_30_COL_10".equalsIgnoreCase(parser.getName())) {
+					//序号
+					item.id = parser.nextText();
+					
+				} else if("IFC_30_COL_20".equalsIgnoreCase(parser.getName())) {
+					//标题
+					item.title = parser.nextText();
+					
+				} else if("IFC_30_COL_90".equalsIgnoreCase(parser.getName())) {
+					//内容
+					item.content = parser.nextText();
+					
+				} else if("IFC_30_COL_160".equalsIgnoreCase(parser.getName())) {
+					//时间
+					item.date = parser.nextText();
+					
+				} else if("IFC_50_COL_30".equalsIgnoreCase(parser.getName())) {
+					//图片路径
+					item.iconUrl = parser.nextText();
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+
+	/**
+	 * 信息中心-集团新闻内容
+	 */
+	private static Object getXX() throws XmlPullParserException, IOException{
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		CenterMsgNewsItem item = null;
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new CenterMsgNewsItem();
+					
+				} else if("IFC_30_COL_10".equalsIgnoreCase(parser.getName())) {
+					//序号
+					item.id = parser.nextText();
+					
+				} else if("IFC_30_COL_20".equalsIgnoreCase(parser.getName())) {
+					//标题
+					item.title = parser.nextText();
+					
+				} else if("IFC_30_COL_90".equalsIgnoreCase(parser.getName())) {
+					//内容
+					item.content = parser.nextText();
+					
+				} else if("IFC_30_COL_160".equalsIgnoreCase(parser.getName())) {
+					//时间
+					item.date = parser.nextText();
+					
+				} else if("IFC_50_COL_30".equalsIgnoreCase(parser.getName())) {
+					//图片路径
+					item.iconUrl = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return item;
+	}
 }

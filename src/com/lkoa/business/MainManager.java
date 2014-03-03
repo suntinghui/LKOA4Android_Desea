@@ -7,18 +7,19 @@ import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.client.LKHttpRequest;
 import com.lkoa.client.LKHttpRequestQueue;
 import com.lkoa.client.LKHttpRequestQueueDone;
+import com.lkoa.client.TransferRequestTag;
 
 public class MainManager {
-
+	
 	/**
 	 * 获取管理中心条数
 	 * @param sUserId
 	 * @return
 	 */
-	public void getGLZXCount(String sUserId, LKAsyncHttpResponseHandler handler) {
+	public void getGLZXCount(String sUserId, final LKAsyncHttpResponseHandler handler) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
-		map.put(Constant.kMETHODNAME, "GetGLZXCount");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_GLZX_COUNT);
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("sUserId", sUserId);
@@ -26,7 +27,7 @@ public class MainManager {
 		
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)
-		.executeQueue(null, new LKHttpRequestQueueDone(){
+		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
 
 			@Override
 			public void onComplete() {

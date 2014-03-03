@@ -133,6 +133,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@android:style/Theme.NoTitleBar" />
+      <!-- 信息中心-新闻内容 -->
+      <activity
+            android:name=".activity.CenterMsgContentActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@android:style/Theme.NoTitleBar" />
+      
       <!-- 流程办理-首页 -->
       <activity
             android:name=".activity.ProcessWorkHomeActivity"
