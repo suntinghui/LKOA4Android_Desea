@@ -14,6 +14,7 @@ public class TransferRequestTag {
 	public static final int GET_TZ_LIST = 6;	//获取通知信息列表
 	public static final int GET_TZ = 7;	//信息中心-通知信息内容
 	public static final int GET_BMZC = 8;	//信息中心-部门之窗条数
+	public static final int GET_LCGL_COUNT = 9;	//流程管理-条数
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -29,6 +30,7 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_TZ_LIST, "GetTZList");
 			requestTagMap.put(GET_TZ, "GetTZ");
 			requestTagMap.put(GET_BMZC, "GetBMZC");
+			requestTagMap.put(GET_LCGL_COUNT, "GetLCGLCount");
 		}
 		
 		return requestTagMap;

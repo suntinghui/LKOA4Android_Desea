@@ -10,11 +10,15 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.activity.ProcessWorkHandleActivity.ProcessWorkType;
+import com.lkoa.business.ProcessWorkManager;
+import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.util.LogUtil;
 
 /**
  * 流程办理首页
  */
 public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements OnClickListener {
+	private static final String TAG = "ProcessWorkHomeActivity";
 	
 	private static int [] mTitleResIds = new int[] {
 		R.string.process_work_my_todo,
@@ -42,13 +46,34 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 	
 	private View mMyTodo, mDoing, mRecordHistory, mFileSpecial, mRevocationBox;
 	
+	private ProcessWorkManager mProcessWorkMgr;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_process_work_home);
 		
+		mProcessWorkMgr = new ProcessWorkManager();
+		
 		findViews();
 		setupViews();
+		
+		mProcessWorkMgr.getLCGLCount(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, "successAction(), "+(String)obj);
+				
+				String []subs = ((String) obj).split("[;]");
+				setViewsCount(subs);
+			}
+		});
+	}
+	
+	private void setViewsCount(String []subs) {
+		setupItem(mMyTodo, 0, Integer.parseInt(subs[0]));
+		setupItem(mDoing, 1, Integer.parseInt(subs[1]));
+		setupItem(mFileSpecial, 3, Integer.parseInt(subs[2]));
 	}
 	
 	@Override
@@ -68,14 +93,14 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 	protected void setupViews() {
 		super.setupViews();
 		
-		setupItem(mMyTodo, 0);
-		setupItem(mDoing, 1);
-		setupItem(mRecordHistory, 2);
-		setupItem(mFileSpecial, 3);
-		setupItem(mRevocationBox, 4);
+		setupItem(mMyTodo, 0, 0);
+		setupItem(mDoing, 1, 0);
+		setupItem(mRecordHistory, 2, 0);
+		setupItem(mFileSpecial, 3, 0);
+		setupItem(mRevocationBox, 4, 0);
 	}
 	
-	private void setupItem(View view, int index) {
+	private void setupItem(View view, int index, int count) {
 		ImageView icon = (ImageView)view.findViewById(R.id.iv_center_msg_icon);
 		TextView title = (TextView)view.findViewById(R.id.tv_center_msg_title);
 		TextView number = (TextView)view.findViewById(R.id.iv_center_msg_number);
@@ -83,9 +108,13 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		view.setBackgroundResource(mBackgroundResIds[index]);
 		icon.setImageResource(mIconResIds[index]);
 		title.setText(mTitleResIds[index]);
-		number.setText("8");
 		
-		if(index > 1) number.setVisibility(View.GONE);
+		if(count < 1) {
+			number.setVisibility(View.GONE);
+		} else {
+			number.setVisibility(View.VISIBLE);
+			number.setText(String.valueOf(count));
+		}
 		view.setOnClickListener(this);
 	}
 	

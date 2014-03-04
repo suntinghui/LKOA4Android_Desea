@@ -70,6 +70,10 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_BMZC:
 				//信息中心-部门之窗条数
 				return getBMZC();
+				
+			case TransferRequestTag.GET_LCGL_COUNT:
+				//流程管理-条数
+				return getLCGLCount();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -451,5 +455,28 @@ public class ParseResponseXML {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * 流程管理-条数
+	 */
+	private static Object getLCGLCount() throws XmlPullParserException, IOException{
+		Object retObj = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("GetLCGLCountResult".equalsIgnoreCase(parser.getName())) {
+					retObj = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+
+		return retObj;
 	}
 }
