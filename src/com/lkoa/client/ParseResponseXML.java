@@ -15,8 +15,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import com.lkoa.model.Attachment;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.IdCountItem;
+import com.lkoa.model.WindowDepartmentItem;
 
 public class ParseResponseXML {
 	
@@ -46,7 +48,7 @@ public class ParseResponseXML {
 				return getGLZXCount();
 				
 			case TransferRequestTag.GET_XXZX_COUNT:
-				//获取信息中心条数
+				//信息中心-条数
 				return getXXZXCount();
 				
 			case TransferRequestTag.GET_XX_LIST:
@@ -56,6 +58,18 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_XX:
 				//信息中心-集团新闻内容
 				return getXX();
+				
+			case TransferRequestTag.GET_TZ_LIST:
+				//信息中心-通知信息列表
+				return getTZList();
+				
+			case TransferRequestTag.GET_TZ:
+				//信息中心-通知信息内容
+				return getTZ();
+				
+			case TransferRequestTag.GET_BMZC:
+				//信息中心-部门之窗条数
+				return getBMZC();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -259,5 +273,183 @@ public class ParseResponseXML {
 		}
 		
 		return item;
+	}
+	
+	/**
+	 * 信息中心-通知信息列表
+	 */
+	private static Object getTZList() throws XmlPullParserException, IOException{
+		List<CenterMsgNewsItem> list = new ArrayList<CenterMsgNewsItem>();
+		CenterMsgNewsItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new CenterMsgNewsItem();
+					
+				} else if("NTE_30_COL_10".equalsIgnoreCase(parser.getName())) {
+					//序号
+					item.id = parser.nextText();
+					
+				} else if("NTE_30_COL_20".equalsIgnoreCase(parser.getName())) {
+					//标题
+					item.title = parser.nextText();
+					
+				} else if("NTE_30_COL_40".equalsIgnoreCase(parser.getName())) {
+					//内容
+					item.content = parser.nextText();
+					
+				} else if("NTE_30_COL_150".equalsIgnoreCase(parser.getName())) {
+					//时间
+					item.date = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 信息中心-通知信息内容
+	 */
+	private static Object getTZ() throws XmlPullParserException, IOException{
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		CenterMsgNewsItem item = null;
+		Attachment attachment = null;
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new CenterMsgNewsItem();
+					
+				} else if("NTE_30_COL_10".equalsIgnoreCase(parser.getName())) {
+					//序号
+					item.id = parser.nextText();
+					
+				} else if("NTE_30_COL_20".equalsIgnoreCase(parser.getName())) {
+					//标题
+					item.title = parser.nextText();
+					
+				} else if("NTE_30_COL_40".equalsIgnoreCase(parser.getName())) {
+					//内容
+					item.content = parser.nextText();
+					
+				} else if("NTE_30_COL_150".equalsIgnoreCase(parser.getName())) {
+					//时间
+					item.date = parser.nextText();
+					
+				} else if("Fjs".equalsIgnoreCase(parser.getName())) {
+					//附件列表
+					item.attachments = new ArrayList<Attachment>();
+					
+				} else if("Fj".equalsIgnoreCase(parser.getName())) {
+					attachment = new Attachment();
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					attachment.id = parser.nextText();
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					attachment.title = parser.nextText();
+				} else if("Type".equalsIgnoreCase(parser.getName())) {
+					attachment.type = parser.nextText();
+				} else if("Size".equalsIgnoreCase(parser.getName())) {
+					attachment.size = Integer.parseInt(parser.nextText());
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if("Fj".equalsIgnoreCase(parser.getName())) {
+					item.attachments.add(attachment);
+					attachment = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return item;
+	}
+	
+	/**
+	 * 信息中心-部门之窗条数
+	 */
+	private static Object getBMZC() throws XmlPullParserException, IOException{
+		List<WindowDepartmentItem> list = null;
+		WindowDepartmentItem one = null;
+		WindowDepartmentItem two = null;
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list = new ArrayList<WindowDepartmentItem>();
+					
+				} else if("one".equalsIgnoreCase(parser.getName())) {
+					//一级栏目
+					one = new WindowDepartmentItem();
+					
+				} else if("id".equalsIgnoreCase(parser.getName())) {
+					//栏目序号
+					if(two != null) {
+						two.id = parser.nextText();
+					} else {
+						one.id = parser.nextText();
+					}
+					
+				} else if("name".equalsIgnoreCase(parser.getName())) {
+					//栏目名称
+					if(two != null) {
+						two.name = parser.nextText();
+					} else {
+						one.name = parser.nextText();
+					}
+					
+				} else if("count".equalsIgnoreCase(parser.getName())) {
+					//数量
+					if(two != null) {
+						two.count = Integer.parseInt(parser.nextText());
+					} else {
+						one.count = Integer.parseInt(parser.nextText());
+					}
+					
+				} else if("two".equalsIgnoreCase(parser.getName())) {
+					//二级栏目
+					two = new WindowDepartmentItem();
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if("one".equalsIgnoreCase(parser.getName())) {
+					//一级栏目
+					list.add(one);
+					one = null;
+					
+				} else if("two".equalsIgnoreCase(parser.getName())) {
+					//二级栏目
+					one.list.add(two);
+					two = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
 	}
 }

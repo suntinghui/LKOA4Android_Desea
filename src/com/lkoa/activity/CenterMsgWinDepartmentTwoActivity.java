@@ -1,6 +1,7 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -8,20 +9,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.CenterMsgManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.WindowDepartmentItem;
 import com.lkoa.util.LogUtil;
 
 
 /**
- * 信息中心-部门之窗
+ * 信息中心-部门之窗-二级目录
  */
-public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity implements OnClickListener {
-	private static final String TAG = "CenterMsgWindowDepartmentActivity";
+public class CenterMsgWinDepartmentTwoActivity extends CenterMsgBaseActivity implements OnClickListener {
+	private static final String TAG = "CenterMsgWinDepartmentTwoActivity";
 	
 	private static final int [] mIconResIds = new int[] {
 		R.drawable.ic_window_d_office_president,
@@ -43,23 +46,22 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 		R.drawable.center_msg_public_item_bg,
 	};
 	
-	private String [] mItemTitles;
-	private View [] mItemViews;
-	
-	private CenterMsgManager mNewsMgr;
-	
 	private ArrayList<WindowDepartmentItem> mDataList;
+	
+	private LinearLayout mLinearColumns;
+	
+	private WindowDepartmentItem mOneItem;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mNewsMgr = new CenterMsgManager();
+		setContentView(R.layout.activity_center_msg_window_department_two);
 		
-		Resources res = getResources();
-		mItemTitles = res.getStringArray(R.array.window_d_items);
+		Intent intent = getIntent();
+		Bundle bundle = intent.getBundleExtra("bundle");
+		mOneItem = (WindowDepartmentItem)bundle.getSerializable("one");
 		
-		setContentView(R.layout.activity_center_msg_window_department);
 		findViews();
 		setupViews();
 	}
@@ -67,66 +69,50 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 	@Override
 	protected void findViews() {
 		super.findViews();
-		mItemViews = new View[mItemTitles.length];
-		mItemViews[0] = findViewById(R.id.window_d_office_president);
-		mItemViews[1] = findViewById(R.id.window_d_legal_affairs);
-		mItemViews[2] = findViewById(R.id.window_d_human_resources);
-		mItemViews[3] = findViewById(R.id.window_d_finance_management);
-		mItemViews[4] = findViewById(R.id.window_d_business_management);
-		mItemViews[5] = findViewById(R.id.window_d_run_management);
-		mItemViews[6] = findViewById(R.id.window_d_planning_design);
+		mLinearColumns = (LinearLayout)findViewById(R.id.columns);
 	}
 	
 	@Override
 	protected void setupViews() {
 		super.setupViews();
-		mTvTitle.setText(R.string.center_msg_window_department);
+		mTvTitle.setText(mOneItem.name);
 		
-		for(int i=0; i<mItemViews.length; i++) {
-			setupItem(mItemViews[i], i, 0);
+		List<WindowDepartmentItem> list = mOneItem.list;
+		WindowDepartmentItem item = null;
+		for(int i=0; i<list.size(); i++) {
+			item = list.get(i);
+			View view = mLayoutInflater.inflate(R.layout.center_msg_home_item, mLinearColumns, false);
+			setupItem(view, i, item);
+			mLinearColumns.addView(view);
 		}
-		loadData();
 	}
 	
-	private void setupItem(View view, int index, int count) {
+	private void setupItem(View view, int index, WindowDepartmentItem two) {
 		ImageView icon = (ImageView)view.findViewById(R.id.iv_center_msg_icon);
 		TextView title = (TextView)view.findViewById(R.id.tv_center_msg_title);
 		TextView number = (TextView)view.findViewById(R.id.iv_center_msg_number);
 		
 		view.setBackgroundResource(mBackgroundResIds[index]);
 		icon.setImageResource(mIconResIds[index]);
-		title.setText(mItemTitles[index]);
+		title.setText(two.name);
 		
-		if(count < 1) {
+		if(two.count < 1) {
 			number.setVisibility(View.GONE);
 		} else {
 			number.setVisibility(View.VISIBLE);
-			number.setText(String.valueOf(count));
+			number.setText(String.valueOf(two.count));
 		}
 		view.setOnClickListener(this);
-		if(mDataList != null) view.setTag(mDataList.get(index));
-	}
-	
-	private void loadData() {
-		mNewsMgr.getBMZC(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
-			@Override
-			public void successAction(Object obj) {
-				LogUtil.i(TAG, "successAction()");
-				mDataList = (ArrayList<WindowDepartmentItem>)obj;
-				for(int i=0; i<mItemViews.length; i++) {
-					setupItem(mItemViews[i], i, mDataList.get(i).count);
-				}
-			}
-		});
+		view.setTag(two);
 	}
 	
 	@Override
 	public void onClick(View v) {
-		WindowDepartmentItem item = (WindowDepartmentItem)v.getTag();
-		Intent intent = new Intent(this, CenterMsgWinDepartmentTwoActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("one", item);;
-		intent.putExtra("bundle", bundle);
+		WindowDepartmentItem two = (WindowDepartmentItem)v.getTag();
+		Intent intent = new Intent(this, CenterMsgNewsActivity.class);
+		intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_NOTICE);
+		intent.putExtra("sId", two.id);
+		intent.putExtra("title", two.name);
 		startActivity(intent);
 	}
 }

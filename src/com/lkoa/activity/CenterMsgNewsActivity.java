@@ -41,6 +41,13 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	private static final String NEWS_UNREAD = "0";
 	private static final String NEWS_READED = "1";
 	
+	public static final int LIST_TYPE_NEWS = 0;
+	public static final int LIST_TYPE_PUBLIC = 1;
+	public static final int LIST_TYPE_NOTICE = 2;
+	public static final int LIST_TYPE_WIN_DEPARTMENT = 3;
+	
+	private int mListType = LIST_TYPE_NEWS;
+	
 	private View mParentLatestNews, mParentMoreNews;
 	private TextView mTvLatestNews, mTvMoreNews;
 	private View mLineLatestNews, mLineMoreNews;
@@ -60,13 +67,20 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	}
 	
 	private String mId;
+	private int mTitleResId;
+	
+	private String mTitle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_center_msg_news);
 		
-		mId = getIntent().getStringExtra("sId");
+		Intent intent = getIntent();
+		mTitleResId = intent.getIntExtra("titleResId", -1);
+		mId = intent.getStringExtra("sId");
+		mListType = intent.getIntExtra("listType", LIST_TYPE_NEWS);
+		mTitle = intent.getStringExtra("title");
 		
 		mNewsMgr = new CenterMsgManager();
 		
@@ -102,7 +116,12 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	protected void setupViews() {
 		super.setupViews();
 		
-		mTvTitle.setText(R.string.center_msg_news);
+		if(mTitleResId == -1) {
+			mTvTitle.setText(mTitle);
+		} else {
+			mTvTitle.setText(mTitleResId);
+		}
+		
 		mParentLatestNews.setOnClickListener(this);
 		mParentMoreNews.setOnClickListener(this);
 		
@@ -141,14 +160,22 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	private void loadNewsList(String state) {
 		final String finalState = state;
 		//获取数据
-		mNewsMgr.getXXList(finalState, mId, "1", new LKAsyncHttpResponseHandler() {
+		if(mListType == LIST_TYPE_NOTICE) {
+			mNewsMgr.getTZList(finalState, MainActivity.USER_ID, getResponseHandler(state));
+		} else {
+			mNewsMgr.getXXList(finalState, mId, MainActivity.USER_ID, getResponseHandler(state));
+		}
+	}
+	
+	private LKAsyncHttpResponseHandler getResponseHandler(final String state) {
+		return new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction(), " + obj.toString());
 				ArrayList<CenterMsgNewsItem> list = (ArrayList<CenterMsgNewsItem>)obj;
 				
-				if(TextUtils.equals(finalState, "0")) {
+				if(TextUtils.equals(state, "0")) {
 					//最新消息
 					mLatestNewsLoaded = true;
 					if(mLatestNewsAdapter == null) {
@@ -173,7 +200,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 					mMoreNewsAdapter.notifyDataSetChanged();
 				}
 			}
-		});
+		};
 	}
 	
 	@Override
@@ -257,6 +284,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 			Intent intent = new Intent(this, CenterMsgContentActivity.class);
 			intent.putExtra("sId", id);
 			intent.putExtra("titleResId", R.string.center_msg_news);
+			intent.putExtra("listType", mListType);
 			startActivity(intent);
 		}
 	}

@@ -82,4 +82,75 @@ public class CenterMsgManager {
 			}
 		});
 	}
+	
+	/**
+	 * 信息中心-通知信息列表
+	 */
+	public void getTZList(String state, String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_TZ_LIST);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("State", state);
+		paramMap.put("sUserId", sUserId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		LKHttpRequest req1 = new LKHttpRequest(map, handler);
+		new LKHttpRequestQueue().addHttpRequest(req1)
+		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+
+			@Override
+			public void onComplete() {
+				super.onComplete();
+			}
+		});
+	}
+	
+	/**
+	 * 信息中心-集团新闻内容
+	 */
+	public void getTZ(String infoId, String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_TZ);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("InfoId", infoId);
+		paramMap.put("sUserId", sUserId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		LKHttpRequest req1 = new LKHttpRequest(map, handler);
+		new LKHttpRequestQueue().addHttpRequest(req1)
+		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+
+			@Override
+			public void onComplete() {
+				super.onComplete();
+			}
+		});
+	}
+	
+	/**
+	 * 信息中心-部门之窗条数
+	 */
+	public void getBMZC(String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_BMZC);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		LKHttpRequest req1 = new LKHttpRequest(map, handler);
+		new LKHttpRequestQueue().addHttpRequest(req1)
+		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+
+			@Override
+			public void onComplete() {
+				super.onComplete();
+			}
+		});
+	}
 }

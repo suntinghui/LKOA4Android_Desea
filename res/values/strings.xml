@@ -57,7 +57,7 @@
 	<string name="latest_news">最新消息</string>
 	<string name="more_news">更多消息</string>
 	<string name="center_msg_news_content_date">帝海集团&#160;&#160;&#160;&#160;&#160;%1$s</string>
-	
+	<string name="news_detail">信息详情</string>
 	
 	<!-- 流程办理 -->
 	<string name="process_work_title">流程管理</string>

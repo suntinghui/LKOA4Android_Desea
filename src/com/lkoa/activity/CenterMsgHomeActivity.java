@@ -125,16 +125,27 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 		case R.id.center_msg_news:
 			//集团新闻
 			Intent intent = new Intent(this, CenterMsgNewsActivity.class);
+			intent.putExtra("titleResId", R.string.center_msg_news);
 			intent.putExtra("sId", (String)v.getTag());
+			intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_NEWS);
 			startActivity(intent);
 			break;
 			
 		case R.id.center_msg_public:
 			//集团公告
+			intent = new Intent(this, CenterMsgNewsActivity.class);
+			intent.putExtra("titleResId", R.string.center_msg_public);
+			intent.putExtra("sId", (String)v.getTag());
+			intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_PUBLIC);
+			startActivity(intent);
 			break;
 			
 		case R.id.center_msg_notice:
 			//集团通知
+			intent = new Intent(this, CenterMsgNewsActivity.class);
+			intent.putExtra("titleResId", R.string.center_msg_notice);
+			intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_NOTICE);
+			startActivity(intent);
 			break;
 			
 		case R.id.center_msg_window_department:

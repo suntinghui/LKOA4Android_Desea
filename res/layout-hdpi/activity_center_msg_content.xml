@@ -14,6 +14,7 @@
         android:paddingTop="12dip"
         android:paddingRight="16dip"
         android:paddingLeft="16dip"
+        android:scrollbars="none"
         android:fillViewport="true" >
     <LinearLayout 
         android:layout_width="fill_parent"
@@ -37,12 +38,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dip" />
         
-        <TextView android:id="@+id/content"
+        <WebView android:id="@+id/content"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:textSize="12sp"
-            android:textColor="#8e8e8e"/>
+            android:scrollbars="none"
+			android:background="#f3f3f3" />
     </LinearLayout>
     </ScrollView>
     
