@@ -1,12 +1,12 @@
 package com.lkoa.view;
 
-import com.lkoa.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.lkoa.R;
 
 
 public class CornerListView extends ListView {

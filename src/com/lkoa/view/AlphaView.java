@@ -1,13 +1,13 @@
 package com.lkoa.view;
 
-import com.lkoa.R;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+
+import com.lkoa.R;
 
 public class AlphaView extends ImageView {
 	private Drawable alphaDrawable;

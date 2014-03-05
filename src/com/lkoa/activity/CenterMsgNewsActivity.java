@@ -1,13 +1,10 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,16 +13,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.lkoa.R;
 import com.lkoa.adapter.CenterMsgNewsAdapter;
 import com.lkoa.business.CenterMsgManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.CenterMsgNewsItem;
-import com.lkoa.model.IdCountItem;
 import com.lkoa.util.LogUtil;
 
 /**

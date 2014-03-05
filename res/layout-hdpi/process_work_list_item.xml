@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="75dip"
+    android:background="#F1F1F1"
+    android:paddingLeft="10dip" >
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="信息中心"
+        android:textColor="#505050"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_middle"
+        android:layout_marginTop="@dimen/margin_small"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/process_work_list_type"
+        android:textColor="#9a9a9a"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginLeft="5dip"
+        android:text="@string/process_work_list_task"
+        android:textColor="#9a9a9a"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/sender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/process_work_list_sender"
+        android:textColor="#9a9a9a"
+        android:textSize="12sp" />
+    </LinearLayout>
+    <include layout="@layout/iv_to_right_arrow"/>
+
+</RelativeLayout>

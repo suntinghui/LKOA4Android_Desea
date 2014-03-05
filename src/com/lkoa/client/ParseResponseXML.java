@@ -18,6 +18,12 @@ import android.util.Xml;
 import com.lkoa.model.Attachment;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.IdCountItem;
+import com.lkoa.model.ProcessContentInfo;
+import com.lkoa.model.ProcessContentInfo.Activity;
+import com.lkoa.model.ProcessContentInfo.Filed;
+import com.lkoa.model.ProcessContentInfo.Option;
+import com.lkoa.model.ProcessContentInfo.User;
+import com.lkoa.model.ProcessItem;
 import com.lkoa.model.WindowDepartmentItem;
 
 public class ParseResponseXML {
@@ -74,6 +80,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_LCGL_COUNT:
 				//流程管理-条数
 				return getLCGLCount();
+				
+			case TransferRequestTag.GET_LC_LIST:
+				//流程管理-列表
+				return getLCList();
+				
+			case TransferRequestTag.GET_LCBD:
+				//流程管理-流程表单
+				return getLCBD();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -478,5 +492,200 @@ public class ParseResponseXML {
 		}
 
 		return retObj;
+	}
+	
+	/**
+	 * 流程管理-列表
+	 */
+	private static Object getLCList() throws XmlPullParserException, IOException{
+		List<ProcessItem> list = new ArrayList<ProcessItem>();
+		ProcessItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new ProcessItem();
+					
+				} else if("FEG_20_COL_10".equalsIgnoreCase(parser.getName())) {
+					//序号
+					item.id = parser.nextText();
+					
+				} else if("FEG_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					//标题
+					item.title = parser.nextText();
+					
+				} else if("FEG_15_COL_20".equalsIgnoreCase(parser.getName())) {
+					//类型
+					item.type = parser.nextText();
+					
+				} else if("FRM_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					//任务
+					item.task = parser.nextText();
+					
+				} else if("SYS_30_COL_30".equalsIgnoreCase(parser.getName())) {
+					//发送人
+					item.sender = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 流程管理-流程表单
+	 */
+	private static Object getLCBD() throws XmlPullParserException, IOException{
+		ProcessContentInfo info = null;
+		Activity activity = null;
+		Filed field = null;
+		User zbr = null;
+		User cyr = null;
+		Option option = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					info = new ProcessContentInfo();
+					
+				} else if("FEG_20_COL_10".equalsIgnoreCase(parser.getName())) {
+					//流程序号
+					info.processId = parser.nextText();
+					
+				} else if("FEG_30_COL_10".equalsIgnoreCase(parser.getName())) {
+					//办理序号
+					info.handleId = parser.nextText();
+					
+				} else if("FEG_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					//流程标题
+					info.processTitle = parser.nextText();
+					
+				} else if("Activity".equalsIgnoreCase(parser.getName())) {
+					//活动
+					activity = info.newActivity();
+					
+				} else if("Select".equalsIgnoreCase(parser.getName())) {
+					//是否选择此节点
+					activity.select = Integer.parseInt(parser.nextText());
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					//节点序号
+					activity.id = Integer.parseInt(parser.nextText());
+				} else if("Name".equalsIgnoreCase(parser.getName())) {
+					//节点名称
+					activity.name = parser.nextText();
+				} else if("Type".equalsIgnoreCase(parser.getName())) {
+					//节点类型
+					activity.type = Integer.parseInt(parser.nextText());
+				} else if("Mode".equalsIgnoreCase(parser.getName())) {
+					//节点模式
+					activity.mode = Integer.parseInt(parser.nextText());
+				} else if("DealTime".equalsIgnoreCase(parser.getName())) {
+					//节点办理时限
+					activity.dealTime = parser.nextText();
+				} else if("Interpose".equalsIgnoreCase(parser.getName())) {
+					//是否重置主办人
+					activity.interpose = Integer.parseInt(parser.nextText());
+				} else if("ReSelect".equalsIgnoreCase(parser.getName())) {
+					//是否重置参与人
+					activity.interpose = Integer.parseInt(parser.nextText());
+				} else if("ZBR".equalsIgnoreCase(parser.getName())) {
+					//主办人
+					zbr = info.newUser();
+				} else if("UserId".equalsIgnoreCase(parser.getName())) {
+					//用户id
+					if(zbr != null) {
+						zbr.userId = parser.nextText();
+					} else {
+						cyr.userName = parser.nextText();
+					}
+				} else if("UserName".equalsIgnoreCase(parser.getName())) {
+					//用户名称
+					if(zbr != null) {
+						zbr.userName = parser.nextText();
+					} else if(cyr != null) {
+						cyr.userName = parser.nextText();
+					}
+				} else if("CYR".equalsIgnoreCase(parser.getName())) {
+					//用户名称
+					cyr = info.newUser();
+				} else if("Field".equalsIgnoreCase(parser.getName())) {
+					//属性
+					field = info.newFiled();
+				} else if("LK_COLFIELDID".equalsIgnoreCase(parser.getName())) {
+					//数据项标识
+					field.id = parser.nextText();
+				} else if("LK_FIELDEDIT_TIPNAME".equalsIgnoreCase(parser.getName())) {
+					//数据项名称
+					field.name = parser.nextText();
+				} else if("LK_FLDDBTYPE".equalsIgnoreCase(parser.getName())) {
+					//数据类型
+					field.type = Integer.parseInt(parser.nextText());
+				} else if("LK_FIELDEDITMODE".equalsIgnoreCase(parser.getName())) {
+					//处理模式
+					field.editMode = Integer.parseInt(parser.nextText());
+				} else if("SHOWCONTENT".equalsIgnoreCase(parser.getName())) {
+					//显示内容
+					field.showContent = parser.nextText();
+				} else if("Value".equalsIgnoreCase(parser.getName())) {
+					if(option == null) {
+						field.value = parser.nextText();
+					} else {
+						option.value = parser.nextText();
+					}
+				} else if("Item".equalsIgnoreCase(parser.getName())) {
+					//Option
+					option = info.newOption();
+				} else if("Text".equalsIgnoreCase(parser.getName())) {
+					//Option显示值
+					if(option != null) option.text = parser.nextText();
+				} else if("DefaultFlag".equalsIgnoreCase(parser.getName())) {
+					//Option 是否默认选项
+					option.defaultFlag = Integer.parseInt(parser.nextText());
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("ZBR".equalsIgnoreCase(parser.getName())) {
+					activity.zbr = zbr;
+					zbr = null;
+				} else if ("CYR".equalsIgnoreCase(parser.getName())) {
+					activity.cyrs.add(cyr);
+					cyr = null;
+				} else if("Activity".equalsIgnoreCase(parser.getName())) {
+					//活动
+					info.activityList.add(activity);
+					activity = null;
+				} else if("Field".equalsIgnoreCase(parser.getName())) {
+					//属性
+					info.filedList.add(field);
+					field = null;
+				} else if("Item".equalsIgnoreCase(parser.getName())) {
+					field.optionList.add(option);
+					option = null;;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return info;
 	}
 }

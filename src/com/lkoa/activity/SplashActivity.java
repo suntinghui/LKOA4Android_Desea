@@ -1,16 +1,12 @@
 package com.lkoa.activity;
 
 
-import com.lkoa.R;
-import com.lkoa.client.ApplicationEnvironment;
-import com.lkoa.view.LKAlertDialog;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.WindowManager;
+
+import com.lkoa.R;
 
 public class SplashActivity extends BaseActivity {
 

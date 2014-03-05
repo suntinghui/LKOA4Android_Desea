@@ -20,7 +20,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.TextView.BufferType;
 
 /**
  * A simple text label view that can be applied as a "badge" to any given {@link android.view.View}. 

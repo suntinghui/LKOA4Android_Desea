@@ -15,13 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lkoa.R;
+import com.lkoa.business.ProcessWorkManager;
+import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.util.LogUtil;
 
 /**
  * 流程办理
@@ -55,21 +55,24 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	private ViewPager mContentPager;
 	private int mCursorW, mOffset;
 	
+	private String mInfoId, mType;
+	
+	private ProcessWorkManager mProcessWorkMgr;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_process_work_handle);
+		
+		mProcessWorkMgr = new ProcessWorkManager();
 		
 		Resources res = getResources();
 		mTextColorSelected = res.getColor(R.color.center_msg_news_tab_text_selected);
 		mTextColorUnselected = res.getColor(R.color.center_msg_news_tab_text_unselected);
 		
 		Intent intent = getIntent();
-		if(intent != null) {
-			mWorkType = (ProcessWorkType) intent.
-					getSerializableExtra(KEY_PROCESS_WORK_TYPE);
-			Log.i(TAG, "onCreate(), mWorkType=" + mWorkType);
-		}
+		mInfoId = intent.getStringExtra("InfoId");
+		mType = intent.getStringExtra("sType");
 		
 		findViews();
 		setupViews();
@@ -104,6 +107,14 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		views.add(inflater.inflate(R.layout.process_work_handle_content_attachment, null));
 		mContentPager.setAdapter(new MyPagerAdapter(views));
 		mContentPager.setOnPageChangeListener(new MyOnPageChangeListener());
+		
+		mProcessWorkMgr.getLCBD(mType, mInfoId, MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, "successAction(), obj="+obj);
+			}
+		});
 		
 		//初始化cursor
 		DisplayMetrics dm = new DisplayMetrics();

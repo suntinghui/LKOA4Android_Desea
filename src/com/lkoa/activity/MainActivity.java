@@ -1,8 +1,5 @@
 package com.lkoa.activity;
 
-import java.util.HashMap;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,12 +12,7 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.MainManager;
-import com.lkoa.client.Constant;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
-import com.lkoa.client.LKHttpRequest;
-import com.lkoa.client.LKHttpRequestQueue;
-import com.lkoa.client.LKHttpRequestQueueDone;
-import com.lkoa.client.TransferRequestTag;
 import com.lkoa.util.LogUtil;
 
 public class MainActivity extends BaseActivity implements OnClickListener {

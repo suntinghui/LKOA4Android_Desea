@@ -1,14 +1,7 @@
 package com.lkoa.activity;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;

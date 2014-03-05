@@ -3,31 +3,35 @@ package com.lkoa.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lkoa.R;
-import com.lkoa.model.CenterMsgNewsItem;
+import com.lkoa.model.ProcessItem;
 
-public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
+public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
 
 	private LayoutInflater mLayoutInflater;
-	private List<CenterMsgNewsItem> mDataList;
+	private List<ProcessItem> mDataList;
+	
+	private Resources mRes;
 
-	public CenterMsgNewsAdapter(Context context, int resource,
-			List<CenterMsgNewsItem> objects) {
+	public ProcessWorkListAdapter(Context context, int resource,
+			List<ProcessItem> objects) {
 		super(context, resource, objects);
+		
+		mRes = context.getResources();
 		
 		mLayoutInflater = LayoutInflater.from(context);
 		mDataList = objects;
 	}
 	
 	@Override
-	public CenterMsgNewsItem getItem(int position) {
+	public ProcessItem getItem(int position) {
 		return mDataList.get(position);
 	}
 	
@@ -35,12 +39,12 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
 		if(convertView == null) {
-			convertView = mLayoutInflater.inflate(R.layout.center_msg_news_item, parent, false);
+			convertView = mLayoutInflater.inflate(R.layout.process_work_list_item, parent, false);
 			holder = new ViewHolder();
-			holder.icon = (ImageView)convertView.findViewById(R.id.icon);
 			holder.title = (TextView)convertView.findViewById(R.id.title);
-			holder.date = (TextView)convertView.findViewById(R.id.date);
-			holder.details = (TextView)convertView.findViewById(R.id.details);
+			holder.type = (TextView)convertView.findViewById(R.id.type);
+			holder.task = (TextView)convertView.findViewById(R.id.task);
+			holder.sender = (TextView)convertView.findViewById(R.id.sender);
 			convertView.setTag(holder);
 			
 		} else {
@@ -55,32 +59,28 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_246);
 		}
 		
-		CenterMsgNewsItem item = getItem(position);
+		ProcessItem item = getItem(position);
 		holder.title.setText(item.title);
-		holder.date.setText(item.date);
-		holder.details.setText(item.content);
-		if(item.iconUrl == null) {
-			holder.icon.setVisibility(View.GONE);
-		} else {
-			holder.icon.setVisibility(View.VISIBLE);
-		}
+		holder.type.setText(mRes.getString(R.string.process_work_list_type, item.type));
+		holder.task.setText(mRes.getString(R.string.process_work_list_task, item.task));
+		holder.sender.setText(mRes.getString(R.string.process_work_list_sender, item.sender));
 		
 		return convertView;
 	}
 	
-	public void setData(List<CenterMsgNewsItem> data) {
+	public void setData(List<ProcessItem> data) {
 		this.mDataList = data;
 	}
 	
-	public List<CenterMsgNewsItem> getData() {
+	public List<ProcessItem> getData() {
 		return mDataList;
 	}
 	
 	private class ViewHolder {
-		ImageView icon;
 		TextView title;
-		TextView date;
-		TextView details;
+		TextView type;
+		TextView task;
+		TextView sender;
 	}
 
 }

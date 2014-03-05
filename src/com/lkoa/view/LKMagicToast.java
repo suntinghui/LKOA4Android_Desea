@@ -4,15 +4,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.lkoa.R;
-import com.lkoa.client.ApplicationEnvironment;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+
+import com.lkoa.R;
+import com.lkoa.client.ApplicationEnvironment;
 
 /**
  * 

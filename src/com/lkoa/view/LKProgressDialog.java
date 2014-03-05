@@ -1,7 +1,5 @@
 package com.lkoa.view;
 
-import com.lkoa.R;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +9,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.lkoa.R;
 
 public class LKProgressDialog extends Dialog {
 	

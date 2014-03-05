@@ -1,16 +1,14 @@
 package com.lkoa.view;
 
-import com.lkoa.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.lkoa.R;
 
 public class ImageWithTextView extends LinearLayout {
 	

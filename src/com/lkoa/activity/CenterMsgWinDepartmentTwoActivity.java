@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,11 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
-import com.lkoa.business.CenterMsgManager;
-import com.lkoa.client.LKAsyncHttpResponseHandler;
-import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.WindowDepartmentItem;
-import com.lkoa.util.LogUtil;
 
 
 /**

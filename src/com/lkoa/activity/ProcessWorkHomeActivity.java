@@ -2,7 +2,6 @@ package com.lkoa.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.sax.StartElementListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -118,9 +117,10 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		view.setOnClickListener(this);
 	}
 	
-	private void startActivity(ProcessWorkType type) {
-		Intent intent = new Intent(this, ProcessWorkHandleActivity.class);
-		intent.putExtra(ProcessWorkHandleActivity.KEY_PROCESS_WORK_TYPE, type);
+	private void startActivity(int titleResId, int type) {
+		Intent intent = new Intent(this, ProcessWorkListActivity.class);
+		intent.putExtra("titleResId", titleResId);
+		intent.putExtra("type", type);
 		
 		startActivity(intent);
 	}
@@ -130,27 +130,27 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		switch (v.getId()) {
 		case R.id.process_work_my_todo:
 			//我的待办
-			startActivity(ProcessWorkType.TYPE_MY_TODO);
+			startActivity(R.string.process_work_my_todo, 0);
 			break;
 			
 		case R.id.process_work_doing:
 			//正在办理
-			startActivity(ProcessWorkType.TYPE_DOING);
+			startActivity(R.string.process_work_doing, 1);
 			break;
 			
 		case R.id.process_work_record_history:
 			//历史记录
-			startActivity(ProcessWorkType.TYPE_RECORD_HISTORY);
+			startActivity(R.string.process_work_record_history, 2);
 			break;
 			
 		case R.id.process_work_file_special:
 			//特批文件
-			startActivity(ProcessWorkType.TYPE_FILE_SPECIAL);
+			startActivity(R.string.process_work_file_special, 3);
 			break;
 			
 		case R.id.process_work_revocation_box:
 			//撤销箱
-			startActivity(ProcessWorkType.TYPE_REVOCATION_BOX);
+			startActivity(R.string.process_work_revocation_box, 4);
 			break;
 
 		default:

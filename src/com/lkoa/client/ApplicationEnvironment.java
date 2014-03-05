@@ -1,7 +1,5 @@
 package com.lkoa.client;
 
-import com.lkoa.activity.BaseActivity;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
+import com.lkoa.activity.BaseActivity;
 
 public class ApplicationEnvironment {
 	

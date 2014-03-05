@@ -3,7 +3,6 @@ package com.lkoa.client;
 import android.util.Log;
 
 import com.lkoa.activity.BaseActivity;
-import com.lkoa.view.LKMagicToast;
 
 public class LKHttpRequestQueueDone {
 	
