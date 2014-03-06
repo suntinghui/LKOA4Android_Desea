@@ -142,6 +142,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			
 		case R.id.iv_schedule:
 			//日程安排
+			startActivity(new Intent(this, ScheduleHomeActivity.class));
 			break;
 
 		case R.id.iv_contacts:

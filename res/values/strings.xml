@@ -85,4 +85,11 @@
 	<string name="my_sms">我的短信</string>
 	<string name="my_sms_jsr_and_phone">%1$s（%2$s）</string>
 	<string name="my_sms_write_title">短信编写</string>
+	
+	<!-- 日程管理 -->
+	<string name="schedule_title">日程管理</string>
+	<string name="schedule_my">我的日程</string>
+	<string name="schedule_department">部门日程</string>
+	<string name="schedule_leader">领导日程</string>
+	<string name="schedule_active">集团活动</string>
 </resources>

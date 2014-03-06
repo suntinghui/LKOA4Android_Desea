@@ -25,7 +25,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dip"
-        android:visibility="visible"
+        android:visibility="gone"
         android:padding="8dip"
         android:src="@drawable/my_sms_write" />
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <!-- 我的日程 -->
+    <include 
+        android:id="@+id/schedule_my"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 部门日程-->
+    <include 
+        android:id="@+id/schedule_department"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 领导日程 -->
+    <include 
+        android:id="@+id/schedule_leader"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 集团活动 -->
+    <include 
+        android:id="@+id/schedule_active"
+        layout="@layout/center_msg_home_item" />
+</LinearLayout>
