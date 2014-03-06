@@ -18,6 +18,8 @@ public class TransferRequestTag {
 	public static final int GET_LCGL_COUNT = 9;	//流程管理-条数
 	public static final int GET_LC_LIST = 10;	//流程管理-列表
 	public static final int GET_LCBD = 11;	//流程管理-流程表单
+	public static final int GET_SMS_LIST = 12;	//我的短信-列表
+	public static final int WRITE_SMS = 13;	//我的短信-列表
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -36,6 +38,8 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_LCGL_COUNT, "GetLCGLCount");
 			requestTagMap.put(GET_LC_LIST, "GetLCList");
 			requestTagMap.put(GET_LCBD, "GetLCBD");
+			requestTagMap.put(GET_SMS_LIST, "GetSMSList");
+			
 		}
 		
 		return requestTagMap;

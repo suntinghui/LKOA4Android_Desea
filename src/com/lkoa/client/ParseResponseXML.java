@@ -24,6 +24,7 @@ import com.lkoa.model.ProcessContentInfo.Filed;
 import com.lkoa.model.ProcessContentInfo.Option;
 import com.lkoa.model.ProcessContentInfo.User;
 import com.lkoa.model.ProcessItem;
+import com.lkoa.model.SmsMessage;
 import com.lkoa.model.WindowDepartmentItem;
 
 public class ParseResponseXML {
@@ -88,6 +89,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_LCBD:
 				//流程管理-流程表单
 				return getLCBD();
+				
+			case TransferRequestTag.GET_SMS_LIST:
+				//我的短信-列表
+				return getSmsList();
+				
+			case TransferRequestTag.WRITE_SMS:
+				//我的短信-写短信
+				return writeSms();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -687,5 +696,76 @@ public class ParseResponseXML {
 		}
 		
 		return info;
+	}
+	
+	/**
+	 * 我的短信-列表
+	 */
+	private static Object getSmsList() throws XmlPullParserException, IOException{
+		List<SmsMessage> list = new ArrayList<SmsMessage>();
+		SmsMessage item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new SmsMessage();
+					
+				} else if("JSR".equalsIgnoreCase(parser.getName())) {
+					//接收人
+					item.jsr = parser.nextText();
+					
+				} else if("JSRHM".equalsIgnoreCase(parser.getName())) {
+					//接收人手机号
+					item.jsrPhone = parser.nextText();
+					
+				} else if("NR".equalsIgnoreCase(parser.getName())) {
+					//短信内容
+					item.content = parser.nextText();
+					
+				} else if("Date".equalsIgnoreCase(parser.getName())) {
+					//发送时间
+					item.date = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 我的短信-写短信
+	 */
+	private static Object writeSms() throws XmlPullParserException, IOException{
+		int result = -1;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
 	}
 }

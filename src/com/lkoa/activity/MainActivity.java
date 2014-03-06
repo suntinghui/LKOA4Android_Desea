@@ -156,6 +156,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			
 		case R.id.iv_my_msg:
 			//我的短信
+			Intent intent = new Intent(this, MyMessageListActivity.class);
+			intent.putExtra("titleResId", R.string.my_sms);
+			startActivity(intent);
 			break;
 			
 		case R.id.iv_mgr_people:

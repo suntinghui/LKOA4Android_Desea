@@ -80,4 +80,9 @@
 	<string name="doc_mgr_received_today">今日收文</string>
 	<string name="doc_mgr_received_management">收文管理</string>
 	<string name="doc_mgr_sent_management">发文管理</string>
+	
+	<!-- 我的短信 -->
+	<string name="my_sms">我的短信</string>
+	<string name="my_sms_jsr_and_phone">%1$s（%2$s）</string>
+	<string name="my_sms_write_title">短信编写</string>
 </resources>

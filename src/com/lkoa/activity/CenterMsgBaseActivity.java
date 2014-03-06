@@ -12,6 +12,7 @@ import com.lkoa.R;
 public class CenterMsgBaseActivity extends BaseActivity{
 	protected ImageView mIvBack;
 	protected TextView mTvTitle;
+	protected ImageView mIvRight;
 	
 	protected LayoutInflater mLayoutInflater;
 	
@@ -32,6 +33,7 @@ public class CenterMsgBaseActivity extends BaseActivity{
 	protected void findViews() {
 		mIvBack = (ImageView) findViewById(R.id.iv_back);
 		mTvTitle = (TextView) findViewById(R.id.tv_title);
+		mIvRight = (ImageView) findViewById(R.id.iv_right);
 	}
 	
 	protected void setupViews() {
