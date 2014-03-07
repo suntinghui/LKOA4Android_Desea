@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			
 		case R.id.iv_my_email:
 			//我的邮件
+			startActivity(new Intent(this, MyMailHomeActivity.class));
 			break;
 			
 		case R.id.iv_my_msg:

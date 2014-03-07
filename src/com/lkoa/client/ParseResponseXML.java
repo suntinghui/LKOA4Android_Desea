@@ -18,6 +18,7 @@ import android.util.Xml;
 import com.lkoa.model.Attachment;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.IdCountItem;
+import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
 import com.lkoa.model.ProcessContentInfo.Activity;
 import com.lkoa.model.ProcessContentInfo.Filed;
@@ -97,6 +98,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.WRITE_SMS:
 				//我的短信-写短信
 				return writeSms();
+				
+			case TransferRequestTag.GET_MAIL_COUNT:
+				//我的邮件-条数
+				return getMailCount();
+				
+			case TransferRequestTag.GET_MAIL_LIST:
+				//我的邮件-内部邮件-列表
+				return getMailList();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -767,5 +776,74 @@ public class ParseResponseXML {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 我的邮件-条数
+	 */
+	private static Object getMailCount() throws XmlPullParserException, IOException{
+		int count = 0;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("GetMailCountResult".equalsIgnoreCase(parser.getName())) {
+					count = Integer.parseInt(parser.nextText());
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		return count;
+	}
+	
+	/**
+	 * 我的邮件-内部邮件-列表
+	 */
+	private static Object getMailList() throws XmlPullParserException, IOException{
+		List<MailItemInfo> list = new ArrayList<MailItemInfo>();
+		MailItemInfo item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new MailItemInfo();
+					
+				} else if("EML_20_COL_10".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("EML_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					item.subject = parser.nextText();
+					
+				} else if("SYS_30_COL_30".equalsIgnoreCase(parser.getName())) {
+					item.sender = parser.nextText();
+					
+				} else if("EML_20_COL_100".equalsIgnoreCase(parser.getName())) {
+					item.date = parser.nextText();
+					
+				} else if("FJCounts".equalsIgnoreCase(parser.getName())) {
+					item.fjCount = Integer.parseInt(parser.nextText());
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
 	}
 }

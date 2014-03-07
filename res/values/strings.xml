@@ -92,4 +92,13 @@
 	<string name="schedule_department">部门日程</string>
 	<string name="schedule_leader">领导日程</string>
 	<string name="schedule_active">集团活动</string>
+	
+	<!-- 我的邮件 -->
+	<string name="my_email_title">邮件管理</string>
+	<string name="my_email_internal">内部邮件</string>
+	<string name="my_email_internal_inbox">收件箱</string>
+	<string name="my_email_internal_outbox">发件箱</string>
+	<string name="my_email_internal_drafts">草稿箱</string>
+	<string name="my_email_internal_deleted">已删除</string>
+	<string name="my_email_external">外部邮件</string>
 </resources>
