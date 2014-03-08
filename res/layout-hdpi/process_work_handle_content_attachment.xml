@@ -20,6 +20,7 @@
             style="@style/ProcessWorkFormsTag" />
         
         <TextView 
+            android:id="@+id/attachment_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="已添加4个附件"
@@ -32,16 +33,11 @@
     </RelativeLayout>
     
     <LinearLayout 
+        android:id="@+id/attachments"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:orientation="vertical" >
-        
-        <include layout="@layout/process_work_handle_content_attachment_item"/>
-        <include layout="@layout/process_work_handle_content_attachment_item"/>
-        <include layout="@layout/process_work_handle_content_attachment_item"/>
-        <include layout="@layout/process_work_handle_content_attachment_item"/>
-        
     </LinearLayout>
 
 

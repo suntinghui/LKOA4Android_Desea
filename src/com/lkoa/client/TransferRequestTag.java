@@ -22,6 +22,9 @@ public class TransferRequestTag {
 	public static final int WRITE_SMS = 13;	//我的短信-列表
 	public static final int GET_MAIL_COUNT = 14;	//我的邮件-条数
 	public static final int GET_MAIL_LIST = 15;	//我的邮件-列表
+	public static final int GET_LCZW = 16;	//流程管理-流程办理-正文
+	public static final int GET_ATT_LIST = 17;	//流程管理-流程办理-附件
+	public static final int SET_GLBD = 18;	//流程管理-流程办理-保存
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -43,6 +46,10 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_SMS_LIST, "GetSMSList");
 			requestTagMap.put(GET_MAIL_COUNT, "GetMailCount");
 			requestTagMap.put(GET_MAIL_LIST, "GetMailList");
+			requestTagMap.put(GET_LCZW, "GetLCZW");
+			requestTagMap.put(GET_ATT_LIST, "GetAttList");
+			requestTagMap.put(SET_GLBD, "SetGLBD");
+			
 		}
 		
 		return requestTagMap;

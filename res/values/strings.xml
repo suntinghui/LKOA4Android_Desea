@@ -74,6 +74,8 @@
 	<string name="process_work_list_type">工作类型&#160;&#160;&#160;&#160;&#160;%1$s</string>
 	<string name="process_work_list_task">工作任务&#160;&#160;&#160;&#160;&#160;%1$s</string>
 	<string name="process_work_list_sender">&#160;&#160;&#160;&#160;发送人&#160;&#160;&#160;&#160;&#160;%1$s</string>
+	<string name="process_work_handle_save">保存</string>
+	<string name="process_work_handle_commit">提交</string>
 	
 	<!-- 公文办理 -->
 	<string name="doc_mgr_title">公文管理</string>

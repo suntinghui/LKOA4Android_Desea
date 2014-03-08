@@ -28,5 +28,31 @@
         android:visibility="gone"
         android:padding="8dip"
         android:src="@drawable/my_sms_write" />
+    
+    <LinearLayout 
+        android:id="@+id/linear_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" >
+        <TextView
+	        android:id="@+id/tv_right_1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="10dip"
+	        android:visibility="visible"
+	        android:text="保存"
+	        style="@style/NavigationRightText" />
+        
+        <TextView
+	        android:id="@+id/tv_right_2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="10dip"
+	        android:visibility="visible"
+	        android:text="提交"
+	        style="@style/NavigationRightText" />
+    </LinearLayout>
+    
 
 </RelativeLayout>

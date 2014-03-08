@@ -12,6 +12,7 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 
@@ -21,7 +22,7 @@ import com.lkoa.model.IdCountItem;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
 import com.lkoa.model.ProcessContentInfo.Activity;
-import com.lkoa.model.ProcessContentInfo.Filed;
+import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Option;
 import com.lkoa.model.ProcessContentInfo.User;
 import com.lkoa.model.ProcessItem;
@@ -106,6 +107,18 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_MAIL_LIST:
 				//我的邮件-内部邮件-列表
 				return getMailList();
+				
+			case TransferRequestTag.GET_LCZW:
+				//流程管理-正文
+				return getLCZW();
+				
+			case TransferRequestTag.GET_ATT_LIST:
+				//流程管理-附件
+				return getAttList();
+				
+			case TransferRequestTag.SET_GLBD:
+				//流程管理-表单保存或提交
+				return setGLBD();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -570,7 +583,7 @@ public class ParseResponseXML {
 	private static Object getLCBD() throws XmlPullParserException, IOException{
 		ProcessContentInfo info = null;
 		Activity activity = null;
-		Filed field = null;
+		Field field = null;
 		User zbr = null;
 		User cyr = null;
 		Option option = null;
@@ -620,10 +633,10 @@ public class ParseResponseXML {
 					activity.dealTime = parser.nextText();
 				} else if("Interpose".equalsIgnoreCase(parser.getName())) {
 					//是否重置主办人
-					activity.interpose = Integer.parseInt(parser.nextText());
+					activity.interpose = parser.nextText();
 				} else if("ReSelect".equalsIgnoreCase(parser.getName())) {
 					//是否重置参与人
-					activity.interpose = Integer.parseInt(parser.nextText());
+					activity.reSelect = parser.nextText();
 				} else if("ZBR".equalsIgnoreCase(parser.getName())) {
 					//主办人
 					zbr = info.newUser();
@@ -845,5 +858,94 @@ public class ParseResponseXML {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * 流程管理-正文
+	 */
+	private static Object getLCZW() throws XmlPullParserException, IOException {
+		String path = null;
+
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("GetLCZWResult".equalsIgnoreCase(parser.getName())) {
+					path = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		return path;
+	}
+	
+	/**
+	 * 流程管理-附件
+	 */
+	private static Object getAttList() throws XmlPullParserException, IOException{
+		List<Attachment> list = new ArrayList<Attachment>();
+		Attachment item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("FJ".equalsIgnoreCase(parser.getName())) {
+					item = new Attachment();
+					
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("Type".equalsIgnoreCase(parser.getName())) {
+					item.type = parser.nextText();
+					
+				} else if("Size".equalsIgnoreCase(parser.getName())) {
+					item.size = Integer.parseInt(parser.nextText());
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("FJ".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 流程管理-流程办理-保存或提交
+	 */
+	private static Object setGLBD() throws XmlPullParserException, IOException{
+		String result = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("FJ".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
 	}
 }

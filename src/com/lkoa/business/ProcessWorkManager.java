@@ -62,6 +62,55 @@ public class ProcessWorkManager {
 		execute(map, handler);
 	}
 	
+	/**
+	 * 流程管理-流程办理-正文
+	 */
+	public void getLCZW(String infoId, String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_LCZW);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		paramMap.put("InfoId", infoId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute(map, handler);
+	}
+	
+	/**
+	 * 流程管理-流程办理-附件
+	 * @param id	关联id，包括信息序号、通知序号、邮件序号、流程序号、日程序号
+	 */
+	public void getAttList(String id, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_ATT_LIST);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("Id", id);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute(map, handler);
+	}
+	
+	/**
+	 * 流程管理-流程办理-保存
+	 */
+	public void setGLBD(String userId, String type, String infor, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.SET_GLBD);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", userId);
+		paramMap.put("sType", type);
+		paramMap.put("Infor", infor);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute(map, handler);
+	}
+	
 	private void execute(HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)
