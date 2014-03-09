@@ -64,10 +64,11 @@ public class BaseActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK){
+		super.onActivityResult(requestCode, resultCode, data);
+		/*if (resultCode == Activity.RESULT_OK){
 			this.setResult(Activity.RESULT_OK);
 			this.finish();
-		}
+		}*/
 	}
 	
 	@Override

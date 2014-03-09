@@ -178,7 +178,7 @@ public class AddressListActivity extends Activity implements OnAlphaChangedListe
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.list_item, null);
+				convertView = inflater.inflate(R.layout.contacts_list_item, null);
 				holder = new ViewHolder(convertView);
 				convertView.setTag(holder);
 			} else {

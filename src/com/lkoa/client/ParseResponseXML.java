@@ -18,6 +18,7 @@ import android.util.Xml;
 
 import com.lkoa.model.Attachment;
 import com.lkoa.model.CenterMsgNewsItem;
+import com.lkoa.model.ContactItem;
 import com.lkoa.model.IdCountItem;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
@@ -119,6 +120,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.SET_GLBD:
 				//流程管理-表单保存或提交
 				return setGLBD();
+				
+			case TransferRequestTag.GET_SYSADDRESS_BOOK:
+				//通讯录-联系人列表
+				return getContacts();
+				
+			case TransferRequestTag.GET_DEPT:
+				//通讯录-部门列表
+				return getDept();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -938,7 +947,7 @@ public class ParseResponseXML {
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
-				if ("FJ".equalsIgnoreCase(parser.getName())) {
+				if ("SetGLBDResult".equalsIgnoreCase(parser.getName())) {
 					result = parser.nextText();
 				}
 				break;
@@ -947,5 +956,117 @@ public class ParseResponseXML {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 通讯录-列表
+	 */
+	private static Object getContacts() throws XmlPullParserException, IOException{
+		List<ContactItem> list = new ArrayList<ContactItem>();
+		ContactItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new ContactItem();
+					
+				} else if("USERID".equalsIgnoreCase(parser.getName())) {
+					item.userId = parser.nextText();
+					
+				} else if("XM".equalsIgnoreCase(parser.getName())) {
+					item.userName = parser.nextText();
+					
+				} else if("DEPTID".equalsIgnoreCase(parser.getName())) {
+					item.deptId = parser.nextText();
+					
+				} else if("DEPT".equalsIgnoreCase(parser.getName())) {
+					item.deptName = parser.nextText();
+					
+				} else if("BGDH".equalsIgnoreCase(parser.getName())) {
+					item.bgdh = parser.nextText();
+					
+				} else if("YDDH".equalsIgnoreCase(parser.getName())) {
+					item.yddh = parser.nextText();
+					
+				} else if("EMAIL".equalsIgnoreCase(parser.getName())) {
+					item.email1 = parser.nextText();
+					
+				} else if("EMAIL2".equalsIgnoreCase(parser.getName())) {
+					item.email2 = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 通讯录-部门列表
+	 */
+	private static Object getDept() throws XmlPullParserException, IOException{
+		List<ContactItem> list = new ArrayList<ContactItem>();
+		ContactItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new ContactItem();
+					
+				} else if("USERID".equalsIgnoreCase(parser.getName())) {
+					item.userId = parser.nextText();
+					
+				} else if("XM".equalsIgnoreCase(parser.getName())) {
+					item.userName = parser.nextText();
+					
+				} else if("DEPTID".equalsIgnoreCase(parser.getName())) {
+					item.deptId = parser.nextText();
+					
+				} else if("DEPT".equalsIgnoreCase(parser.getName())) {
+					item.deptName = parser.nextText();
+					
+				} else if("BGDH".equalsIgnoreCase(parser.getName())) {
+					item.bgdh = parser.nextText();
+					
+				} else if("YDDH".equalsIgnoreCase(parser.getName())) {
+					item.yddh = parser.nextText();
+					
+				} else if("EMAIL".equalsIgnoreCase(parser.getName())) {
+					item.email1 = parser.nextText();
+					
+				} else if("EMAIL2".equalsIgnoreCase(parser.getName())) {
+					item.email2 = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
 	}
 }

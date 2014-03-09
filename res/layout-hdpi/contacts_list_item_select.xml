@@ -31,7 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/bg_photo_default" android:contentDescription="TODO"/>
+            android:src="@drawable/bg_photo_default" 
+            android:contentDescription="TODO"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -40,12 +42,14 @@
             android:orientation="vertical"
             android:paddingLeft="8.0dip" >
 
-            <TextView
+            <CheckedTextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
+                android:gravity="center_vertical"
                 android:textAppearance="?android:textAppearanceMedium"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                 android:textColor="#333333" />
 
             <TextView
@@ -54,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textAppearance="?android:textAppearanceSmall"
+                android:visibility="gone"
                 android:textColor="#999999" />
         </LinearLayout>
     </LinearLayout>

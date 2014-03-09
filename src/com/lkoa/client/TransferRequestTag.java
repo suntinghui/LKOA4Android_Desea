@@ -25,6 +25,8 @@ public class TransferRequestTag {
 	public static final int GET_LCZW = 16;	//流程管理-流程办理-正文
 	public static final int GET_ATT_LIST = 17;	//流程管理-流程办理-附件
 	public static final int SET_GLBD = 18;	//流程管理-流程办理-保存
+	public static final int GET_SYSADDRESS_BOOK = 19;	//通讯录-列表
+	public static final int GET_DEPT = 20;	//通讯录-部门列表
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -49,6 +51,8 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_LCZW, "GetLCZW");
 			requestTagMap.put(GET_ATT_LIST, "GetAttList");
 			requestTagMap.put(SET_GLBD, "SetGLBD");
+			requestTagMap.put(GET_SYSADDRESS_BOOK, "GetSysAddress_Book");
+			requestTagMap.put(GET_DEPT, "GetDept");
 			
 		}
 		

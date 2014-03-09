@@ -5,27 +5,40 @@ import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.DataSetObserver;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.lkoa.R;
+import com.lkoa.adapter.ProcessWorkSpinnerAdapter;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.Attachment;
 import com.lkoa.model.ProcessContentInfo;
 import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Field.ContentType;
+import com.lkoa.model.ProcessContentInfo.Option;
 import com.lkoa.util.LogUtil;
 
 /**
@@ -80,6 +93,23 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private ProcessContentInfo mContentInfo;
 	
+	private OnItemSelectedListener mSpinnerOnItemClickListener = new OnItemSelectedListener() {
+
+		@Override
+		public void onItemSelected(AdapterView<?> adapterView, View view, int pos,
+				long arg3) {
+			Field field = (Field)adapterView.getTag();
+			Option opt = field.optionList.get(pos);
+			field.name = opt.text;
+			field.value = opt.value;
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			
+		}
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,6 +146,32 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == RESULT_OK) {
+			if(requestCode == ContactsSelectorActivity.SELECT_MODE_SINGLE) {
+				String showContent = data.getStringExtra("showContent");
+				String value = data.getStringExtra("value");
+				
+				Field field = mContentInfo.getSinglePeopleField();
+				field.showContent = showContent;
+				field.value = value;
+				
+			} else if(requestCode == ContactsSelectorActivity.SELECT_MODE_MULTI) {
+				String showContent = data.getStringExtra("showContent");
+				String value = data.getStringExtra("value");
+				
+				Field field = mContentInfo.getMultiPeopleField();
+				field.showContent = showContent;
+				field.value = value;
+				
+			}
+			
+			buildBD(mContentInfo);
+		}
+	}
+	
+	@Override
 	protected void setupViews() {
 		super.setupViews();
 		//导航栏
@@ -127,6 +183,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mTvRight2.setOnClickListener(this);
 		
 		//初始化ViewPager
+		//表单
 		LayoutInflater inflater = LayoutInflater.from(this);
 		List<View> views = new ArrayList<View>();
 		View view = inflater.inflate(R.layout.process_work_handle_content_forms, null);
@@ -183,11 +240,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		}
 	}
 	
-	private void setupFormItem(Field field) {
+	private void setupFormItem(final Field field) {
 		View view = mLayoutInflater.inflate(R.layout.process_work_handle_content_forms_item, null);
 		TextView title = (TextView)view.findViewById(R.id.title);
 		TextView contentText = (TextView)view.findViewById(R.id.content_text);
 		TextView contentEdit = (TextView)view.findViewById(R.id.content_edit);
+		ImageView toRightArrow = (ImageView)view.findViewById(R.id.to_right_arrow);
+		Spinner contentSpinner = (Spinner) view.findViewById(R.id.content_spinner);
 		
 		title.setText(field.name);
 		ContentType contentType = field.getContentType();
@@ -196,13 +255,79 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			contentEdit.setVisibility(View.VISIBLE);
 			contentText.setVisibility(View.GONE);
 			
-		} else if(contentType == ContentType.TEXT) {
+		} else if(contentType == ContentType.PULLDOWNLIST) {
+			//TODO: 处理弹出选择dialog
+			contentText.setVisibility(View.GONE);
+			contentEdit.setVisibility(View.GONE);
+			contentSpinner.setVisibility(View.VISIBLE);
+			String [] subs = new String[field.optionList.size()];
+			Option opt = null;
+			for(int i=0; i<field.optionList.size(); i++) {
+				opt = field.optionList.get(i);
+				subs[i] = opt.text;
+			}
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+					this, android.R.layout.simple_spinner_item, subs);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			contentSpinner.setAdapter(adapter);
+			contentSpinner.setOnItemSelectedListener(mSpinnerOnItemClickListener);
+			contentSpinner.setTag(field);
+			
+		} else if(contentType == ContentType.SINGLE_PEOPLE 
+				|| contentType == ContentType.MULTI_PEOPLE) {
+			//TODO: 跳转到联系人选择
+			contentEdit.setVisibility(View.GONE);
+			toRightArrow.setVisibility(View.VISIBLE);
+			if(TextUtils.isEmpty(field.showContent)) {
+				field.showContent = "test";
+				field.value = "20";
+			}
+			contentText.setText(field.showContent);
+			final ContentType type = contentType;
+			view.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(
+							ProcessWorkHandleActivity.this, 
+							ContactsSelectorActivity.class);
+					int mode = -1;
+					if(type == ContentType.SINGLE_PEOPLE) {
+						mode = ContactsSelectorActivity.SELECT_MODE_SINGLE;
+						intent.putExtra(
+								ContactsSelectorActivity.KEY_SELECT_MODE, 
+								mode);
+						intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
+								field.value);
+					} else {
+						mode = ContactsSelectorActivity.SELECT_MODE_MULTI;
+						intent.putExtra(
+								ContactsSelectorActivity.KEY_SELECT_MODE, 
+								mode);
+						intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
+								field.value);
+					}
+					startActivityForResult(intent, mode);
+				}
+			});
+			
+		} else if(contentType == ContentType.SINGLE_DEPT
+				|| contentType == ContentType.MULTI_DEPT) {
+			//TODO: 跳转到部门选择
+			contentEdit.setVisibility(View.GONE);
+			toRightArrow.setVisibility(View.VISIBLE);
+			if(TextUtils.isEmpty(field.showContent)) {
+				field.showContent = "总裁办公室";
+				field.value = "15";
+			}
+			contentText.setText(field.showContent);
+			
+		} else {
 			contentEdit.setVisibility(View.GONE);
 			contentText.setText(field.showContent);
 			contentText.setVisibility(View.VISIBLE);
-		} else {
-			//TODO: 处理弹出选择dialog
 		}
+		view.setTag(field);
 		mLinearForms.addView(view);
 	}
 	
@@ -272,31 +397,73 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			break;
 		}
 	}
+	
+	private void collectionData() {
+		//TODO: 采集数据，保存到mContentInfo对象
+		int count = mLinearForms.getChildCount();
+		for(int i=0; i<count; i++) {
+			View view = mLinearForms.getChildAt(i);
+			Field field = (Field)view.getTag();
+			setField(field, view);
+		}
+	}
+	
+	private void setField(Field field, View view) {
+		ContentType type = field.getContentType();
+		if(type == ContentType.EDITTEXT) {
+			EditText et = (EditText)view.findViewById(R.id.content_edit);
+			field.showContent = et.getText().toString();
+			field.value = et.getText().toString();
+			
+		} else if(type == ContentType.SINGLE_PEOPLE
+				|| type == ContentType.SINGLE_DEPT
+				|| type == ContentType.MULTI_PEOPLE
+				|| type == ContentType.MULTI_DEPT) {
+			TextView text = (TextView)view.findViewById(R.id.content_text);
+			field.showContent = text.getText().toString();
+		}
+	}
+	
+	private void save() {
+		try {
+			collectionData();
+			mProcessWorkMgr.setGLBD(MainActivity.USER_ID, TYPE_SAVE, 
+					mContentInfo.buildXml(false), new LKAsyncHttpResponseHandler() {
+
+						@Override
+						public void successAction(Object obj) {
+							LogUtil.i(TAG, "setGLBD(), successAction obj="+obj);
+							if(obj != null) {
+								showDialog(MODAL_DIALOG, "保存表单成功!");
+							}
+						}
+				
+			});
+		} catch (Exception e) {
+			Log.e(TAG, "setGLBD(), successAction Error: "+e);
+			e.printStackTrace();
+		}
+	}
+	
+	private void commit() {
+		Intent intent = new Intent(this, ProcessWorkCommitActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("processInfo", mContentInfo);
+		intent.putExtra("bundle", bundle);
+		startActivity(intent);
+	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.tv_right_1:
 			//保存
-			try {
-				mProcessWorkMgr.setGLBD(MainActivity.USER_ID, TYPE_SAVE, 
-						mContentInfo.buildXml(), new LKAsyncHttpResponseHandler() {
-
-							@Override
-							public void successAction(Object obj) {
-								LogUtil.i(TAG, "setGLBD(), successAction obj="+obj);
-							}
-					
-				});
-			} catch (Exception e) {
-				Log.e(TAG, "setGLBD(), successAction Error: "+e);
-				e.printStackTrace();
-			}
-			
+			save();
 			break;
 			
 		case R.id.tv_right_2:
 			//提交
+			commit();
 			break;
 			
 		default:
@@ -376,6 +543,5 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 			setActiveTab(index, loadData);
 		}
-		
 	}
 }

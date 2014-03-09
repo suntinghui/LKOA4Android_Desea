@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/process_work_handle_forms_item_bg" >
+
+    <!-- Navigation -->
+    <include android:id="@+id/navigation" layout="@layout/navigation" />
+    
+    <LinearLayout 
+	    android:id="@+id/forms_parent"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/navigation"
+	    android:orientation="vertical" >
+	    <!-- 下级节点 -->
+	    <include android:id="@+id/node_next"
+	        layout="@layout/process_work_handle_content_forms_item" />
+	    
+	    <!-- 节点办理时限（工作日） -->
+	    <include android:id="@+id/node_dealtime"
+	        layout="@layout/process_work_handle_content_forms_item" />
+	    
+	    <!-- 节点模式 -->
+	    <include android:id="@+id/node_mode"
+	        layout="@layout/process_work_handle_content_forms_item" />
+	    
+	    <!-- 主办人员 -->
+	    <include android:id="@+id/node_zbr"
+	        layout="@layout/process_work_handle_content_forms_item" />
+	    
+	    <!-- 相关办理人员 -->
+	    <include android:id="@+id/node_cyr"
+	        layout="@layout/process_work_handle_content_forms_item" />
+	</LinearLayout>
+</RelativeLayout>

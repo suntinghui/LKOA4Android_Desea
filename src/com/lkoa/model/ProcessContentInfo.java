@@ -1,6 +1,7 @@
 package com.lkoa.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import com.lkoa.util.LogUtil;
 import android.text.TextUtils;
 import android.util.Xml;
 
-public class ProcessContentInfo {
+public class ProcessContentInfo implements Serializable {
 	public static final String TAG_INFOR = "Infor";
 	public static final String TAG_PROCESS_ID = "FEG_20_COL_10"; 
 	public static final String TAG_HANDLE_ID = "FEG_30_COL_10";
@@ -48,7 +49,47 @@ public class ProcessContentInfo {
 		return new Option();
 	}
 	
-	public class Activity {
+	public Field getSinglePeopleField() {
+		for(Field f : filedList) {
+			if(f.type == Field.DATA_TYPE_SINGLE_PEOPLE) {
+				return f;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Field getSingleDeptField() {
+		for(Field f : filedList) {
+			if(f.type == Field.DATA_TYPE_SINGLE_DEPARTMENT) {
+				return f;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Field getMultiPeopleField() {
+		for(Field f : filedList) {
+			if(f.type == Field.DATA_TYPE_MULTI_PEOPLE) {
+				return f;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Field getMultiDeptField() {
+		for(Field f : filedList) {
+			if(f.type == Field.DATA_TYPE_MULTI_DEPARTMENT) {
+				return f;
+			}
+		}
+		
+		return null;
+	}
+	
+	public class Activity implements Serializable {
 		public static final String TAG_ACTIVITY = "Activity";
 		public static final String TAG_ID = "Id"; 
 		public static final String TAG_SELECT = "Select"; 
@@ -82,35 +123,35 @@ public class ProcessContentInfo {
 			ser.startTag(null, TAG_ACTIVITY);
 			
 			ser.startTag(null, TAG_SELECT);
-			ser.text(String.valueOf(select));
+			ser.text(packetCDATA(String.valueOf(select)));
 			ser.endTag(null, TAG_SELECT);
 			
 			ser.startTag(null, TAG_ID);
-			ser.text(String.valueOf(id));
+			ser.text(packetCDATA(String.valueOf(id)));
 			ser.endTag(null, TAG_ID);
 			
 			ser.startTag(null, TAG_NAME);
-			ser.text(name);
+			ser.text(packetCDATA(name));
 			ser.endTag(null, TAG_NAME);
 			
 			ser.startTag(null, TAG_TYPE);
-			ser.text(String.valueOf(type));
+			ser.text(packetCDATA(String.valueOf(type)));
 			ser.endTag(null, TAG_TYPE);
 			
 			ser.startTag(null, TAG_MODE);
-			ser.text(String.valueOf(mode));
+			ser.text(packetCDATA(String.valueOf(mode)));
 			ser.endTag(null, TAG_MODE);
 			
 			ser.startTag(null, TAG_DEALTIME);
-			ser.text(dealTime);
+			ser.text(packetCDATA(dealTime));
 			ser.endTag(null, TAG_DEALTIME);
 			
 			ser.startTag(null, TAG_INTERPOSE);
-			ser.text(interpose);
+			ser.text(packetCDATA(interpose));
 			ser.endTag(null, TAG_INTERPOSE);
 			
 			ser.startTag(null, TAG_RESELECT);
-			ser.text(reSelect);
+			ser.text(packetCDATA(reSelect));
 			ser.endTag(null, TAG_RESELECT);
 			
 			ser.startTag(null, TAG_ZBR);
@@ -129,7 +170,7 @@ public class ProcessContentInfo {
 		}
 	}
 	
-	public static class Field {
+	public static class Field implements Serializable {
 		public static final int EDIT_MODE_READ = 0;	//只读
 		public static final int EDIT_MODE_UPDATE = 1;	//可更新
 		public static final int EDIT_MODE_MUST = 2;	//必填
@@ -161,7 +202,9 @@ public class ProcessContentInfo {
 		public static final String TAG_OPTIONS = "OPTIONS"; 
 		
 		public enum ContentType {
-			TEXT, EDITTEXT, PULLDOWNLIST
+			TEXT, EDITTEXT, PULLDOWNLIST, 
+			SINGLE_PEOPLE, MULTI_PEOPLE, 
+			SINGLE_DEPT, MULTI_DEPT
 		}
 		
 		public String id;	//数据项标识
@@ -187,11 +230,23 @@ public class ProcessContentInfo {
 						|| type == DATA_TYPE_TEXT
 						|| type == DATA_TYPE_OPINION) {
 					return ContentType.EDITTEXT;
+					
+				} else if(type == DATA_TYPE_ENUM) {
+					return ContentType.PULLDOWNLIST;
+					
+				} else if(type == DATA_TYPE_SINGLE_PEOPLE) {
+					return ContentType.SINGLE_PEOPLE;
+					
+				} else if(type == DATA_TYPE_SINGLE_DEPARTMENT) {
+					return ContentType.SINGLE_DEPT;
+					
+				} else if(type == DATA_TYPE_MULTI_PEOPLE) {
+					return ContentType.MULTI_PEOPLE;
+					
+				} else if(type == DATA_TYPE_MULTI_DEPARTMENT) {
+					return ContentType.MULTI_DEPT;
 				}
 				
-				if(type == DATA_TYPE_ENUM) {
-					return ContentType.PULLDOWNLIST;
-				}
 				return ContentType.TEXT;
 				
 			} else {
@@ -203,27 +258,27 @@ public class ProcessContentInfo {
 			ser.startTag(null, TAG_FIELD);
 			
 			ser.startTag(null, TAG_ID);
-			ser.text(String.valueOf(id));
+			ser.text(packetCDATA(String.valueOf(id)));
 			ser.endTag(null, TAG_ID);
 			
 			ser.startTag(null, TAG_NAME);
-			ser.text(name);
+			ser.text(packetCDATA(name));
 			ser.endTag(null, TAG_NAME);
 			
 			ser.startTag(null, TAG_TYPE);
-			ser.text(String.valueOf(type));
+			ser.text(packetCDATA(String.valueOf(type)));
 			ser.endTag(null, TAG_TYPE);
 			
 			ser.startTag(null, TAG_EDIT_MODE);
-			ser.text(String.valueOf(editMode));
+			ser.text(packetCDATA(String.valueOf(editMode)));
 			ser.endTag(null, TAG_EDIT_MODE);
 			
 			ser.startTag(null, TAG_SHOWCONTENT);
-			ser.text(showContent);
+			ser.text(packetCDATA(showContent));
 			ser.endTag(null, TAG_SHOWCONTENT);
 			
 			ser.startTag(null, TAG_VALUE);
-			ser.text(value);
+			ser.text(packetCDATA(value));
 			ser.endTag(null, TAG_VALUE);
 			
 			
@@ -237,7 +292,7 @@ public class ProcessContentInfo {
 		}
 	}
 	
-	public class User {
+	public class User implements Serializable {
 		public static final String TAG_USERID = "UserId";
 		public static final String TAG_USERNAME = "UserName";
 		
@@ -247,17 +302,22 @@ public class ProcessContentInfo {
 		public void buildXml(XmlSerializer ser) throws IOException {
 			ser.startTag(null, TAG_USERID);
 			if(TextUtils.isEmpty(userId)) userId = "";
-			ser.text(userId);
+			ser.text(packetCDATA(userId));
 			ser.endTag(null, TAG_USERID);
 			
 			ser.startTag(null, TAG_USERNAME);
 			if(TextUtils.isEmpty(userName)) userName = "";
-			ser.text(userName);
+			ser.text(packetCDATA(userName));
 			ser.endTag(null, TAG_USERNAME);
+		}
+		
+		@Override
+		public String toString() {
+			return userName;
 		}
 	}
 	
-	public class Option {
+	public class Option implements Serializable {
 		public static final String TAG_ITEM = "Item"; 
 		public static final String TAG_VALUE = "Value";
 		public static final String TAG_TEXT = "Text"; 
@@ -271,54 +331,64 @@ public class ProcessContentInfo {
 			ser.startTag(null, TAG_ITEM);
 
 			ser.startTag(null, TAG_VALUE);
-			ser.text(value);
+			ser.text(packetCDATA(value));
 			ser.endTag(null, TAG_VALUE);
 			
 			ser.startTag(null, TAG_TEXT);
-			ser.text(text);
+			ser.text(packetCDATA(text));
 			ser.endTag(null, TAG_TEXT);
 			
 			ser.startTag(null, TAG_DEFAULTFLAG);
-			ser.text(String.valueOf(defaultFlag));
+			ser.text(packetCDATA(String.valueOf(defaultFlag)));
 			ser.endTag(null, TAG_DEFAULTFLAG);
 			
 			ser.endTag(null, TAG_ITEM);
 		}
 	}
 	
-	public String buildXml() throws IOException {
+	public String buildXml(boolean all) throws IOException {
 		StringWriter writer = new StringWriter(); 
 		
 		XmlSerializer ser = Xml.newSerializer();
 		ser.setOutput(writer);
 		
 		ser.startTag(null, TAG_PROCESS_ID);
-		ser.text(processId);
+		ser.text(packetCDATA(processId));
 		ser.endTag(null, TAG_PROCESS_ID);
 		
 		ser.startTag(null, TAG_HANDLE_ID);
-		ser.text(handleId);
+		ser.text(packetCDATA(handleId));
 		ser.endTag(null, TAG_HANDLE_ID);
 		
 		ser.startTag(null, TAG_PROCESS_TITLE);
-		ser.text(processTitle);
+		ser.text(packetCDATA(processTitle));
 		ser.endTag(null, TAG_PROCESS_TITLE);
 		
-		ser.startTag(null, TAG_ACTIVITYS);
-		for(Activity activity : activityList) {
-			activity.buildXml(ser);
+		if(all) {
+			ser.startTag(null, TAG_ACTIVITYS);
+			for(Activity activity : activityList) {
+				activity.buildXml(ser);
+			}
+			ser.endTag(null, TAG_ACTIVITYS);
 		}
-		ser.endTag(null, TAG_ACTIVITYS);
 		
 		ser.startTag(null, TAG_FIELDS);
 		for(Field field : filedList) {
 			field.buildXml(ser);
 		}
 		ser.endTag(null, TAG_FIELDS);
+		ser.flush();
 		
 		String xml = writer.toString();
+		xml = xml.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 		LogUtil.i("ProcessContentInfo", "buildXml(), xml="+xml);
 		return xml;
 	}
+	
+	public static String packetCDATA(String text) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<![CDATA[").append(text).append("]]>");
+		return buffer.toString();
+	} 
 
 }

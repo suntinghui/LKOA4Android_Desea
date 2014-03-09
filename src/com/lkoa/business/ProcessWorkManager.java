@@ -1,6 +1,9 @@
 package com.lkoa.business;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
+
+import android.text.TextUtils;
 
 import com.lkoa.client.Constant;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
@@ -26,7 +29,7 @@ public class ProcessWorkManager {
 		paramMap.put("sUserId", sUserId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute("正在加载数据..", map, handler);
 	}
 	
 	/**
@@ -42,7 +45,7 @@ public class ProcessWorkManager {
 		paramMap.put("sType", sType);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute("正在加载数据..", map, handler);
 	}
 	
 	/**
@@ -59,7 +62,7 @@ public class ProcessWorkManager {
 		paramMap.put("InfoId", infoId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute("正在加载数据..", map, handler);
 	}
 	
 	/**
@@ -75,7 +78,7 @@ public class ProcessWorkManager {
 		paramMap.put("InfoId", infoId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute("正在加载数据..", map, handler);
 	}
 	
 	/**
@@ -91,7 +94,7 @@ public class ProcessWorkManager {
 		paramMap.put("Id", id);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute("正在加载数据..", map, handler);
 	}
 	
 	/**
@@ -105,16 +108,23 @@ public class ProcessWorkManager {
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("sUserId", userId);
 		paramMap.put("sType", type);
-		paramMap.put("Infor", infor);
+		
+		HashMap<String, Object> inforsMap = new HashMap<String, Object>();
+		inforsMap.put("Infor", URLEncoder.encode(infor));
+		paramMap.put("Infors", inforsMap);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		String msg = "正在保存数据..";
+		if(TextUtils.equals("1", type)) {
+			msg = "正在提交数据..";
+		}
+		execute(msg ,map, handler);
 	}
 	
-	private void execute(HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
+	private void execute(String dialogMsg, HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)
-		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+		.executeQueue(dialogMsg, new LKHttpRequestQueueDone(){
 
 			@Override
 			public void onComplete() {

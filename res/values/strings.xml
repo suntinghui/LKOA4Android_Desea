@@ -76,6 +76,15 @@
 	<string name="process_work_list_sender">&#160;&#160;&#160;&#160;发送人&#160;&#160;&#160;&#160;&#160;%1$s</string>
 	<string name="process_work_handle_save">保存</string>
 	<string name="process_work_handle_commit">提交</string>
+	<string name="process_work_commit_title">操作提交</string>
+	<string name="process_work_node_next">下级节点</string>
+	<string name="process_work_node_dealtime">节点办理时限（工作日）</string>
+	<string name="process_work_node_mode">节点模式</string>
+	<string name="process_work_node_zbr">主办人员</string>
+	<string name="process_work_node_cyr">相关办理人员</string>
+	<string name="process_work_node_mode_zbr">主办人模式</string>
+	<string name="process_work_node_mode_hqr">会签人模式</string>
+	<string name="process_work_node_mode_dr">单人签发模式</string>
 	
 	<!-- 公文办理 -->
 	<string name="doc_mgr_title">公文管理</string>
@@ -103,4 +112,12 @@
 	<string name="my_email_internal_drafts">草稿箱</string>
 	<string name="my_email_internal_deleted">已删除</string>
 	<string name="my_email_external">外部邮件</string>
+	
+	<!-- 通讯录 -->
+	<string name="contacts_title">通讯录</string>
+	<string name="contacts_selector_title">通讯录-联系人选择</string>
+	<string name="contacts_sort_by_name">按姓名排序</string>
+	<string name="contacts_sort_by_department">按部门排序</string>
+	<string name="confirm">确定</string>
+	
 </resources>
