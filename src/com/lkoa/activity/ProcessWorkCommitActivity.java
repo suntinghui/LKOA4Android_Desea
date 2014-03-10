@@ -111,6 +111,11 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(resultCode == RESULT_OK) {
+			mContentInfo = (ProcessContentInfo)data.getSerializableExtra("bundle");
+			buildPageWarper();
+		}
 	}
 	
 	@Override
@@ -122,7 +127,19 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		mTvRight1.setVisibility(View.GONE);
 		mTvRight2.setText(R.string.process_work_handle_commit);
 		mTvRight2.setOnClickListener(this);
+		mNodeNext.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ProcessWorkCommitActivity.this, ProcessWorkSelectActivity.class);
+				intent.putExtra("bundle", mContentInfo);
+				startActivityForResult(intent, 0);
+			}
+		});
 		
+		buildPageWarper();
+	}
+	
+	private void buildPageWarper() {
 		List<Activity> list = mContentInfo.activityList;
 		boolean flag = false;
 		for(Activity a : list) {
@@ -150,6 +167,10 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	private void setItem(View view, int titleResId, String value) {
 		TextView title = (TextView)view.findViewById(R.id.title);
 		TextView text = (TextView)view.findViewById(R.id.content_text);
+		if(view == mNodeNext) {
+			ImageView toRightArrow = (ImageView)view.findViewById(R.id.to_right_arrow);
+			toRightArrow.setVisibility(View.VISIBLE);
+		}
 		
 		title.setText(titleResId);
 		text.setText(value);

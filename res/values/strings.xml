@@ -85,6 +85,7 @@
 	<string name="process_work_node_mode_zbr">主办人模式</string>
 	<string name="process_work_node_mode_hqr">会签人模式</string>
 	<string name="process_work_node_mode_dr">单人签发模式</string>
+	<string name="process_work_next_node_select">下级节点选择</string>
 	
 	<!-- 公文办理 -->
 	<string name="doc_mgr_title">公文管理</string>
