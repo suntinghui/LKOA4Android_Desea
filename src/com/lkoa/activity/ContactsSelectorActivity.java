@@ -52,7 +52,7 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 		mMode = intent.getIntExtra(KEY_SELECT_MODE, SELECT_MODE_SINGLE);
 		String contacts = intent.getStringExtra(KEY_SELECTED_CONTACT);
 		if(!TextUtils.isEmpty(contacts)) {
-			for(String s : contacts.split("[;]")) {
+			for(String s : contacts.split("[,]")) {
 				mSelectedContacts.add(s);
 			}
 		}
@@ -86,9 +86,17 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 				StringBuilder showContent = new StringBuilder();
 				StringBuilder value = new StringBuilder();
 				List<ContactItem> list = mAdapter.getSelectedContacts();
-				for(ContactItem item : list) {
-					showContent.append(item.userName).append(";");
-					value.append(item.userId).append(";");
+				ContactItem item = null;
+				int count = list.size();
+				for(int i=0; i<count; i++) {
+					item = list.get(i);
+					if(i == count -1) {
+						showContent.append(item.userName);
+						value.append(item.userId);
+					} else {
+						showContent.append(item.userName).append(",");
+						value.append(item.userId).append(",");
+					}
 				}
 				Intent data = new Intent();
 				data.putExtra("showContent", showContent.toString());

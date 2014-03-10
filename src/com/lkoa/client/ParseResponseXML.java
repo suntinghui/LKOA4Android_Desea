@@ -19,6 +19,7 @@ import android.util.Xml;
 import com.lkoa.model.Attachment;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.ContactItem;
+import com.lkoa.model.DepartmentItem;
 import com.lkoa.model.IdCountItem;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
@@ -1018,8 +1019,8 @@ public class ParseResponseXML {
 	 * 通讯录-部门列表
 	 */
 	private static Object getDept() throws XmlPullParserException, IOException{
-		List<ContactItem> list = new ArrayList<ContactItem>();
-		ContactItem item = null;
+		List<DepartmentItem> list = new ArrayList<DepartmentItem>();
+		DepartmentItem item = null;
 		
 		XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inStream, "UTF-8");
@@ -1027,40 +1028,16 @@ public class ParseResponseXML {
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
-				if ("Infor".equalsIgnoreCase(parser.getName())) {
-					item = new ContactItem();
+				if("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new DepartmentItem();
+					list.add(item);
 					
-				} else if("USERID".equalsIgnoreCase(parser.getName())) {
-					item.userId = parser.nextText();
-					
-				} else if("XM".equalsIgnoreCase(parser.getName())) {
-					item.userName = parser.nextText();
-					
-				} else if("DEPTID".equalsIgnoreCase(parser.getName())) {
+				} else if("DeptId".equalsIgnoreCase(parser.getName())) {
 					item.deptId = parser.nextText();
 					
-				} else if("DEPT".equalsIgnoreCase(parser.getName())) {
+				} else if("DeptName".equalsIgnoreCase(parser.getName())) {
 					item.deptName = parser.nextText();
 					
-				} else if("BGDH".equalsIgnoreCase(parser.getName())) {
-					item.bgdh = parser.nextText();
-					
-				} else if("YDDH".equalsIgnoreCase(parser.getName())) {
-					item.yddh = parser.nextText();
-					
-				} else if("EMAIL".equalsIgnoreCase(parser.getName())) {
-					item.email1 = parser.nextText();
-					
-				} else if("EMAIL2".equalsIgnoreCase(parser.getName())) {
-					item.email2 = parser.nextText();
-					
-				}
-				break;
-				
-			case XmlPullParser.END_TAG:
-				if ("Infor".equalsIgnoreCase(parser.getName())) {
-					list.add(item);
-					item = null;
 				}
 				break;
 			}

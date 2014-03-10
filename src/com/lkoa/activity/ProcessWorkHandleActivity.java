@@ -165,10 +165,32 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				field.showContent = showContent;
 				field.value = value;
 				
+			} else if(requestCode == DepartmentSelectorActivity.SELECT_MODE_SINGLE) {
+				//单选部门
+				String showContent = data.getStringExtra("showContent");
+				String value = data.getStringExtra("value");
+				
+				Field field = mContentInfo.getSingleDeptField();
+				field.showContent = showContent;
+				field.value = value;
+				
+			} else if(requestCode == DepartmentSelectorActivity.SELECT_MODE_MULTI) {
+				//多选部门
+				String showContent = data.getStringExtra("showContent");
+				String value = data.getStringExtra("value");
+				
+				Field field = mContentInfo.getMultiDeptField();
+				field.showContent = showContent;
+				field.value = value;
 			}
 			
+			removeAllFormViews();
 			buildBD(mContentInfo);
 		}
+	}
+	
+	private void removeAllFormViews() {
+		if(mLinearForms != null) mLinearForms.removeAllViews();
 	}
 	
 	@Override
@@ -278,36 +300,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			//TODO: 跳转到联系人选择
 			contentEdit.setVisibility(View.GONE);
 			toRightArrow.setVisibility(View.VISIBLE);
-			if(TextUtils.isEmpty(field.showContent)) {
-				field.showContent = "test";
-				field.value = "20";
-			}
 			contentText.setText(field.showContent);
 			final ContentType type = contentType;
 			view.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(
-							ProcessWorkHandleActivity.this, 
-							ContactsSelectorActivity.class);
-					int mode = -1;
-					if(type == ContentType.SINGLE_PEOPLE) {
-						mode = ContactsSelectorActivity.SELECT_MODE_SINGLE;
-						intent.putExtra(
-								ContactsSelectorActivity.KEY_SELECT_MODE, 
-								mode);
-						intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
-								field.value);
-					} else {
-						mode = ContactsSelectorActivity.SELECT_MODE_MULTI;
-						intent.putExtra(
-								ContactsSelectorActivity.KEY_SELECT_MODE, 
-								mode);
-						intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
-								field.value);
-					}
-					startActivityForResult(intent, mode);
+					selectContacts(field, type);
 				}
 			});
 			
@@ -316,11 +315,15 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			//TODO: 跳转到部门选择
 			contentEdit.setVisibility(View.GONE);
 			toRightArrow.setVisibility(View.VISIBLE);
-			if(TextUtils.isEmpty(field.showContent)) {
-				field.showContent = "总裁办公室";
-				field.value = "15";
-			}
 			contentText.setText(field.showContent);
+			final ContentType type = contentType;
+			view.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					selectDepts(field, type);
+				}
+			});
 			
 		} else {
 			contentEdit.setVisibility(View.GONE);
@@ -329,6 +332,52 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		}
 		view.setTag(field);
 		mLinearForms.addView(view);
+	}
+	
+	private void selectContacts(Field field, ContentType type) {
+		Intent intent = new Intent(
+				ProcessWorkHandleActivity.this, 
+				ContactsSelectorActivity.class);
+		int mode = -1;
+		if(type == ContentType.SINGLE_PEOPLE) {
+			mode = ContactsSelectorActivity.SELECT_MODE_SINGLE;
+			intent.putExtra(
+					ContactsSelectorActivity.KEY_SELECT_MODE, 
+					mode);
+			intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
+					field.value);
+		} else {
+			mode = ContactsSelectorActivity.SELECT_MODE_MULTI;
+			intent.putExtra(
+					ContactsSelectorActivity.KEY_SELECT_MODE, 
+					mode);
+			intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
+					field.value);
+		}
+		startActivityForResult(intent, mode);
+	}
+	
+	private void selectDepts(Field field, ContentType type) {
+		Intent intent = new Intent(
+				ProcessWorkHandleActivity.this, 
+				DepartmentSelectorActivity.class);
+		int mode = -1;
+		if(type == ContentType.SINGLE_DEPT) {
+			mode = DepartmentSelectorActivity.SELECT_MODE_SINGLE;
+			intent.putExtra(
+					DepartmentSelectorActivity.KEY_SELECT_MODE, 
+					mode);
+			intent.putExtra(DepartmentSelectorActivity.KEY_SELECTED_DEPT, 
+					field.value);
+		} else {
+			mode = DepartmentSelectorActivity.SELECT_MODE_MULTI;
+			intent.putExtra(
+					DepartmentSelectorActivity.KEY_SELECT_MODE, 
+					mode);
+			intent.putExtra(DepartmentSelectorActivity.KEY_SELECTED_DEPT, 
+					field.value);
+		}
+		startActivityForResult(intent, mode);
 	}
 	
 	private void setActiveTab(int index, boolean loadData) {

@@ -14,10 +14,11 @@ import android.widget.ListView;
 
 import com.lkoa.R;
 import com.lkoa.adapter.ContactsSelectorAdapter;
-import com.lkoa.business.ContactsManager;
+import com.lkoa.adapter.DepartmentSelectorAdapter;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.ContactItem;
+import com.lkoa.model.DepartmentItem;
 import com.lkoa.util.LogUtil;
 import com.lkoa.util.Pinyin4j;
 
@@ -28,14 +29,14 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 	implements OnItemClickListener {
 	private static final String TAG = "ContactsSelectorActivity";
 	
-	public static final int SELECT_MODE_SINGLE = 0;	//联系人单选模式
-	public static final int SELECT_MODE_MULTI = 1;	//联系人多选模式
+	public static final int SELECT_MODE_SINGLE = 5;	//联系人单选模式
+	public static final int SELECT_MODE_MULTI = 6;	//联系人多选模式
+	public static final String KEY_SELECT_MODE = "key_select_mode";	//选择模式
 	
-	public static final String KEY_SELECT_MODE = "key_select_mode";
-	public static final String KEY_SELECTED_CONTACT = "key_selected_contact";
+	public static final String KEY_SELECTED_DEPT = "key_selected_contact";//已选择的部门
 	
 	private ListView mSortByNameLv;
-	private ContactsSelectorAdapter mAdapter;
+	private DepartmentSelectorAdapter mAdapter;
 	
 	private ProcessWorkManager mContactsMgr;
 	
@@ -51,9 +52,9 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 		
 		Intent intent = getIntent();
 		mMode = intent.getIntExtra(KEY_SELECT_MODE, SELECT_MODE_SINGLE);
-		String contacts = intent.getStringExtra(KEY_SELECTED_CONTACT);
+		String contacts = intent.getStringExtra(KEY_SELECTED_DEPT);
 		if(!TextUtils.isEmpty(contacts)) {
-			for(String s : contacts.split("[;]")) {
+			for(String s : contacts.split("[,]")) {
 				mSelectedContacts.add(s);
 			}
 		}
@@ -86,10 +87,18 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 			public void onClick(View v) {
 				StringBuilder showContent = new StringBuilder();
 				StringBuilder value = new StringBuilder();
-				List<ContactItem> list = mAdapter.getSelectedContacts();
-				for(ContactItem item : list) {
-					showContent.append(item.userName).append(";");
-					value.append(item.userId).append(";");
+				List<DepartmentItem> list = mAdapter.getSelectedContacts();
+				DepartmentItem item = null;
+				int count = list.size();
+				for(int i=0; i<count; i++) {
+					item = list.get(i);
+					if(i == count - 1) {
+						showContent.append(item.deptName);
+						value.append(item.deptId);
+					} else {
+						showContent.append(item.deptName).append(",");
+						value.append(item.deptId).append(",");
+					}
 				}
 				Intent data = new Intent();
 				data.putExtra("showContent", showContent.toString());
@@ -101,7 +110,7 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 		});
 		
 		//获取数据
-		mContactsMgr.getSysAddress_Book(getResponseHandler());
+		mContactsMgr.getDept(getResponseHandler());
 	}
 	
 	private LKAsyncHttpResponseHandler getResponseHandler() {
@@ -110,28 +119,34 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction(), " + obj.toString());
-				List<ContactItem> list = (ArrayList<ContactItem>)obj;
+				List<DepartmentItem> list = (ArrayList<DepartmentItem>)obj;
 				initAlphaU(list);
 				initSelect(list);
 				if(mAdapter == null) {
-					mAdapter = new ContactsSelectorAdapter(DepartmentSelectorActivity.this, 0, list);
+					mAdapter = new DepartmentSelectorAdapter(DepartmentSelectorActivity.this, 0, list);
 					mSortByNameLv.setAdapter(mAdapter);
 				}
 			}
 		};
 	}
 	
-	private void initSelect(List<ContactItem> list) {
-		for(ContactItem item : list) {
-			if(mSelectedContacts.indexOf(item.userId) > -1) {
+	private void initSelect(List<DepartmentItem> list) {
+		for(DepartmentItem item : list) {
+			if(mSelectedContacts.indexOf(item.deptId) > -1) {
 				item.checked = true;
 			}
 		}
 	}
 	
-	private void initAlphaU(List<ContactItem> list) {
-		for(ContactItem item : list) {
-			item.alphaU = String.valueOf(Pinyin4j.getHanyuPinyin(item.userName).charAt(0));
+	private void initAlphaU(List<DepartmentItem> list) {
+		String py = null;
+		for(DepartmentItem item : list) {
+			py = Pinyin4j.getHanyuPinyin(item.deptName);
+			if(!TextUtils.isEmpty(py)) {
+				item.alpha = String.valueOf(py.charAt(0));
+			} else {
+				item.alpha = "#";
+			}
 		}
 	}
 	
@@ -142,8 +157,8 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 			mAdapter.clearSelected();
 		}
 		
-		List<ContactItem> list = mAdapter.getData();
-		ContactItem item = list.get(position);
+		List<DepartmentItem> list = mAdapter.getData();
+		DepartmentItem item = list.get(position);
 		item.checked = !item.checked;
 		mAdapter.notifyDataSetChanged();
 	}
