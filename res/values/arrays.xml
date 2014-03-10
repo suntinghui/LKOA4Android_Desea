@@ -9,4 +9,14 @@
         <item >经营管理部</item>
         <item >规划设计部</item>
     </string-array>
+    
+    <string-array name="rc_content_item_names">
+        <item >标题</item>
+        <item >执行人</item>
+        <item >时间</item>
+        <item >范围</item>
+        <item >状态</item>
+        <item >参与者</item>
+        <item >内容</item>
+    </string-array>
 </resources>

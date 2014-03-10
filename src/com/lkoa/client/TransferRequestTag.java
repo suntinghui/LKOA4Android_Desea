@@ -29,6 +29,8 @@ public class TransferRequestTag {
 	public static final int GET_DEPT = 20;	//通讯录-部门列表
 	public static final int GET_RC_COUNT = 21;	//日程管理-条数
 	public static final int GET_ATT = 22;	//附件-内容
+	public static final int GET_RC_LIST = 23;	//日程管理-列表
+	public static final int GET_RC = 25;	//日程管理-内容
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -57,6 +59,8 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_DEPT, "GetDept");
 			requestTagMap.put(GET_RC_COUNT, "GetRCCount");
 			requestTagMap.put(GET_ATT, "GetAtt");
+			requestTagMap.put(GET_RC_LIST, "GetRCList");
+			requestTagMap.put(GET_RC, "GetRC");
 			
 		}
 		

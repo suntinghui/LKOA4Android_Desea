@@ -105,6 +105,12 @@
 	<string name="schedule_department">部门日程</string>
 	<string name="schedule_leader">领导日程</string>
 	<string name="schedule_active">集团活动</string>
+	<string name="schedule_rc_title">日程标题：</string>
+	<string name="schedule_rc_date">日程时间：</string>
+	<string name="schedule_rc_fw">日程范围：</string>
+	<string name="schedule_rc_state">日程状态：</string>
+	<string name="schedule_rc_content_title">日程详情</string>
+	<string name="schedule_active_content_title">活动详情</string>
 	
 	<!-- 我的邮件 -->
 	<string name="my_email_title">邮件管理</string>

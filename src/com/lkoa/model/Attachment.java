@@ -5,5 +5,5 @@ public class Attachment {
 	public String id;
 	public String title;
 	public String type;
-	public int size;
+	public String size;
 }

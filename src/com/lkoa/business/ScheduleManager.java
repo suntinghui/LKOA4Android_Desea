@@ -32,6 +32,38 @@ public class ScheduleManager {
 		execute("正在加载数据..", map, handler);
 	}
 	
+	/**
+	 * 日程管理-列表
+	 */
+	public void getRCList(String sType, String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_RC_LIST);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		paramMap.put("sType", sType);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
+	/**
+	 * 日程管理-列表内容
+	 */
+	public void getRC(String sUserId, String InfoId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_RC);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		paramMap.put("InfoId", InfoId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
 	private void execute(String dialogMsg, HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/common_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <LinearLayout android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="20dip"
+        android:orientation="vertical"
+        android:visibility="gone"
+         >
+        
+        <include 
+            android:id="@+id/rc_title"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/rc_zxr"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/rc_date"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/rc_fw"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/rc_state"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/rc_cyz"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/rc_content"
+            layout="@layout/schedule_rc_content_item" />
+        
+    </LinearLayout>
+    
+</LinearLayout>

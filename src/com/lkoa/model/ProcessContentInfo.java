@@ -3,6 +3,7 @@ package com.lkoa.model;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -390,7 +391,7 @@ public class ProcessContentInfo implements Serializable {
 	
 	public static String packetCDATA(String text) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("<![CDATA[").append(text).append("]]>");
+		buffer.append("<![CDATA[").append(URLEncoder.encode(text)).append("]]>");
 		return buffer.toString();
 	} 
 

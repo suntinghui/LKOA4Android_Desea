@@ -23,6 +23,8 @@ import com.lkoa.model.DepartmentItem;
 import com.lkoa.model.IdCountItem;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
+import com.lkoa.model.RCContentItem;
+import com.lkoa.model.RCListItem;
 import com.lkoa.model.ProcessContentInfo.Activity;
 import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Option;
@@ -133,6 +135,18 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_ATT:
 				//附件-内容
 				return getAtt();
+				
+			case TransferRequestTag.GET_RC_COUNT:
+				//日程-条数
+				return getRCCount();
+				
+			case TransferRequestTag.GET_RC_LIST:
+				//日程-列表
+				return getRCList();
+				
+			case TransferRequestTag.GET_RC:
+				//日程-列表内容
+				return getRC();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -430,7 +444,7 @@ public class ParseResponseXML {
 				} else if("Type".equalsIgnoreCase(parser.getName())) {
 					attachment.type = parser.nextText();
 				} else if("Size".equalsIgnoreCase(parser.getName())) {
-					attachment.size = Integer.parseInt(parser.nextText());
+					attachment.size = parser.nextText();
 				}
 				break;
 				
@@ -922,7 +936,7 @@ public class ParseResponseXML {
 					item.type = parser.nextText();
 					
 				} else if("Size".equalsIgnoreCase(parser.getName())) {
-					item.size = Integer.parseInt(parser.nextText());
+					item.size = parser.nextText();
 					
 				}
 				break;
@@ -1073,5 +1087,160 @@ public class ParseResponseXML {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 附件-内容
+	 */
+	private static Object getRCCount() throws XmlPullParserException, IOException{
+		String result = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if("GetRCCountResult".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
+					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 日程-列表
+	 */
+	private static Object getRCList() throws XmlPullParserException, IOException{
+		List<RCListItem> list = new ArrayList<RCListItem>();
+		RCListItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new RCListItem();
+					
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("FW".equalsIgnoreCase(parser.getName())) {
+					item.fw = parser.nextText();
+					
+				} else if("Date".equalsIgnoreCase(parser.getName())) {
+					item.date = parser.nextText();
+					
+				} else if("State".equalsIgnoreCase(parser.getName())) {
+					item.state = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+
+	/**
+	 * 日程-内容
+	 */
+	private static Object getRC() throws XmlPullParserException, IOException{
+		RCContentItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new RCContentItem();
+					
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("FW".equalsIgnoreCase(parser.getName())) {
+					item.fw = parser.nextText();
+					
+				} else if("Date".equalsIgnoreCase(parser.getName())) {
+					item.date = parser.nextText();
+					
+				} else if("State".equalsIgnoreCase(parser.getName())) {
+					item.state = parser.nextText();
+					
+				} else if("ZXR".equalsIgnoreCase(parser.getName())) {
+					item.zxr = parser.nextText();
+					
+				} else if("CYR".equalsIgnoreCase(parser.getName())) {
+					item.cyr = parser.nextText();
+					
+				} else if("NR".equalsIgnoreCase(parser.getName())) {
+					item.nr = parser.nextText();
+					
+				} else if("FJs".equalsIgnoreCase(parser.getName())) {
+					item.attachments = new ArrayList<Attachment>();
+					parseFJs(parser, item.attachments);
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return item;
+	}
+	
+	private static void parseFJs(XmlPullParser parser, List<Attachment> outList) throws XmlPullParserException, IOException {
+		Attachment item = null;
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("FJ".equalsIgnoreCase(parser.getName())) {
+					item = new Attachment();
+					outList.add(item);
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("Type".equalsIgnoreCase(parser.getName())) {
+					item.type = parser.nextText();
+					
+				} else if("Size".equalsIgnoreCase(parser.getName())) {
+					item.size = parser.nextText();
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("FJs".equalsIgnoreCase(parser.getName())) {
+					return;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
 	}
 }

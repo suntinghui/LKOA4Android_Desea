@@ -32,4 +32,9 @@
     
     <drawable name="process_work_handle_forms_item_bg">#f1f1f1</drawable>
     <drawable name="ic_cursor">#4691f7</drawable>
+    
+    <color name="rc_title">#191e20</color>
+    <color name="rc_title_value">#3826fe</color>
+    <color name="rc_state_value">#33b9f3</color>
+    <color name="common_bg">#f1f1f1</color>
 </resources>
