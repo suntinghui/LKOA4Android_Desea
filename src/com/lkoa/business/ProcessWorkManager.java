@@ -136,6 +136,22 @@ public class ProcessWorkManager {
 		execute(msg ,map, handler);
 	}
 	
+	/**
+	 * 附件-内容
+	 */
+	public void getAtt(String attId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_ATT);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("AttId", attId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		String msg = "正在加载数据..";
+		execute(msg ,map, handler);
+	}
+	
 	private void execute(String dialogMsg, HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)

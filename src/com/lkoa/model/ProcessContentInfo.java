@@ -204,7 +204,8 @@ public class ProcessContentInfo implements Serializable {
 		public enum ContentType {
 			TEXT, EDITTEXT, PULLDOWNLIST, 
 			SINGLE_PEOPLE, MULTI_PEOPLE, 
-			SINGLE_DEPT, MULTI_DEPT
+			SINGLE_DEPT, MULTI_DEPT, 
+			TEXT_EDITTEXT	//用于意见
 		}
 		
 		public String id;	//数据项标识
@@ -227,9 +228,11 @@ public class ProcessContentInfo implements Serializable {
 				if(type == DATA_TYPE_CHAR 
 						|| type == DATA_TYPE_INT 
 						|| type == DATA_TYPE_FLOAT
-						|| type == DATA_TYPE_TEXT
-						|| type == DATA_TYPE_OPINION) {
+						|| type == DATA_TYPE_TEXT) {
 					return ContentType.EDITTEXT;
+					
+				} else if(type == DATA_TYPE_OPINION) {
+					return ContentType.TEXT_EDITTEXT;
 					
 				} else if(type == DATA_TYPE_ENUM) {
 					return ContentType.PULLDOWNLIST;

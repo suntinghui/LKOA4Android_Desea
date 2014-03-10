@@ -60,7 +60,7 @@ public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
 		}
 		
 		ProcessItem item = getItem(position);
-		holder.title.setText(item.title);
+		holder.title.setText((position+1) +". "+item.title);
 		holder.type.setText(mRes.getString(R.string.process_work_list_type, item.type));
 		holder.task.setText(mRes.getString(R.string.process_work_list_task, item.task));
 		holder.sender.setText(mRes.getString(R.string.process_work_list_sender, item.sender));

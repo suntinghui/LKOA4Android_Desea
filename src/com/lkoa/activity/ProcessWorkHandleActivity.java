@@ -5,33 +5,25 @@ import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.DataSetObserver;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.lkoa.R;
-import com.lkoa.adapter.ProcessWorkSpinnerAdapter;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.Attachment;
@@ -78,7 +70,6 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	private int mTextColorUnselected;
 	
 	private ViewPager mContentPager;
-	private int mCursorW, mOffset;
 	
 	private String mInfoId;	//流程序号
 	private String mType;
@@ -224,15 +215,6 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mContentPager.setAdapter(new MyPagerAdapter(views));
 		mContentPager.setOnPageChangeListener(new MyOnPageChangeListener());
 		
-		//初始化cursor
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int screenW = dm.widthPixels;// 获取分辨率宽度
-		mCursorW = screenW / 3;
-		mOffset = (screenW / 3 - mCursorW) / 2;// 计算偏移量
-		Matrix matrix = new Matrix();
-		matrix.postTranslate(mOffset, 0);
-		
 		mFormsDataLoaded = true;
 		setActiveTab(INDEX_FORMS, true);
 	}
@@ -252,14 +234,34 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	 * 构建附件页面
 	 */
 	private void buildAttachment(List<Attachment> list) {
+		if(mLinearAttachments != null) {
+			mLinearAttachments.removeAllViews();
+		}
+		
 		for(Attachment att : list) {
 			//TODO: 构建附件页面
 			View view = mLayoutInflater.inflate(R.layout.process_work_handle_content_attachment_item, null);
 			TextView name = (TextView)view.findViewById(R.id.tv_attachment_name);
 			name.setText(att.title);
+			final String attId = att.id;
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mProcessWorkMgr.getAtt(attId, getAttachmentResponseHandler());
+				}
+			});
 			
 			mLinearAttachments.addView(view);
 		}
+	}
+	
+	private LKAsyncHttpResponseHandler getAttachmentResponseHandler() {
+		return new LKAsyncHttpResponseHandler() {
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, "successAction(), attachment response. obj="+obj);
+			}
+		};
 	}
 	
 	private void setupFormItem(final Field field) {
@@ -276,6 +278,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			contentEdit.setText(field.showContent);
 			contentEdit.setVisibility(View.VISIBLE);
 			contentText.setVisibility(View.GONE);
+			
+		} else if(contentType == ContentType.TEXT_EDITTEXT) {
+			//先显示showContent的值，再在下面显示文本框让用户输入
+			contentText.setText(field.showContent);
+			contentText.setVisibility(View.VISIBLE);
+			contentEdit.setVisibility(View.VISIBLE);
 			
 		} else if(contentType == ContentType.PULLDOWNLIST) {
 			//TODO: 处理弹出选择dialog
@@ -423,6 +431,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				@Override
 				public void successAction(Object obj) {
 					LogUtil.i(TAG, obj.toString());
+					mTextDataLoaded = true;
 				}
 			});
 			break;
@@ -434,6 +443,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				@Override
 				public void successAction(Object obj) {
 					LogUtil.i(TAG, obj.toString());
+					mAttachmentLoaded = true;
 					List<Attachment> list = (ArrayList<Attachment>)obj;
 					mAttachmentCount.setText(getResources().getString(
 							R.string.process_work_handle_attachment_added, list.size()));
@@ -461,7 +471,11 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		ContentType type = field.getContentType();
 		if(type == ContentType.EDITTEXT) {
 			EditText et = (EditText)view.findViewById(R.id.content_edit);
-			field.showContent = et.getText().toString();
+//			field.showContent = et.getText().toString();
+			field.value = et.getText().toString();
+			
+		} else if(type == ContentType.TEXT_EDITTEXT) {
+			EditText et = (EditText)view.findViewById(R.id.content_edit);
 			field.value = et.getText().toString();
 			
 		} else if(type == ContentType.SINGLE_PEOPLE

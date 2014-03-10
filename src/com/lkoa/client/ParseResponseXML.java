@@ -129,6 +129,10 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_DEPT:
 				//通讯录-部门列表
 				return getDept();
+				
+			case TransferRequestTag.GET_ATT:
+				//附件-内容
+				return getAtt();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -1045,5 +1049,29 @@ public class ParseResponseXML {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * 附件-内容
+	 */
+	private static Object getAtt() throws XmlPullParserException, IOException{
+		String result = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if("GetAttResult".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
+					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
 	}
 }

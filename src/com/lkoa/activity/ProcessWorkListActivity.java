@@ -58,6 +58,9 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 			@Override
 			public void successAction(Object obj) {
 				ArrayList<ProcessItem> list = (ArrayList<ProcessItem>)obj;
+				StringBuffer buffer = new StringBuffer(mTvTitle.getText());
+				buffer.append("（").append(list.size()).append("）");
+				mTvTitle.setText(buffer.toString());
 				if(mAdapter == null) {
 					mAdapter = new ProcessWorkListAdapter(
 							ProcessWorkListActivity.this, 0, list);
