@@ -17,7 +17,7 @@ import com.lkoa.model.ProcessContentInfo.Activity;
 /**
  * 流程管理-节点选择
  */
-public class ProcessWorkSelectActivity extends CenterMsgBaseActivity implements OnItemClickListener {
+public class ProcessWorkNodeSelectActivity extends CenterMsgBaseActivity implements OnItemClickListener {
 	
 	private ListView mListView = null;
 	private ProcessWorkNodeSelectAdapter mAdapter;

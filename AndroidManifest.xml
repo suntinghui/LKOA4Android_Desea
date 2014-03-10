@@ -183,7 +183,7 @@
             android:theme="@android:style/Theme.NoTitleBar" />
       <!-- 流程管理-节点选择 -->
       <activity
-            android:name=".activity.ProcessWorkSelectActivity"
+            android:name=".activity.ProcessWorkNodeSelectActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"

@@ -77,7 +77,7 @@ public class DepartmentSelectorActivity extends CenterMsgBaseActivity
 	protected void setupViews() {
 		super.setupViews();
 		
-		mTvTitle.setText(R.string.contacts_selector_title);
+		mTvTitle.setText(R.string.process_work_department_select);
 		mLinearRight.setVisibility(View.VISIBLE);
 		mTvRight1.setVisibility(View.GONE);
 		mTvRight2.setVisibility(View.VISIBLE);

@@ -130,7 +130,7 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		mNodeNext.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(ProcessWorkCommitActivity.this, ProcessWorkSelectActivity.class);
+				Intent intent = new Intent(ProcessWorkCommitActivity.this, ProcessWorkNodeSelectActivity.class);
 				intent.putExtra("bundle", mContentInfo);
 				startActivityForResult(intent, 0);
 			}
