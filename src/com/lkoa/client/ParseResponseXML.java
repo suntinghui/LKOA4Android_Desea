@@ -21,6 +21,7 @@ import com.lkoa.model.ContactItem;
 import com.lkoa.model.DepartmentItem;
 import com.lkoa.model.IdCountItem;
 import com.lkoa.model.JTHDContentItem;
+import com.lkoa.model.MailContentItemInfo;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
 import com.lkoa.model.ProcessContentInfo.Activity;
@@ -155,6 +156,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_JTHD:
 				//日程-集团活动内容
 				return getJTHD();
+				
+			case TransferRequestTag.GET_MAIL:
+				//我的邮件-获取邮件内容
+				return getMail();
+				
+			case TransferRequestTag.WRITE_MAIL:
+				//我的邮件-获取邮件内容
+				return writeMail();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -894,6 +903,77 @@ public class ParseResponseXML {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * 我的邮件-邮件内容
+	 */
+	private static Object getMail() throws XmlPullParserException, IOException{
+		MailContentItemInfo item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new MailContentItemInfo();
+					
+				} else if("EML_20_COL_10".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("EML_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("EML_20_COL_30".equalsIgnoreCase(parser.getName())) {
+					item.content = parser.nextText();
+					
+				} else if("SYS_30_COL_30".equalsIgnoreCase(parser.getName())) {
+					item.sender = parser.nextText();
+					
+				} else if("EML_20_COL_100".equalsIgnoreCase(parser.getName())) {
+					item.date = parser.nextText();
+					
+				} else if("SJR".equalsIgnoreCase(parser.getName())) {
+					item.sjr = parser.nextText();
+					
+				} else if("SJRId".equalsIgnoreCase(parser.getName())) {
+					item.sjrId = parser.nextText();
+					
+				} else if("FJs".equalsIgnoreCase(parser.getName())) {
+					item.attachments = new ArrayList<Attachment>();
+					parseFJs(parser, item.attachments);
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return item;
+	}
+	
+	/**
+	 * 我的邮件-写邮件
+	 */
+	private static Object writeMail() throws XmlPullParserException, IOException{
+		String result = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("WriteMail".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
 	}
 	
 	/**

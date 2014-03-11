@@ -30,4 +30,13 @@
         <item >参加领导</item>
         <item >内容</item>
     </string-array>
+    
+    <string-array name="my_mail_content_item_names">
+        <item >发件人：</item>
+        <item >收件人：</item>
+        <item >主题：</item>
+        <item >内容：</item>
+        <item >时间</item>
+        <item >附件</item>
+    </string-array>
 </resources>

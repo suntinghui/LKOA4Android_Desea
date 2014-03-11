@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/common_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <ScrollView android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingBottom="10dip" >
+    <LinearLayout android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="20dip"
+        android:orientation="vertical"
+        android:visibility="gone" >
+        
+        <include 
+            android:id="@+id/mail_sender"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/mail_sjr"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/mail_title"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/mail_content"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/mail_date"
+            layout="@layout/schedule_rc_content_item" />
+        <include 
+            android:id="@+id/mail_attachment"
+            layout="@layout/schedule_rc_content_item" />
+        
+    </LinearLayout>
+    </ScrollView>
+    
+</LinearLayout>

@@ -120,6 +120,8 @@
 	<string name="my_email_internal_drafts">草稿箱</string>
 	<string name="my_email_internal_deleted">已删除</string>
 	<string name="my_email_external">外部邮件</string>
+	<string name="my_email_details">邮件详情</string>
+	<string name="my_email_send">发送</string>
 	
 	<!-- 通讯录 -->
 	<string name="contacts_title">通讯录</string>

@@ -280,6 +280,22 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@android:style/Theme.NoTitleBar" />
+      <!-- 我的邮件-内部邮件-内容页 -->
+      <activity
+            android:name=".activity.MyMailContentActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@android:style/Theme.NoTitleBar" />
+      <!-- 我的邮件-写邮件 -->
+      <activity
+            android:name=".activity.MyMailWriteActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@android:style/Theme.NoTitleBar" />
+      
       
       <!-- 通讯录-列表页 -->
       <activity

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/common_bg"
+    android:orientation="vertical" >
+
+    <!-- Navigation -->
+
+    <include layout="@layout/navigation" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_marginTop="20dip"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <!-- 收件人 -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收件人：" 
+                style="@style/TextName"/>
+            
+            <TextView android:id="@+id/mail_sjr"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/TextValue" />
+            
+            <ImageView android:id="@+id/mail_sjr_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="8dip"
+                android:layout_marginRight="3dip"
+                android:src="@drawable/ic_add_bg" />
+        </LinearLayout>
+        
+        <!-- 主题 -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="主题：" 
+                style="@style/TextName"/>
+            
+            <EditText android:id="@+id/mail_title"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="5"
+                style="@style/EditText" />
+        </LinearLayout>
+        
+        <!-- 邮件内容 -->
+        <EditText 
+            	android:id="@+id/mail_content"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:layout_margin="10dip"
+                android:hint="请输入邮件内容"
+                style="@style/EditText" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.lkoa.R;
 import com.lkoa.adapter.MyMailListAdapter;
@@ -18,7 +20,7 @@ import com.lkoa.util.LogUtil;
 /**
  * 我的邮件-内部邮件-列表页
  */
-public class MyMailInternalListActivity extends CenterMsgBaseActivity implements OnClickListener {
+public class MyMailInternalListActivity extends CenterMsgBaseActivity implements OnItemClickListener {
 	private static final String TAG = "MyMailInternalListActivity";
 	
 	public static final int STATE_UNREAD = 0;
@@ -54,6 +56,7 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 		super.findViews();
 		
 		mListView = (ListView) findViewById(android.R.id.list);
+		mListView.setOnItemClickListener(this);
 	}
 	
 	@Override
@@ -76,26 +79,11 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 	}
 	
 	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.my_email_internal_inbox:
-			//收件箱
-			break;
-			
-		case R.id.my_email_internal_outbox:
-			//发件箱
-			break;
-			
-		case R.id.my_email_internal_drafts:
-			//草稿箱
-			break;
-			
-		case R.id.my_email_internal_deleted:
-			//已删除
-			break;
-
-		default:
-			break;
-		}
+	public void onItemClick(AdapterView<?> adapterView, View view, int pos, long arg3) {
+		MailItemInfo item = mAdapter.getData().get(pos);
+		String mailId = item.id;
+		Intent intent = new Intent(this, MyMailContentActivity.class);
+		intent.putExtra("mailId", mailId);
+		startActivity(intent);
 	}
 }
