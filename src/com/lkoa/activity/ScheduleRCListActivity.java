@@ -19,7 +19,7 @@ import com.lkoa.model.RCListItem;
 /**
  * 日程安排-列表页
  */
-public class ScheduleListActivity extends CenterMsgBaseActivity implements OnItemClickListener {
+public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnItemClickListener {
 	
 	private ListView mListView = null;
 	private ScheduleRCListAdapter mAdapter;
@@ -65,7 +65,7 @@ public class ScheduleListActivity extends CenterMsgBaseActivity implements OnIte
 					List<RCListItem> list = (ArrayList<RCListItem>)obj;
 					if(mAdapter == null) {
 						mAdapter = new ScheduleRCListAdapter(
-								ScheduleListActivity.this, 0, list);
+								ScheduleRCListActivity.this, 0, list);
 						mListView.setAdapter(mAdapter);
 					}
 				}
@@ -73,6 +73,18 @@ public class ScheduleListActivity extends CenterMsgBaseActivity implements OnIte
 			
 		} else {
 			//集团活动
+			mScheduleMgr.getJTHDList(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+				
+				@Override
+				public void successAction(Object obj) {
+					List<RCListItem> list = (ArrayList<RCListItem>)obj;
+					if(mAdapter == null) {
+						mAdapter = new ScheduleRCListAdapter(
+								ScheduleRCListActivity.this, 0, list);
+						mListView.setAdapter(mAdapter);
+					}
+				}
+			});
 		}
 		
 	}
@@ -80,13 +92,15 @@ public class ScheduleListActivity extends CenterMsgBaseActivity implements OnIte
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 		RCListItem item = mAdapter.getData().get(position);
-		Intent intent = new Intent(this, ScheduleRCContentActivity.class);
-		intent.putExtra("InfoId", item.id);
+		Intent intent = null;
 		if(mType < 4) {
+			intent = new Intent(this, ScheduleRCContentActivity.class);
 			intent.putExtra("titleResId", R.string.schedule_rc_content_title);
 		} else {
+			intent = new Intent(this, ScheduleActiveContentActivity.class);
 			intent.putExtra("titleResId", R.string.schedule_active_content_title);
 		}
+		intent.putExtra("InfoId", item.id);
 		
 		startActivity(intent);
 	}

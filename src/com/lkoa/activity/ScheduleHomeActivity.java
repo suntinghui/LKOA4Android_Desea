@@ -119,7 +119,7 @@ public class ScheduleHomeActivity extends CenterMsgBaseActivity implements OnCli
 	@Override
 	public void onClick(View v) {
 		int index = (Integer)v.getTag();
-		Intent intent = new Intent(this, ScheduleListActivity.class);
+		Intent intent = new Intent(this, ScheduleRCListActivity.class);
 		intent.putExtra("titleResId", mTitleResIds[index]);
 		intent.putExtra("sType", mTypes[index]);
 		startActivity(intent);

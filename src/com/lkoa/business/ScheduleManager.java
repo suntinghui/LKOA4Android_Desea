@@ -49,6 +49,37 @@ public class ScheduleManager {
 	}
 	
 	/**
+	 * 日程管理-集体活动列表
+	 */
+	public void getJTHDList(String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_JTHD_LIST);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
+	/**
+	 * 日程管理-集体活动列表
+	 */
+	public void getJTHD(String sUserId, String InfoId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_JTHD);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		paramMap.put("InfoId", InfoId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
+	/**
 	 * 日程管理-列表内容
 	 */
 	public void getRC(String sUserId, String InfoId, final LKAsyncHttpResponseHandler handler) {

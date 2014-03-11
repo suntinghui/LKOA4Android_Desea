@@ -12,7 +12,6 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 
@@ -21,15 +20,16 @@ import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.ContactItem;
 import com.lkoa.model.DepartmentItem;
 import com.lkoa.model.IdCountItem;
+import com.lkoa.model.JTHDContentItem;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
-import com.lkoa.model.RCContentItem;
-import com.lkoa.model.RCListItem;
 import com.lkoa.model.ProcessContentInfo.Activity;
 import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Option;
 import com.lkoa.model.ProcessContentInfo.User;
 import com.lkoa.model.ProcessItem;
+import com.lkoa.model.RCContentItem;
+import com.lkoa.model.RCListItem;
 import com.lkoa.model.SmsMessage;
 import com.lkoa.model.WindowDepartmentItem;
 
@@ -147,6 +147,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_RC:
 				//日程-列表内容
 				return getRC();
+				
+			case TransferRequestTag.GET_JTHD_LIST:
+				//日程-集团活动列表
+				return getJTHDList();
+				
+			case TransferRequestTag.GET_JTHD:
+				//日程-集团活动内容
+				return getJTHD();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -1113,6 +1121,61 @@ public class ParseResponseXML {
 		return result;
 	}
 	
+	private static Object getJTHDList() throws XmlPullParserException, IOException {
+		return getRCList();
+	}
+	
+	/**
+	 * 日程-集团活动内容
+	 */
+	private static Object getJTHD() throws XmlPullParserException, IOException{
+		JTHDContentItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new JTHDContentItem();
+					
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("HDDD".equalsIgnoreCase(parser.getName())) {
+					item.hddd = parser.nextText();
+					
+				} else if("FQBM".equalsIgnoreCase(parser.getName())) {
+					item.fqbm = parser.nextText();
+					
+				} else if("Date".equalsIgnoreCase(parser.getName())) {
+					item.date = parser.nextText();
+					
+				} else if("State".equalsIgnoreCase(parser.getName())) {
+					item.state = parser.nextText();
+					
+				} else if("CJLD ".equalsIgnoreCase(parser.getName())) {
+					item.cjld = parser.nextText();
+					
+				} else if("CYR".equalsIgnoreCase(parser.getName())) {
+					item.cyr = parser.nextText();
+					
+				} else if("NR".equalsIgnoreCase(parser.getName())) {
+					item.nr = parser.nextText();
+					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return item;
+	}
+	
 	/**
 	 * 日程-列表
 	 */
@@ -1159,7 +1222,7 @@ public class ParseResponseXML {
 		
 		return list;
 	}
-
+	
 	/**
 	 * 日程-内容
 	 */
