@@ -100,38 +100,6 @@ public class AddressListActivity extends Activity implements OnAlphaChangedListe
 		windowManager.addView(overlay, lp);
 	}
 
-//	private void startQuery() {
-//		queryHandler.startQuery(1, null, uri, projection, "data1 is not null",
-//				null, "sort_key COLLATE LOCALIZED asc");
-//	}
-
-//	// 异步查询类
-//	private class MyAsyncQueryHandler extends AsyncQueryHandler {
-//
-//		public MyAsyncQueryHandler(ContentResolver cr) {
-//			super(cr);
-//
-//		}
-//
-//		@Override
-//		protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-//			list.clear();
-//			if (cursor != null) {
-//				while (cursor.moveToNext()) {
-//					LinkManModel item = new ContactItem();
-//					item.setName(cursor.getString(1));
-//					item.setNumber(Utils.formatNumber(cursor.getString(2)));
-//					item.setAlpha(Utils.formatAlpha(cursor.getString(3)));
-//					list.add(item);
-//				}
-//			}
-//			if (list.size() > 0) {
-//				setAdapter();
-//			}
-//		}
-//
-//	}
-
 	private void setAdapter() {
 		if (adapter == null) {
 			adapter = new ListAdapter();

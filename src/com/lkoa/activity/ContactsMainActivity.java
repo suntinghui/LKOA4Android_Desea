@@ -1,38 +1,46 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-import android.content.Intent;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lkoa.R;
-import com.lkoa.adapter.CenterMsgNewsAdapter;
 import com.lkoa.adapter.ContactsAdapter;
-import com.lkoa.business.CenterMsgManager;
+import com.lkoa.adapter.DeptsAdapter;
 import com.lkoa.business.ContactsManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
-import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.ContactItem;
+import com.lkoa.model.DepartmentItem;
 import com.lkoa.util.LogUtil;
 import com.lkoa.util.Pinyin4j;
+import com.lkoa.view.AlphaView;
+import com.lkoa.view.AlphaView.OnAlphaChangedListener;
 
 /**
  * 通讯录-首页
  */
 public class ContactsMainActivity extends CenterMsgBaseActivity 
-	implements OnClickListener, OnItemClickListener {
+	implements OnClickListener, OnItemClickListener, OnAlphaChangedListener {
 	private static final String TAG = "ContactsMainActivity";
 	
 	private static final int INDEX_SORT_BY_NAME = 0;
@@ -47,13 +55,25 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 	
 	private ViewPager mViewPager;
 	private ListView mSortByNameLv, mSortByDeptLv;
-	private ContactsAdapter mSortByNameAdapter, mSortByDeptAdapter;
+	private View mSortByNameViewParent, mSortByDeptViewParent;
+	private ContactsAdapter mSortByNameAdapter;
+	private DeptsAdapter mSortByDeptAdapter;
 	
 	private boolean mSortByNameLoaded, mSortByDeptLoaded;
 	
 	private ContactsManager mContactsMgr;
 	
 	private String mId;
+	
+	private List<ContactItem> mContactItemList;
+	
+	private TextView mAlphaOverlay;
+	private WindowManager mWindowMgr;
+	
+	//存放存在的汉语拼音首字母和与之对应的列表位置
+	private HashMap<String, Integer> mDeptAlphaIndexer;
+	private HashMap<String, Integer> mContactAlphaIndexer;
+	private OverlayThread mOverlayThread;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +88,11 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 		
 		findViews();
 		setupViews();
+		
+		mDeptAlphaIndexer = new HashMap<String, Integer>();
+		mContactAlphaIndexer = new HashMap<String, Integer>();
+		mOverlayThread = new OverlayThread();
+		initOverlay();
 	}
 	
 	@Override
@@ -84,10 +109,21 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 		mLineMoreNews = findViewById(R.id.v_more_news_line_selected);
 		
 		mViewPager = (ViewPager)findViewById(R.id.view_pager);
-		mSortByNameLv = (ListView)mLayoutInflater.inflate(R.layout.layout_list_view, null);
-		mSortByDeptLv = (ListView)mLayoutInflater.inflate(R.layout.layout_list_view, null);
+		mSortByNameViewParent = mLayoutInflater.inflate(R.layout.layout_listview_with_alpha, null);
+		mSortByNameLv = (ListView)mSortByNameViewParent.findViewById(android.R.id.list);
+		initAlphaView(mSortByNameViewParent);
+		
+		mSortByDeptViewParent = mLayoutInflater.inflate(R.layout.layout_listview_with_alpha, null);
+		mSortByDeptLv = (ListView)mSortByDeptViewParent.findViewById(android.R.id.list);
+		initAlphaView(mSortByDeptViewParent);
+		
 		mSortByNameLv.setOnItemClickListener(this);
 		mSortByDeptLv.setOnItemClickListener(this);
+	}
+	
+	private void initAlphaView(View view) {
+		AlphaView alphaV = (AlphaView) view.findViewById(R.id.alphaView);
+		alphaV.setOnAlphaChangedListener(this);
 	}
 	
 	@Override
@@ -100,8 +136,8 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 		mParentMoreNews.setOnClickListener(this);
 		
 		List<View> list = new ArrayList<View>();
-		list.add(mSortByNameLv);
-		list.add(mSortByDeptLv);
+		list.add(mSortByNameViewParent);
+		list.add(mSortByDeptViewParent);
 		mViewPager.setAdapter(new MyPagerAdapter(list));
 		mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
 		
@@ -138,6 +174,16 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 			
 		} else {
 			//按部门排序
+			if(mContactItemList != null && mContactItemList.size() > 0) {
+				if(mSortByDeptAdapter == null) {
+					List<DepartmentItem> list = mContactsMgr.getDepts(mContactItemList);
+					initDeptAlphaU(list);
+					Collections.sort(list);
+					initDeptAlphaIndexer(list);
+					mSortByDeptAdapter = new DeptsAdapter(this, 0, list);
+					mSortByDeptLv.setAdapter(mSortByDeptAdapter);
+				}
+			}
 		}
 	}
 	
@@ -150,11 +196,13 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 				
 				if(index == INDEX_SORT_BY_NAME) {
 					//按名称排序
-					List<ContactItem> list = (ArrayList<ContactItem>)obj;
-					initAlphaU(list);
+					mContactItemList = (ArrayList<ContactItem>)obj;
+					initAlphaU(mContactItemList);
+					Collections.sort(mContactItemList);
+					initContactAlphaIndexer();
 					mSortByNameLoaded = true;
 					if(mSortByNameAdapter == null) {
-						mSortByNameAdapter = new ContactsAdapter(ContactsMainActivity.this, 0, list);
+						mSortByNameAdapter = new ContactsAdapter(ContactsMainActivity.this, 0, mContactItemList);
 						mSortByNameLv.setAdapter(mSortByNameAdapter);
 					}
 					
@@ -166,10 +214,59 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 		};
 	}
 	
+	private void initContactAlphaIndexer() {
+		final List<ContactItem> list = mContactItemList;
+		for (int i = 0; i < list.size(); i++) {
+			String currentAlpha = list.get(i).alphaU;
+			String previewAlpha = (i - 1) >= 0 ? list.get(i - 1).alphaU : " ";
+			if (!TextUtils.equals(currentAlpha, previewAlpha)) {
+				String alpha = list.get(i).alphaU;
+				mContactAlphaIndexer.put(alpha, i);
+			}
+		}
+	}
+	
+	private void initDeptAlphaIndexer(final List<DepartmentItem> list) {
+		for (int i = 0; i < list.size(); i++) {
+			String currentAlpha = list.get(i).alpha;
+			String previewAlpha = (i - 1) >= 0 ? list.get(i - 1).alpha : " ";
+			if (!TextUtils.equals(currentAlpha, previewAlpha)) {
+				String alpha = list.get(i).alpha;
+				mDeptAlphaIndexer.put(alpha, i);
+			}
+		}
+	}
+	
+	private void initDeptAlphaU(List<DepartmentItem> list) {
+		for(DepartmentItem item : list) {
+			if(TextUtils.isEmpty(item.deptName)) {
+				item.alpha = "#";
+			} else {
+				item.alpha = String.valueOf(
+						Pinyin4j.getHanyuPinyin(item.deptName).charAt(0));
+			}
+		}
+	}
+	
 	private void initAlphaU(List<ContactItem> list) {
 		for(ContactItem item : list) {
 			item.alphaU = String.valueOf(Pinyin4j.getHanyuPinyin(item.userName).charAt(0));
 		}
+	}
+	
+	// 初始化汉语拼音首字母弹出提示框
+	private void initOverlay() {
+		mAlphaOverlay = (TextView) mLayoutInflater.inflate(R.layout.overlay, null);
+		mAlphaOverlay.setVisibility(View.INVISIBLE);
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+				WindowManager.LayoutParams.TYPE_APPLICATION,
+				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+						| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+				PixelFormat.TRANSLUCENT);
+		mWindowMgr = (WindowManager) this
+				.getSystemService(Context.WINDOW_SERVICE);
+		mWindowMgr.addView(mAlphaOverlay, lp);
 	}
 	
 	@Override
@@ -241,6 +338,53 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+	}
+	
+	private ListView getCurrListView() {
+		int index = mViewPager.getCurrentItem();
+		if(index == 0) {
+			return mSortByNameLv;
+		} else {
+			return mSortByDeptLv;
+		}
+	}
+	
+	private HashMap<String, Integer> getCurrAlphaIndexer() {
+		int index = mViewPager.getCurrentItem();
+		if(index == 0) {
+			return mContactAlphaIndexer;
+		} else {
+			return mDeptAlphaIndexer;
+		}
+	}
+	
+	private Handler handler = new Handler();
+	
+	@Override
+	public void OnAlphaChanged(String s, int index) {
+		if (s != null && s.trim().length() > 0) {
+			mAlphaOverlay.setText(s);
+			mAlphaOverlay.setVisibility(View.VISIBLE);
+			handler.removeCallbacks(mOverlayThread);
+			handler.postDelayed(mOverlayThread, 700);
+			if (getCurrAlphaIndexer().get(s.toLowerCase()) != null) {
+				LogUtil.i(TAG, "set list view pos, s="+s);
+				int position = getCurrAlphaIndexer().get(s.toLowerCase());
+				getCurrListView().setSelection(position);
+			} else {
+				LogUtil.i(TAG, "not operator, s="+s);
+			}
+		}
+	}
+	
+	// 设置overlay不可见
+	private class OverlayThread implements Runnable {
+
+		@Override
+		public void run() {
+			mAlphaOverlay.setVisibility(View.GONE);
+		}
+
 	}
 	
 }

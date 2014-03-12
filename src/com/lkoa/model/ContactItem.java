@@ -2,7 +2,9 @@ package com.lkoa.model;
 
 import java.io.Serializable;
 
-public class ContactItem implements Serializable {
+import android.text.TextUtils;
+
+public class ContactItem implements Serializable, Comparable<ContactItem> {
 
 	private static final long serialVersionUID = 1L;
 	public String userId;	//用户序号
@@ -19,4 +21,23 @@ public class ContactItem implements Serializable {
 	
 	public String alphaU;	//用户名拼音首字母
 	public boolean checked;	//是否被选中
+	
+	@Override
+	public int compareTo(ContactItem another) {
+		if(TextUtils.equals("#", alphaU)) {
+			return 1;
+		} else if(TextUtils.equals("#", another.alphaU)) {
+			return -1;
+		}
+		
+		char curr = alphaU.charAt(0);
+		char other = another.alphaU.charAt(0);
+		if(curr > other) {
+			return 1;
+		} else if(curr < other) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 }
