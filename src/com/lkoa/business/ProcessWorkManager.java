@@ -82,22 +82,6 @@ public class ProcessWorkManager {
 	}
 	
 	/**
-	 * 流程管理-流程办理-附件
-	 * @param id	关联id，包括信息序号、通知序号、邮件序号、流程序号、日程序号
-	 */
-	public void getAttList(String id, final LKAsyncHttpResponseHandler handler) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
-		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_ATT_LIST);
-		
-		HashMap<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("Id", id);
-		map.put(Constant.kPARAMNAME, paramMap);
-		
-		execute("正在加载数据..", map, handler);
-	}
-	
-	/**
 	 * 流程管理-流程办理-保存
 	 */
 	public void setGLBD(String userId, String type, String infor, final LKAsyncHttpResponseHandler handler) {
@@ -130,22 +114,6 @@ public class ProcessWorkManager {
 		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_DEPT);
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
-		map.put(Constant.kPARAMNAME, paramMap);
-		
-		String msg = "正在加载数据..";
-		execute(msg ,map, handler);
-	}
-	
-	/**
-	 * 附件-内容
-	 */
-	public void getAtt(String attId, final LKAsyncHttpResponseHandler handler) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
-		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_ATT);
-		
-		HashMap<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("AttId", attId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
 		String msg = "正在加载数据..";

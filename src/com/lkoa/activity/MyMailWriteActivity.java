@@ -44,11 +44,12 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_my_mail_content);
+		setContentView(R.layout.activity_my_mail_write_mail);
 
 		mMailMgr = new MyMailManager();
 		Intent intent = getIntent();
 		mMailId = intent.getStringExtra("mailId");
+		if(mMailId == null) mMailId = "";
 
 		findViews();
 		setupViews();
@@ -93,7 +94,15 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 			
 			@Override
 			public void successAction(Object obj) {
-				
+				String result = (String) obj;
+				if(!TextUtils.equals(result, "1")) {
+					//发送成功
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件发送成功！");
+					
+				} else {
+					//发送失败
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件发送失败！");
+				}
 			}
 		};
 	}

@@ -75,6 +75,10 @@ public class MyMailInternalMainActivity extends CenterMsgBaseActivity implements
 		super.setupViews();
 		
 		mTvTitle.setText(R.string.my_email_internal);
+		mLinearRight.setVisibility(View.VISIBLE);
+		mTvRight1.setVisibility(View.GONE);
+		mTvRight2.setText(R.string.my_email_write);
+		mTvRight2.setOnClickListener(this);
 		
 		for(int i=0; i<mItemViews.length; i++) {
 			setupItem(mItemViews[i], i, 0);
@@ -138,6 +142,12 @@ public class MyMailInternalMainActivity extends CenterMsgBaseActivity implements
 			//已删除
 			intent.putExtra("type", TYPE_DELETED);
 			intent.putExtra("titleResId", R.string.my_email_internal_deleted);
+			startActivity(intent);
+			break;
+			
+		case R.id.tv_right_2:
+			//写邮件
+			intent = new Intent(this, MyMailWriteActivity.class);
 			startActivity(intent);
 			break;
 

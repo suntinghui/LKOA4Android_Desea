@@ -3,9 +3,11 @@ package com.lkoa.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.sax.StartElementListener;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -24,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lkoa.R;
+import com.lkoa.business.AttachmentManager;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.Attachment;
@@ -75,6 +78,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	private String mType;
 	
 	private ProcessWorkManager mProcessWorkMgr;
+	private AttachmentManager mAttachmentMgr;
 	
 	private LinearLayout mLinearForms, mLinearAttachments;
 	private WebView mWebViewText;
@@ -107,6 +111,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		setContentView(R.layout.activity_process_work_handle);
 		
 		mProcessWorkMgr = new ProcessWorkManager();
+		mAttachmentMgr = new AttachmentManager();
 		
 		Resources res = getResources();
 		mTextColorSelected = res.getColor(R.color.center_msg_news_tab_text_selected);
@@ -247,21 +252,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					mProcessWorkMgr.getAtt(attId, getAttachmentResponseHandler());
+					AttachmentShowActivity.showAttachment(
+							ProcessWorkHandleActivity.this, attId);
 				}
 			});
 			
 			mLinearAttachments.addView(view);
 		}
-	}
-	
-	private LKAsyncHttpResponseHandler getAttachmentResponseHandler() {
-		return new LKAsyncHttpResponseHandler() {
-			@Override
-			public void successAction(Object obj) {
-				LogUtil.i(TAG, "successAction(), attachment response. obj="+obj);
-			}
-		};
 	}
 	
 	private void setupFormItem(final Field field) {
@@ -438,7 +435,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case INDEX_ATTACHMENT:
 			//附件数据
-			mProcessWorkMgr.getAttList(mInfoId, new LKAsyncHttpResponseHandler() {
+			mAttachmentMgr.getAttList(mInfoId, new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {

@@ -9,15 +9,14 @@
     <include layout="@layout/navigation" />
     
     <ScrollView android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingBottom="10dip" >
+        android:layout_height="fill_parent" >
     <LinearLayout android:id="@+id/content"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:layout_marginTop="20dip"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
         
         <include 
             android:id="@+id/mail_sender"
@@ -34,9 +33,36 @@
         <include 
             android:id="@+id/mail_date"
             layout="@layout/schedule_rc_content_item" />
-        <include 
+        
+        <LinearLayout
             android:id="@+id/mail_attachment"
-            layout="@layout/schedule_rc_content_item" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="horizontal" >
+            
+            <TextView 
+	    	    android:id="@+id/title"
+	    	    android:layout_width="65dip"
+	    	    android:layout_height="wrap_content"
+	    	    android:gravity="right"
+	    	    android:text="附件: "
+	    	    android:layout_marginLeft="@dimen/process_work_handle_forms_item_left_margin"
+	    	    style="@style/ProcessWorkFormsTag" />
+            
+            <LinearLayout 
+                android:id="@+id/attachments"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dip"
+                android:layout_marginLeft="8dip"
+                android:orientation="vertical" />
+            
+        </LinearLayout>
+        
+        <View android:layout_width="fill_parent"
+            android:layout_height="20dip" />
         
     </LinearLayout>
     </ScrollView>

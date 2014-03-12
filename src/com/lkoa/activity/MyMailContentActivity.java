@@ -1,26 +1,26 @@
 package com.lkoa.activity;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.MyMailManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.model.Attachment;
 import com.lkoa.model.MailContentItemInfo;
-import com.lkoa.model.RCContentItem;
-import com.lkoa.model.RCListItem;
 import com.lkoa.util.LogUtil;
 
 /**
  * 我的邮件-内部邮件-邮件内容
  */
-public class MyMailContentActivity extends CenterMsgBaseActivity {
+public class MyMailContentActivity extends CenterMsgBaseActivity implements OnClickListener {
 	private static final String TAG = "MyMailContentActivity";
 	
 	private MyMailManager mMailMgr;
@@ -30,6 +30,8 @@ public class MyMailContentActivity extends CenterMsgBaseActivity {
 	private LinearLayout mLinearContent;
 	private View [] mViews = null;
 	private String [] mNames = null;
+	
+	private LinearLayout mLinearAttachments;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class MyMailContentActivity extends CenterMsgBaseActivity {
 		mViews[3] = findViewById(R.id.mail_content);
 		mViews[4] = findViewById(R.id.mail_date);
 		mViews[5] = findViewById(R.id.mail_attachment);
+		
+		mLinearAttachments = (LinearLayout)findViewById(R.id.attachments);
 		
 		mViews[4].setVisibility(View.GONE);
 	}
@@ -89,7 +93,7 @@ public class MyMailContentActivity extends CenterMsgBaseActivity {
 		contentVals[5] = "";
 		
 		TextView title, content;
-		for(int i=0; i<mViews.length; i++) {
+		for(int i=0; i<mViews.length - 1; i++) {
 			title = (TextView)mViews[i].findViewById(R.id.title);
 			content = (TextView)mViews[i].findViewById(R.id.content_text);
 			
@@ -103,5 +107,24 @@ public class MyMailContentActivity extends CenterMsgBaseActivity {
 				content.setText(contentVals[i]);
 			}
 		}
+		
+		View child = null;
+		TextView name = null;
+		List<Attachment> list = item.attachments;
+		for(Attachment att : list) {
+			child = mLayoutInflater.inflate(R.layout.process_work_handle_content_attachment_item, 
+					mLinearAttachments);
+			name = (TextView)child.findViewById(R.id.tv_attachment_name);
+			name.setText(att.title);
+			
+			child.setTag(att);
+			child.setOnClickListener(this);
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		Attachment att = (Attachment)v.getTag();
+		AttachmentShowActivity.showAttachment(this, att.id);
 	}
 }
