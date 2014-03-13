@@ -1,12 +1,12 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -338,6 +338,15 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+		int index = mViewPager.getCurrentItem();
+		if(index == 0) {
+			
+		} else {
+			DepartmentItem item = mSortByDeptAdapter.getData().get(position);
+			Intent intent = new Intent(this, ContactsDeptListActivity.class);
+			intent.putExtra("dept", item);
+			startActivity(intent);
+		}
 	}
 	
 	private ListView getCurrListView() {
