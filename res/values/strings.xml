@@ -130,6 +130,7 @@
 	<string name="contacts_sort_by_name">按姓名排序</string>
 	<string name="contacts_sort_by_department">按部门排序</string>
 	<string name="confirm">确定</string>
+	<string name="contact_details">联系人详情</string>
 	
 	<!-- 附件 -->
 	<string name="attachment_show_title">附件详情</string>

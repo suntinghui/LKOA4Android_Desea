@@ -16,18 +16,28 @@
         android:layout_marginRight="10dip"
         android:padding="5dip" >
         <TextView
+            android:id="@+id/tv_sjr_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="收件人"
             android:textColor="@color/black"
             android:textSize="16sp" />
+        
+        <TextView
+            android:id="@+id/tv_sjr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_sjr_name"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/add_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/my_sms_write_n" />
+            android:src="@drawable/ic_add_bg" />
     </RelativeLayout>
 
     <EditText
@@ -37,6 +47,7 @@
         android:layout_marginRight="10dip"
         android:layout_height="0dip"
         android:layout_weight="1"
+        android:focusable="false"
         android:enabled="false" />
 
     <LinearLayout
@@ -54,6 +65,7 @@
             android:maxLines="8"
             android:background="@color/white"
             android:padding="5dip"
+            android:hint="请输入短信内容"
             android:layout_weight="1" />
 
         <Button

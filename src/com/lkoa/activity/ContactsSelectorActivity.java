@@ -3,6 +3,8 @@ package com.lkoa.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -153,6 +155,13 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 		ContactItem item = list.get(position);
 		item.checked = !item.checked;
 		mAdapter.notifyDataSetChanged();
+	}
+	
+	public static void startForResult(Context ctx, int mode, String selected) {
+		Intent intent = new Intent(ctx, ContactsSelectorActivity.class);
+		intent.putExtra(KEY_SELECT_MODE, mode);
+		intent.putExtra(KEY_SELECTED_CONTACT, selected);
+		((Activity)ctx).startActivityForResult(intent, 0);
 	}
 	
 }

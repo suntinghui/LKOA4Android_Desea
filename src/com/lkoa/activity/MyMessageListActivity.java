@@ -57,8 +57,7 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MyMessageListActivity.this, MyMessageWriteActivity.class);
-				startActivity(intent);
+				MyMessageWriteActivity.start(MyMessageListActivity.this, null);
 			}
 		});
 		

@@ -37,4 +37,6 @@
     <color name="rc_title_value">#3826fe</color>
     <color name="rc_state_value">#33b9f3</color>
     <color name="common_bg">#f1f1f1</color>
+    <color name="common_blue">#6f91d6</color>
+    
 </resources>

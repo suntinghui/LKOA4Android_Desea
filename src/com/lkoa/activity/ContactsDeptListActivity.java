@@ -141,6 +141,8 @@ public class ContactsDeptListActivity extends CenterMsgBaseActivity
 
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+		ContactItem item = mAdapter.getData().get(position);
+		ContactDetailsActivity.start(this, item);
 	}
 	
 	private Handler handler = new Handler();

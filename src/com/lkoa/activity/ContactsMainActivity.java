@@ -340,7 +340,8 @@ public class ContactsMainActivity extends CenterMsgBaseActivity
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 		int index = mViewPager.getCurrentItem();
 		if(index == 0) {
-			
+			ContactItem item = mSortByNameAdapter.getData().get(position);
+			ContactDetailsActivity.start(this, item);
 		} else {
 			DepartmentItem item = mSortByDeptAdapter.getData().get(position);
 			Intent intent = new Intent(this, ContactsDeptListActivity.class);

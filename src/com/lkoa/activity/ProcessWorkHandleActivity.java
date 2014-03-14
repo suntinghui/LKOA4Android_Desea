@@ -345,21 +345,14 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				ContactsSelectorActivity.class);
 		int mode = -1;
 		if(type == ContentType.SINGLE_PEOPLE) {
-			mode = ContactsSelectorActivity.SELECT_MODE_SINGLE;
-			intent.putExtra(
-					ContactsSelectorActivity.KEY_SELECT_MODE, 
-					mode);
-			intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
+			ContactsSelectorActivity.startForResult(this, 
+					ContactsSelectorActivity.SELECT_MODE_SINGLE,
 					field.value);
 		} else {
-			mode = ContactsSelectorActivity.SELECT_MODE_MULTI;
-			intent.putExtra(
-					ContactsSelectorActivity.KEY_SELECT_MODE, 
-					mode);
-			intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
+			ContactsSelectorActivity.startForResult(this, 
+					ContactsSelectorActivity.SELECT_MODE_MULTI,
 					field.value);
 		}
-		startActivityForResult(intent, mode);
 	}
 	
 	private void selectDepts(Field field, ContentType type) {

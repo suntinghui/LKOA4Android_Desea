@@ -70,4 +70,13 @@ public class PhoneUtil {
 	    
 	}
 	
+	/**
+	 * 调用打电话界面
+	 */
+	public static void dial(Context ctx, String phone) {
+		Uri uri = Uri.parse("tel:" + phone);
+		Intent intent = new Intent(Intent.ACTION_DIAL, uri);
+		ctx.startActivity(intent);
+	}
+	
 }

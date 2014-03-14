@@ -2,26 +2,21 @@ package com.lkoa.activity;
 
 import java.net.URLEncoder;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lkoa.R;
 import com.lkoa.business.MyMailManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
-import com.lkoa.model.MailContentItemInfo;
-import com.lkoa.model.RCContentItem;
-import com.lkoa.model.RCListItem;
-import com.lkoa.util.LogUtil;
+import com.lkoa.model.ContactItem;
 
 /**
  * 我的邮件-写邮件
@@ -29,8 +24,8 @@ import com.lkoa.util.LogUtil;
 public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClickListener {
 	private static final String TAG = "MyMailWriteActivity";
 
-	public static final String STATE_DRAFT = "0";
-	public static final String STATE_SEND = "1";
+	public static final String STATE_DRAFT = "0";	//来自草稿箱
+	public static final String STATE_SEND = "1";	//新建邮件
 	
 	private MyMailManager mMailMgr;
 	private String mMailId;
@@ -40,6 +35,7 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 	private ImageView mSjrAdd;
 	
 	private String sUserIds = null;
+	private String sUserNames = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +46,11 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 		Intent intent = getIntent();
 		mMailId = intent.getStringExtra("mailId");
 		if(mMailId == null) mMailId = "";
+		ContactItem item = (ContactItem)intent.getSerializableExtra("contact");
+		if(item != null) {
+			sUserIds = item.userId;
+			sUserNames = item.userName;
+		}
 
 		findViews();
 		setupViews();
@@ -75,7 +76,8 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 		mTvRight2.setText(R.string.my_email_send);
 		mTvRight2.setOnClickListener(this);
 		mSjrAdd.setOnClickListener(this);
-
+		
+		mSjr.setText(sUserNames);
 	}
 	
 	@Override
@@ -84,8 +86,8 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 		
 		if(resultCode == RESULT_OK) {
 			sUserIds = data.getStringExtra("value");
-			String content = data.getStringExtra("showContent");
-			mSjr.setText(content);
+			sUserNames = data.getStringExtra("showContent");
+			mSjr.setText(sUserNames);
 		}
 	}
 	
@@ -132,14 +134,15 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 			
 		} else if(v == mSjrAdd) {
 			//添加收件人
-			Intent intent = new Intent(this, ContactsSelectorActivity.class);
-			intent.putExtra(ContactsSelectorActivity.KEY_SELECT_MODE, 
-					ContactsSelectorActivity.SELECT_MODE_MULTI);
-			intent.putExtra(ContactsSelectorActivity.KEY_SELECTED_CONTACT, 
-					sUserIds);
-			
-			startActivityForResult(intent, 0);
+			ContactsSelectorActivity.startForResult(this, 
+					ContactsSelectorActivity.SELECT_MODE_MULTI, sUserIds);
 		}
+	}
+	
+	public static void startForResult(Context ctx, ContactItem item) {
+		Intent intent = new Intent(ctx, MyMailWriteActivity.class);
+		intent.putExtra("contact", item);
+		((Activity)ctx).startActivityForResult(intent, 0);
 	}
 
 }
