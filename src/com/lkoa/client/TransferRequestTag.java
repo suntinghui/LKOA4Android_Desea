@@ -71,6 +71,7 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_MAIL, "GetMail");
 			requestTagMap.put(WRITE_MAIL, "WriteMail");
 			requestTagMap.put(GET_GWGL_COUNT, "GetGWGLCount");
+			requestTagMap.put(WRITE_SMS, "WriteSMS");
 			
 		}
 		

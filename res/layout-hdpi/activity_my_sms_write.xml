@@ -48,6 +48,7 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:focusable="false"
+        android:gravity="top|left"
         android:enabled="false" />
 
     <LinearLayout

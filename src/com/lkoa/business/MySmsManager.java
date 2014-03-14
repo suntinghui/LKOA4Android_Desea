@@ -15,13 +15,14 @@ public class MySmsManager {
 	/**
 	 * 我的短信-列表
 	 */
-	public void getSmsList(String sUserId, final LKAsyncHttpResponseHandler handler) {
+	public void getSmsList(String sUserId, String sType, final LKAsyncHttpResponseHandler handler) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
 		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_SMS_LIST);
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("sUserId", sUserId);
+		paramMap.put("sType", sType);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
 		execute(map, handler);
@@ -32,7 +33,8 @@ public class MySmsManager {
 	 * @param sSJH	接收手机号，多个时用英文逗号分割
 	 * @param sJSR	接收人姓名，多个时用英文逗号分隔
 	 */
-	public void writeSMS(String sUserId, String sSJH, String sJSR, final LKAsyncHttpResponseHandler handler) {
+	public void writeSMS(String sUserId, String sSJH, 
+			String sJSR, String content, final LKAsyncHttpResponseHandler handler) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
 		map.put(Constant.kMETHODNAME, TransferRequestTag.WRITE_SMS);
@@ -41,6 +43,7 @@ public class MySmsManager {
 		paramMap.put("sUserId", sUserId);
 		paramMap.put("sSJH", URLEncoder.encode(sSJH));
 		paramMap.put("sJSR", URLEncoder.encode(sJSR));
+		paramMap.put("SMSContent", URLEncoder.encode(content));
 		map.put(Constant.kPARAMNAME, paramMap);
 		
 		execute(map, handler);

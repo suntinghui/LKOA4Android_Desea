@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,12 @@ public class SmsMessageListAdapter extends ArrayAdapter<SmsMessage> {
 		}
 		
 		SmsMessage item = getItem(position);
-		holder.jsrAndPhone.setText(mRes.getString(
-				R.string.my_sms_jsr_and_phone, item.jsr, item.jsrPhone));
+		if(TextUtils.isEmpty(item.jsrPhone)) {
+			holder.jsrAndPhone.setText(item.jsr);
+		} else {
+			holder.jsrAndPhone.setText(mRes.getString(
+					R.string.my_sms_jsr_and_phone, item.jsr, item.jsrPhone));
+		}
 		holder.content.setText(item.content);
 		holder.date.setText(item.date);
 		

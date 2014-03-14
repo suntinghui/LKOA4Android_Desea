@@ -98,6 +98,9 @@
 	<string name="my_sms">我的短信</string>
 	<string name="my_sms_jsr_and_phone">%1$s（%2$s）</string>
 	<string name="my_sms_write_title">短信编写</string>
+	<string name="my_sms_inbox">收件箱</string>
+	<string name="my_sms_outbox">发件箱</string>
+	<string name="my_sms_weixin">我的微信</string>
 	
 	<!-- 日程管理 -->
 	<string name="schedule_title">日程管理</string>

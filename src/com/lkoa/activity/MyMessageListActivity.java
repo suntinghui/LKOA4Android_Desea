@@ -2,6 +2,7 @@ package com.lkoa.activity;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 	private int mTitleResId;
 	
 	private MySmsManager mSmsMgr;
+	private String mType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,8 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 		
 		mSmsMgr = new MySmsManager();
 		Intent intent = getIntent();
-		mTitleResId = intent.getIntExtra("titleResId", -1);
+		mTitleResId = intent.getIntExtra("titleResId", R.string.my_sms_inbox);
+		mType = intent.getStringExtra("type");
 		
 		findViews();
 		setupViews();
@@ -61,7 +64,7 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 			}
 		});
 		
-		mSmsMgr.getSmsList(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+		mSmsMgr.getSmsList(MainActivity.USER_ID, mType, new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {
@@ -73,5 +76,12 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 				}
 			}
 		});
+	}
+	
+	public static void start(Context ctx, String type, int titleResId) {
+		Intent intent = new Intent(ctx, MyMessageListActivity.class);
+		intent.putExtra("titleResId", titleResId);
+		intent.putExtra("type", type);
+		ctx.startActivity(intent);
 	}
 }

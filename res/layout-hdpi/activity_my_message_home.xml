@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <!-- 收件箱 -->
+    <include 
+        android:id="@+id/my_message_inbox"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 发件箱 -->
+    <include 
+        android:id="@+id/my_message_outbox"
+        layout="@layout/center_msg_home_item" />
+    
+    <!-- 我的微信 -->
+    <include 
+        android:id="@+id/my_message_weixin"
+        layout="@layout/center_msg_home_item" />
+</LinearLayout>

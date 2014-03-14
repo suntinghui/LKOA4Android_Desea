@@ -821,7 +821,7 @@ public class ParseResponseXML {
 	 * 我的短信-写短信
 	 */
 	private static Object writeSms() throws XmlPullParserException, IOException{
-		int result = -1;
+		String result = null;
 		
 		XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inStream, "UTF-8");
@@ -829,8 +829,8 @@ public class ParseResponseXML {
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
-				if ("Infor".equalsIgnoreCase(parser.getName())) {
-					
+				if ("WriteSMSResult".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
 				}
 				break;
 			}

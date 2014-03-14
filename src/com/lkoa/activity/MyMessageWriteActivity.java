@@ -3,6 +3,7 @@ package com.lkoa.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,6 +31,7 @@ public class MyMessageWriteActivity extends CenterMsgBaseActivity implements OnC
 	private Button mBtnSend;
 	private TextView mSjrTv;
 	private EditText mContactSelected;
+	private EditText mContentEt;
 	
 	private String mUserIds;
 	private String mUserNames;
@@ -60,6 +62,7 @@ public class MyMessageWriteActivity extends CenterMsgBaseActivity implements OnC
 		mBtnSend = (Button) findViewById(R.id.send);
 		mSjrTv = (TextView) findViewById(R.id.tv_sjr);
 		mContactSelected = (EditText) findViewById(R.id.contacts_selected);
+		mContentEt = (EditText) findViewById(R.id.content);
 	}
 	
 	@Override
@@ -91,6 +94,12 @@ public class MyMessageWriteActivity extends CenterMsgBaseActivity implements OnC
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction(), obj="+obj);
+				String result = (String)obj;
+				if(TextUtils.equals("1", result)) {
+					showDialog(MODAL_DIALOG, "发送短信成功！");
+				} else {
+					showDialog(MODAL_DIALOG, "发送短信失败！");
+				}
 			}
 		};
 	}
@@ -106,8 +115,12 @@ public class MyMessageWriteActivity extends CenterMsgBaseActivity implements OnC
 			
 		case R.id.send:
 			//发送短信
+			String content = mContentEt.getText().toString();
+			if(TextUtils.isEmpty(content)) {
+				return;
+			}
 			mSmsMgr.writeSMS(MainActivity.USER_ID, mUserIds, 
-					mUserNames, getResponseHandler());
+					mUserNames, content, getResponseHandler());
 			break;
 
 		default:
