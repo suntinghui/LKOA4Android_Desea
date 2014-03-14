@@ -164,6 +164,10 @@ public class ParseResponseXML {
 			case TransferRequestTag.WRITE_MAIL:
 				//我的邮件-获取邮件内容
 				return writeMail();
+				
+			case TransferRequestTag.GET_GWGL_COUNT:
+				//公文管理-条数
+				return getGWGLCount();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -1178,7 +1182,7 @@ public class ParseResponseXML {
 	}
 	
 	/**
-	 * 附件-内容
+	 * 日程安排-条数
 	 */
 	private static Object getRCCount() throws XmlPullParserException, IOException{
 		String result = null;
@@ -1352,6 +1356,30 @@ public class ParseResponseXML {
 		}
 		
 		return item;
+	}
+	
+	/**
+	 * 公文管理-条数
+	 */
+	private static Object getGWGLCount() throws XmlPullParserException, IOException{
+		String result = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if("GetGWGLCountResult".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
+					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
 	}
 	
 	private static void parseFJs(XmlPullParser parser, List<Attachment> outList) throws XmlPullParserException, IOException {

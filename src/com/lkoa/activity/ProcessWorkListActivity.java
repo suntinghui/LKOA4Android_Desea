@@ -3,6 +3,7 @@ package com.lkoa.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -80,5 +81,12 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 		intent.putExtra("InfoId", infoId);
 		intent.putExtra("sType", mType);
 		startActivity(intent);
+	}
+	
+	public static void start(Context ctx, int titleResId, int type) {
+		Intent intent = new Intent(ctx, ProcessWorkListActivity.class);
+		intent.putExtra("titleResId", titleResId);
+		intent.putExtra("type", type);
+		ctx.startActivity(intent);
 	}
 }

@@ -132,7 +132,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			
 		case R.id.iv_process_work:
 			//流程办理
-			startActivity(new Intent(this, ProcessWorkHomeActivity.class));
+			ProcessWorkHomeActivity.start(this, null, 
+					R.string.process_work_title, true);
 			break;
 			
 		case R.id.iv_doc_handing:

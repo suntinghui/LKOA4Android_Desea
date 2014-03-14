@@ -1,5 +1,6 @@
 package com.lkoa.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lkoa.R;
-import com.lkoa.activity.ProcessWorkHandleActivity.ProcessWorkType;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.util.LogUtil;
@@ -47,26 +47,40 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 	
 	private ProcessWorkManager mProcessWorkMgr;
 	
+	private int [] mTypes = new int [] {0, 1, 2, 3, 4};
+	private int mTitleResId;
+	private boolean mLoadCount;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_process_work_home);
+		
+		Intent intent = getIntent();
+		int [] types = intent.getIntArrayExtra("types");
+		if(types != null) {
+			mTypes = types;
+		}
+		mTitleResId = intent.getIntExtra("titleResId", R.string.process_work_title);
+		mLoadCount = intent.getBooleanExtra("loadCount", false);
 		
 		mProcessWorkMgr = new ProcessWorkManager();
 		
 		findViews();
 		setupViews();
 		
-		mProcessWorkMgr.getLCGLCount(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
-			
-			@Override
-			public void successAction(Object obj) {
-				LogUtil.i(TAG, "successAction(), "+(String)obj);
+		if(mLoadCount) {
+			mProcessWorkMgr.getLCGLCount(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
 				
-				String []subs = ((String) obj).split("[;]");
-				setViewsCount(subs);
-			}
-		});
+				@Override
+				public void successAction(Object obj) {
+					LogUtil.i(TAG, "successAction(), "+(String)obj);
+					
+					String []subs = ((String) obj).split("[;]");
+					setViewsCount(subs);
+				}
+			});
+		}
 	}
 	
 	private void setViewsCount(String []subs) {
@@ -91,6 +105,8 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 	@Override
 	protected void setupViews() {
 		super.setupViews();
+		
+		mTvTitle.setText(mTitleResId);
 		
 		setupItem(mMyTodo, 0, 0);
 		setupItem(mDoing, 1, 0);
@@ -118,11 +134,7 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 	}
 	
 	private void startActivity(int titleResId, int type) {
-		Intent intent = new Intent(this, ProcessWorkListActivity.class);
-		intent.putExtra("titleResId", titleResId);
-		intent.putExtra("type", type);
-		
-		startActivity(intent);
+		ProcessWorkListActivity.start(this, titleResId, type);
 	}
 
 	@Override
@@ -130,31 +142,39 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		switch (v.getId()) {
 		case R.id.process_work_my_todo:
 			//我的待办
-			startActivity(R.string.process_work_my_todo, 0);
+			startActivity(R.string.process_work_my_todo, mTypes[0]);
 			break;
 			
 		case R.id.process_work_doing:
 			//正在办理
-			startActivity(R.string.process_work_doing, 1);
+			startActivity(R.string.process_work_doing, mTypes[1]);
 			break;
 			
 		case R.id.process_work_record_history:
 			//历史记录
-			startActivity(R.string.process_work_record_history, 2);
+			startActivity(R.string.process_work_record_history, mTypes[2]);
 			break;
 			
 		case R.id.process_work_file_special:
 			//特批文件
-			startActivity(R.string.process_work_file_special, 3);
+			startActivity(R.string.process_work_file_special, mTypes[3]);
 			break;
 			
 		case R.id.process_work_revocation_box:
 			//撤销箱
-			startActivity(R.string.process_work_revocation_box, 4);
+			startActivity(R.string.process_work_revocation_box, mTypes[4]);
 			break;
 
 		default:
 			break;
 		}
+	}
+	
+	public static void start(Context ctx, int[] types, int titleResId, boolean loadCount) {
+		Intent intent = new Intent(ctx, ProcessWorkHomeActivity.class);
+		intent.putExtra("types", types);
+		intent.putExtra("titleResId", titleResId);
+		intent.putExtra("loadCount", loadCount);
+		ctx.startActivity(intent);
 	}
 }

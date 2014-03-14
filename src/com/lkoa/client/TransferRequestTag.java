@@ -35,6 +35,7 @@ public class TransferRequestTag {
 	public static final int GET_JTHD = 26;	//日程管理-集体活动内容
 	public static final int GET_MAIL = 27;	//我的邮件-内部邮件-内容
 	public static final int WRITE_MAIL = 28;	//我的邮件-内部邮件-写邮件
+	public static final int GET_GWGL_COUNT = 29;	//公文管理-条数
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -69,6 +70,7 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_JTHD, "GetJTHD");
 			requestTagMap.put(GET_MAIL, "GetMail");
 			requestTagMap.put(WRITE_MAIL, "WriteMail");
+			requestTagMap.put(GET_GWGL_COUNT, "GetGWGLCount");
 			
 		}
 		

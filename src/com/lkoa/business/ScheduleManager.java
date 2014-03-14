@@ -1,9 +1,6 @@
 package com.lkoa.business;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
-
-import android.text.TextUtils;
 
 import com.lkoa.client.Constant;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
@@ -13,7 +10,7 @@ import com.lkoa.client.LKHttpRequestQueueDone;
 import com.lkoa.client.TransferRequestTag;
 
 /**
- * 流程管理
+ * 日程管理
  */
 public class ScheduleManager {
 	
