@@ -14,7 +14,7 @@ public class WindowDepartmentItem implements Serializable {
 
 	public String id;
 	public String name;
-	public int count;
+	public String count;
 	
 	public List<WindowDepartmentItem> list;
 }

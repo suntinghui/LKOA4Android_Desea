@@ -486,69 +486,57 @@ public class ParseResponseXML {
 	 * 信息中心-部门之窗条数
 	 */
 	private static Object getBMZC() throws XmlPullParserException, IOException{
-		List<WindowDepartmentItem> list = null;
-		WindowDepartmentItem one = null;
-		WindowDepartmentItem two = null;
 		XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inStream, "UTF-8");
-		int eventType = parser.getEventType();// 产生第一个事件
+		
+		List<WindowDepartmentItem> list = new ArrayList<WindowDepartmentItem>();
+		parseWinDept(parser, list);
+		
+		return list;
+	}
+	
+	private static void parseWinDept(XmlPullParser parser, List<WindowDepartmentItem> list) throws XmlPullParserException, IOException {
+		int eventType = parser.getEventType();
+		if(eventType == XmlPullParser.END_DOCUMENT) return;
+		
+		WindowDepartmentItem item = null;
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
-				if ("Infor".equalsIgnoreCase(parser.getName())) {
-					list = new ArrayList<WindowDepartmentItem>();
+				if ("Infors".equalsIgnoreCase(parser.getName())) {
+					if(item != null) {
+						parseWinDept(parser, item.list);
+					}
 					
-				} else if("one".equalsIgnoreCase(parser.getName())) {
-					//一级栏目
-					one = new WindowDepartmentItem();
+				} else if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new WindowDepartmentItem();
 					
 				} else if("id".equalsIgnoreCase(parser.getName())) {
 					//栏目序号
-					if(two != null) {
-						two.id = parser.nextText();
-					} else {
-						one.id = parser.nextText();
-					}
+					item.id = parser.nextText();
 					
 				} else if("name".equalsIgnoreCase(parser.getName())) {
 					//栏目名称
-					if(two != null) {
-						two.name = parser.nextText();
-					} else {
-						one.name = parser.nextText();
-					}
+					item.name = parser.nextText();
 					
 				} else if("count".equalsIgnoreCase(parser.getName())) {
 					//数量
-					if(two != null) {
-						two.count = Integer.parseInt(parser.nextText());
-					} else {
-						one.count = Integer.parseInt(parser.nextText());
-					}
-					
-				} else if("two".equalsIgnoreCase(parser.getName())) {
-					//二级栏目
-					two = new WindowDepartmentItem();
+					item.count = parser.nextText();
 				}
 				break;
 				
 			case XmlPullParser.END_TAG:
-				if("one".equalsIgnoreCase(parser.getName())) {
-					//一级栏目
-					list.add(one);
-					one = null;
+				if("Infors".equalsIgnoreCase(parser.getName())) {
+					return;
 					
-				} else if("two".equalsIgnoreCase(parser.getName())) {
-					//二级栏目
-					one.list.add(two);
-					two = null;
+				} else if("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
 				}
 				break;
 			}
 			eventType = parser.next();
 		}
-		
-		return list;
 	}
 	
 	/**

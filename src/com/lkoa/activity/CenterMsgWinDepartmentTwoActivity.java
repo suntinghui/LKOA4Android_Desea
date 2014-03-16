@@ -73,13 +73,7 @@ public class CenterMsgWinDepartmentTwoActivity extends CenterMsgBaseActivity imp
 		mTvTitle.setText(mOneItem.name);
 		
 		List<WindowDepartmentItem> list = mOneItem.list;
-		WindowDepartmentItem item = null;
-		for(int i=0; i<list.size(); i++) {
-			item = list.get(i);
-			View view = mLayoutInflater.inflate(R.layout.center_msg_home_item, mLinearColumns, false);
-			setupItem(view, i, item);
-			mLinearColumns.addView(view);
-		}
+		buildList(list);
 	}
 	
 	private void setupItem(View view, int index, WindowDepartmentItem two) {
@@ -91,7 +85,7 @@ public class CenterMsgWinDepartmentTwoActivity extends CenterMsgBaseActivity imp
 		icon.setImageResource(mIconResIds[index]);
 		title.setText(two.name);
 		
-		if(two.count < 1) {
+		if(Integer.parseInt(two.count) < 1) {
 			number.setVisibility(View.GONE);
 		} else {
 			number.setVisibility(View.VISIBLE);
@@ -101,13 +95,31 @@ public class CenterMsgWinDepartmentTwoActivity extends CenterMsgBaseActivity imp
 		view.setTag(two);
 	}
 	
+	private void buildList(List<WindowDepartmentItem> list) {
+		if(mLinearColumns != null) mLinearColumns.removeAllViews();
+		
+		WindowDepartmentItem item = null;
+		for(int i=0; i<list.size(); i++) {
+			item = list.get(i);
+			View view = mLayoutInflater.inflate(R.layout.center_msg_home_item, mLinearColumns, false);
+			setupItem(view, i, item);
+			mLinearColumns.addView(view);
+		}
+	}
+	
 	@Override
 	public void onClick(View v) {
 		WindowDepartmentItem two = (WindowDepartmentItem)v.getTag();
-		Intent intent = new Intent(this, CenterMsgNewsActivity.class);
-		intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_NOTICE);
-		intent.putExtra("sId", two.id);
-		intent.putExtra("title", two.name);
-		startActivity(intent);
+		if(two.list != null && two.list.size() > 0) {
+			//TODO: 构建选项列表
+			buildList(two.list);
+			
+		} else {
+			Intent intent = new Intent(this, CenterMsgNewsActivity.class);
+			intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_WIN_DEPARTMENT);
+			intent.putExtra("sId", two.id);
+			intent.putExtra("title", two.name);
+			startActivity(intent);
+		}
 	}
 }

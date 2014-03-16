@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
@@ -39,16 +40,15 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 		R.drawable.center_msg_notice_item_bg,
 		R.drawable.center_msg_window_dep_item_bg,
 		R.drawable.process_w_revocation_box_bg, 
-		R.drawable.center_msg_news_item_bg,
-		R.drawable.center_msg_public_item_bg,
 	};
 	
 	private String [] mItemTitles;
-	private View [] mItemViews;
 	
 	private CenterMsgManager mNewsMgr;
 	
 	private ArrayList<WindowDepartmentItem> mDataList;
+	
+	private LinearLayout mLinearItems = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,44 +67,36 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 	@Override
 	protected void findViews() {
 		super.findViews();
-		mItemViews = new View[mItemTitles.length];
-		mItemViews[0] = findViewById(R.id.window_d_office_president);
-		mItemViews[1] = findViewById(R.id.window_d_legal_affairs);
-		mItemViews[2] = findViewById(R.id.window_d_human_resources);
-		mItemViews[3] = findViewById(R.id.window_d_finance_management);
-		mItemViews[4] = findViewById(R.id.window_d_business_management);
-		mItemViews[5] = findViewById(R.id.window_d_run_management);
-		mItemViews[6] = findViewById(R.id.window_d_planning_design);
+		mLinearItems = (LinearLayout) findViewById(R.id.columns);
 	}
 	
 	@Override
 	protected void setupViews() {
 		super.setupViews();
 		mTvTitle.setText(R.string.center_msg_window_department);
-		
-		for(int i=0; i<mItemViews.length; i++) {
-			setupItem(mItemViews[i], i, 0);
-		}
 		loadData();
 	}
 	
-	private void setupItem(View view, int index, int count) {
+	private void setupItem(WindowDepartmentItem item, int index) {
+		View view = mLayoutInflater.inflate(R.layout.center_msg_home_item, mLinearItems, false);
 		ImageView icon = (ImageView)view.findViewById(R.id.iv_center_msg_icon);
 		TextView title = (TextView)view.findViewById(R.id.tv_center_msg_title);
 		TextView number = (TextView)view.findViewById(R.id.iv_center_msg_number);
 		
-		view.setBackgroundResource(mBackgroundResIds[index]);
-		icon.setImageResource(mIconResIds[index]);
-		title.setText(mItemTitles[index]);
+		view.setBackgroundResource(mBackgroundResIds[index % 5]);
+		icon.setImageResource(mIconResIds[index % 5]);
+		title.setText(item.name);
 		
-		if(count < 1) {
+		if(Integer.parseInt(item.count) < 1) {
 			number.setVisibility(View.GONE);
 		} else {
 			number.setVisibility(View.VISIBLE);
-			number.setText(String.valueOf(count));
+			number.setText(item.count);
 		}
 		view.setOnClickListener(this);
-		if(mDataList != null) view.setTag(mDataList.get(index));
+		view.setTag(item);
+		
+		mLinearItems.addView(view);
 	}
 	
 	private void loadData() {
@@ -113,8 +105,8 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction()");
 				mDataList = (ArrayList<WindowDepartmentItem>)obj;
-				for(int i=0; i<mItemViews.length; i++) {
-					setupItem(mItemViews[i], i, mDataList.get(i).count);
+				for(int i=0; i<mDataList.size(); i++) {
+					setupItem(mDataList.get(i), i);
 				}
 			}
 		});
