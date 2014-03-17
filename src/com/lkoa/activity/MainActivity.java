@@ -1,5 +1,8 @@
 package com.lkoa.activity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.MainManager;
+import com.lkoa.client.ApplicationEnvironment;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.util.LogUtil;
 
@@ -73,8 +77,27 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 	
+	private void saveLatestTime(ApplicationEnvironment app) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date curDate = new Date(System.currentTimeMillis());//获取当前时间       
+		String currTime = formatter.format(curDate);
+		app.saveToPreference("latestTime", currTime);
+	}
+	
 	private void setupViews() {
-		String welcome = getResources().getString(R.string.hello_user_and_time, "佳佳", "2013-12-12 12:12");
+		ApplicationEnvironment app = ApplicationEnvironment.getInstance();
+		String userName = app.getUser();
+		String latestTime = app.getLatestTime();
+		String welcome = null;
+		if(TextUtils.isEmpty(latestTime)) {
+			//首次登陆
+			welcome = getResources().getString(R.string.hello_user_and_time_first, userName);
+			
+		} else {
+			//非首次
+			welcome = getResources().getString(R.string.hello_user_and_time, userName, latestTime);
+		}
+		saveLatestTime(app);
 		mTvWelcome.setText(welcome);
 		
 		mLayoutCenterMgr.setOnClickListener(this);

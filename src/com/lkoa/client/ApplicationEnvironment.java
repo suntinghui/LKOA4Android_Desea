@@ -4,8 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.Preference;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -47,6 +49,34 @@ public class ApplicationEnvironment {
 			preferences = this.getApplication().getSharedPreferences(ApplicationEnvironment.LKOA4ANDROID, Context.MODE_PRIVATE);
 		
 		return preferences;
+	}
+	
+	public String getUserId() {
+		return getFromPreference("userId");
+	}
+	
+	public String getPwd() {
+		return getFromPreference("pwd");
+	}
+	
+	public String getUser() {
+		return getFromPreference("user");
+	}
+	
+	public String getLatestTime() {
+		return getFromPreference("latestTime");
+	}
+	
+	public void saveToPreference(String key, String value) {
+		SharedPreferences pref = getPreferences();
+		Editor editor = pref.edit();
+		editor.putString(key, value);
+		editor.commit();
+	}
+	
+	public String getFromPreference(String key) {
+		SharedPreferences pref = getPreferences();
+		return pref.getString(key, null);
 	}
 	
 	public boolean checkNetworkAvailable() {

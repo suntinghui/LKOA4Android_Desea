@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,11 +55,12 @@ public class LoginActivity extends BaseActivity {
 
 		tv_username = (TextWithIconView)this.findViewById(R.id.tv_username);
 		tv_username.setHintString("用户名");
-		tv_username.setText("test");
+		//tv_username.setText("test");
 		tv_pwd = (TextWithIconView)this.findViewById(R.id.tv_pwd);
 		tv_pwd.setHintString("密码");
-		tv_pwd.setText("68528888qg");
+		//tv_pwd.setText("68528888qg");
 		tv_pwd.setIcon(R.drawable.icon_pwd);
+		tv_pwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		
 		ipET = (EditText) this.findViewById(R.id.ipET);
 		ipET.setText(ApplicationEnvironment.getInstance().getPreferences()
@@ -229,8 +231,14 @@ private OnClickListener listener = new OnClickListener() {
 			@Override
 			public void successAction(Object obj) {
 				String str = (String) obj;
-				String status = (String) str.subSequence(0, 1);
+				String [] results = str.split("[;]");
+				String status = results[0];
 				if(status.equals("0")){//登录成功
+					ApplicationEnvironment app = ApplicationEnvironment.getInstance();
+					app.saveToPreference("userId", results[1]);
+					app.saveToPreference("user", results[2]);
+					app.saveToPreference("pwd", tv_pwd.getText().toString());
+					
 					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 					LoginActivity.this.startActivity(intent);
 				}else if(status.equals("1")){//密码错误
