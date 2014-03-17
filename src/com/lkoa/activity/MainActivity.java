@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -21,7 +22,7 @@ import com.lkoa.util.LogUtil;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "MainActivity";
-	
+	private int back_counts = 0;
 	private static int [] mCenterMgrResIds = new int [] {
 		R.string.my_todo,
 		R.string.received_today,
@@ -195,4 +196,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			break;
 		}
 	}
+	
+	@Override  
+    public boolean onKeyDown(int keyCode, KeyEvent event)  
+    {  
+        if (keyCode == KeyEvent.KEYCODE_BACK )  
+        {  
+        	back_counts++;
+        	if(back_counts == 1){
+        		this.showToast("再次点击将退出程序！");
+        	}else {
+        		finish();
+        		android.os.Process.killProcess(android.os.Process.myPid());
+        	}
+			
+        }
+		return false;  
+    }
 }
