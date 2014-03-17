@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -172,4 +173,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			break;
 		}
 	}
+	
+	@Override  
+    public boolean onKeyDown(int keyCode, KeyEvent event)  
+    {  
+        if (keyCode == KeyEvent.KEYCODE_BACK )  
+        {  
+           
+  
+        }
+		return false;  
+    }
 }
