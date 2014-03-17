@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	public static final String USER_ID = "1";
 	
-	private TextView mTvWelcome;
+	private TextView mTvWelcome, mTvLogout;
 	private ImageView mIvPhoto;
 	private LinearLayout mLayoutCenterMgr;
 	private ImageView mIvCenterMgr, mIvCenterMsg, mIvProcessWork;
@@ -58,6 +58,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	private void findViews() {
 		mTvWelcome = (TextView)findViewById(R.id.tv_welcome);
+		mTvLogout = (TextView) findViewById(R.id.tv_logout);
+		mTvLogout.setOnClickListener(this);
 		mIvPhoto = (ImageView)findViewById(R.id.iv_photo);
 		
 		mLayoutCenterMgr = (LinearLayout)findViewById(R.id.linear_center_mgr);
@@ -197,6 +199,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			
 		case R.id.iv_mgr_people:
 			//人事管理
+			break;
+			
+		case R.id.tv_logout:
+			//退出，回到登陆界面
+			this.finish();
 			break;
 			
 		default:
