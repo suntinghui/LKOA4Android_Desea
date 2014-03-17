@@ -108,11 +108,21 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		
 		mTvTitle.setText(mTitleResId);
 		
-		setupItem(mMyTodo, 0, 0);
-		setupItem(mDoing, 1, 0);
-		setupItem(mRecordHistory, 2, 0);
-		setupItem(mFileSpecial, 3, 0);
-		setupItem(mRevocationBox, 4, 0);
+		if(mTypes.length == 2) {
+			setupItem(mMyTodo, 0, 0);
+			setupItem(mRecordHistory, 2, 0);
+			
+			mDoing.setVisibility(View.GONE);
+			mFileSpecial.setVisibility(View.GONE);
+			mRevocationBox.setVisibility(View.GONE);
+			
+		} else {
+			setupItem(mMyTodo, 0, 0);
+			setupItem(mDoing, 1, 0);
+			setupItem(mRecordHistory, 2, 0);
+			setupItem(mFileSpecial, 3, 0);
+			setupItem(mRevocationBox, 4, 0);
+		}
 	}
 	
 	private void setupItem(View view, int index, int count) {
@@ -152,7 +162,12 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 			
 		case R.id.process_work_record_history:
 			//历史记录
-			startActivity(R.string.process_work_record_history, mTypes[2], "2");
+			if(mTypes.length == 2) {
+				startActivity(R.string.process_work_record_history, mTypes[1], "2");
+				
+			} else {
+				startActivity(R.string.process_work_record_history, mTypes[2], "2");
+			}
 			break;
 			
 		case R.id.process_work_file_special:

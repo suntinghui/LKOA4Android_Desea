@@ -12,6 +12,7 @@ public class CenterMsgNewsItem {
 	public String title;
 	public String content;
 	public String date;
+	public String state;	//0-未读	1-已读
 	
 	public List<Attachment> attachments;
 }

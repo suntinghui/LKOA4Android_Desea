@@ -110,14 +110,14 @@ public class DocMgrHomeActivity extends CenterMsgBaseActivity implements OnClick
 			break;
 			
 		case R.id.doc_mgr_received_management:
-			//收文管理
-			ProcessWorkHomeActivity.start(this, new int[] {7, 8, 9, 10, 11}, 
+			//收文管理（7=收文管理待接收，9=收文管理历史记录）
+			ProcessWorkHomeActivity.start(this, new int[] {7, 9}, 
 					R.string.doc_mgr_received_management, false);
 			break;
 			
 		case R.id.doc_mgr_sent_management:
-			//发文管理
-			ProcessWorkHomeActivity.start(this, new int[] {12, 13, 14, 15, 16}, 
+			//发文管理（12=发文管理待接收，14=发文管理历史记录）
+			ProcessWorkHomeActivity.start(this, new int[] {12, 14}, 
 					R.string.doc_mgr_sent_management, false);
 			break;
 

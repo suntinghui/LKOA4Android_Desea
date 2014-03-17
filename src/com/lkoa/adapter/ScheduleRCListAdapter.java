@@ -22,6 +22,8 @@ public class ScheduleRCListAdapter extends ArrayAdapter<RCListItem> {
 	private String mRcTitle, mRcDate, mRcFw, mRcState;
 	
 	private int mColorTitle, mColorTitleVal, mColorStateVal;
+	
+	private boolean mShowRCFw = true;	//是否显示日程范围
 
 	public ScheduleRCListAdapter(Context context, int resource,
 			List<RCListItem> objects) {
@@ -40,6 +42,8 @@ public class ScheduleRCListAdapter extends ArrayAdapter<RCListItem> {
 		mLayoutInflater = LayoutInflater.from(context);
 		mDataList = objects;
 	}
+	
+	
 	
 	@Override
 	public RCListItem getItem(int position) {
@@ -87,6 +91,11 @@ public class ScheduleRCListAdapter extends ArrayAdapter<RCListItem> {
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_246);
 		}
 		
+		if(!mShowRCFw) {
+			holder.rcFwN.setVisibility(View.INVISIBLE);
+			holder.rcFwVal.setVisibility(View.INVISIBLE);
+		}
+		
 		RCListItem item = getItem(position);
 		holder.rcTitleN.setText(mRcTitle);
 		holder.rcTitleVal.setText(item.title);
@@ -101,6 +110,10 @@ public class ScheduleRCListAdapter extends ArrayAdapter<RCListItem> {
 		holder.rcStateVal.setText(item.state);
 		
 		return convertView;
+	}
+	
+	public void setShowRCFw(boolean show) {
+		mShowRCFw = show;
 	}
 	
 	public void setData(List<RCListItem> data) {

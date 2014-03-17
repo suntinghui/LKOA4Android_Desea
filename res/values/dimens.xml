@@ -27,5 +27,9 @@
     
     <dimen name="table_row_head_height">45dip</dimen>
     <dimen name="table_row_body_height">50dip</dimen>
+    
+    <dimen name="text_bold_size">18sp</dimen>
+    
+    
 
 </resources>

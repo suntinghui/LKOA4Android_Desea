@@ -3,6 +3,8 @@ package com.lkoa.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +59,11 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 		
 		CenterMsgNewsItem item = getItem(position);
 		holder.title.setText(item.title);
+		/*if(TextUtils.equals(item.state, "0")) {
+			holder.title.getPaint().setFakeBoldText(true);
+		} else {
+			holder.title.getPaint().setFakeBoldText(false);
+		}*/
 		holder.date.setText(item.date);
 		holder.details.setText(item.content);
 		if(item.iconUrl == null) {

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lkoa.R;
 import com.lkoa.business.MySmsManager;
@@ -116,7 +117,8 @@ public class MyMessageWriteActivity extends CenterMsgBaseActivity implements OnC
 		case R.id.send:
 			//发送短信
 			String content = mContentEt.getText().toString();
-			if(TextUtils.isEmpty(content)) {
+			if(TextUtils.isEmpty(content) || TextUtils.isEmpty(mUserIds)) {
+				Toast.makeText(this, "收件人和短信内容都不能为空！", Toast.LENGTH_SHORT).show();
 				return;
 			}
 			mSmsMgr.writeSMS(MainActivity.USER_ID, mUserIds, 

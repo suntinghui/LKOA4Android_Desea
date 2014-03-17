@@ -326,7 +326,10 @@ public class ParseResponseXML {
 				} else if("IFC_50_COL_30".equalsIgnoreCase(parser.getName())) {
 					//图片路径
 					item.iconUrl = parser.nextText();
-				}
+				} else if("state".equalsIgnoreCase(parser.getName())) {
+					//未读已读标志
+					item.state = parser.nextText();
+				} 
 				break;
 				
 			case XmlPullParser.END_TAG:

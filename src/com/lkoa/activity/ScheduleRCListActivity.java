@@ -81,6 +81,7 @@ public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnI
 					if(mAdapter == null) {
 						mAdapter = new ScheduleRCListAdapter(
 								ScheduleRCListActivity.this, 0, list);
+						mAdapter.setShowRCFw(false);
 						mListView.setAdapter(mAdapter);
 					}
 				}
