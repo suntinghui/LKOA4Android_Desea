@@ -1,21 +1,16 @@
 package com.lkoa.activity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lkoa.R;
-import com.lkoa.business.CenterMsgManager;
 import com.lkoa.business.MyMailManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
-import com.lkoa.model.IdCountItem;
 import com.lkoa.util.LogUtil;
 
 /**
@@ -113,6 +108,13 @@ public class MyMailHomeActivity extends CenterMsgBaseActivity implements OnClick
 			
 		case R.id.my_email_external:
 			//外部邮件
+			Uri uri = Uri.parse("mailto:"); 
+			String[] email = {""};
+			intent = new Intent(Intent.ACTION_SENDTO, uri);
+			intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
+			intent.putExtra(Intent.EXTRA_SUBJECT, ""); // 主题
+			intent.putExtra(Intent.EXTRA_TEXT, ""); // 正文
+			startActivity(Intent.createChooser(intent, ""));
 			break;
 
 		default:

@@ -23,7 +23,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 	private ProcessWorkListAdapter mAdapter;
 	
 	private int mTitleResId;
-	private String mType;
+	private String mType;	//流程列表参数
 	private String mInnerType;
 	
 	private ProcessWorkManager mProcessWorkMgr;

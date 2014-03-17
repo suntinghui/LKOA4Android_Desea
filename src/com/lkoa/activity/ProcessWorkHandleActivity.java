@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private ProcessWorkType mWorkType = ProcessWorkType.TYPE_MY_TODO;
 	
+	private static final String [] TYPES_SHOW_SAVE_COMMIT = new String [] {"0", "1", "7", "8", "12", "13"};
+	
 	private int mTextColorSelected;
 	private int mTextColorUnselected;
 	
@@ -117,6 +120,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		}
 	};
 	
+	private boolean mShowSaveCommit = false; 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -133,6 +138,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mInfoId = intent.getStringExtra("InfoId");
 		mType = intent.getStringExtra("sType");
 		mInnerType = intent.getStringExtra("innerType");
+		
+		for(String str : TYPES_SHOW_SAVE_COMMIT) {
+			if(TextUtils.equals(mType, str)) {
+				mShowSaveCommit = true;
+			}
+		}
 		
 		findViews();
 		setupViews();
@@ -207,12 +218,15 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	protected void setupViews() {
 		super.setupViews();
 		//导航栏
-		mTvTitle.setText(R.string.process_work_handle_title);
-		mLinearRight.setVisibility(View.VISIBLE);
-		mTvRight1.setText(R.string.process_work_handle_save);
-		mTvRight2.setText(R.string.process_work_handle_commit);
-		mTvRight1.setOnClickListener(this);
-		mTvRight2.setOnClickListener(this);
+		if(mShowSaveCommit) {
+			mTvTitle.setText(R.string.process_work_handle_title);
+			mLinearRight.setVisibility(View.VISIBLE);
+			mTvRight1.setText(R.string.process_work_handle_save);
+			mTvRight2.setText(R.string.process_work_handle_commit);
+			mTvRight1.setOnClickListener(this);
+			mTvRight2.setOnClickListener(this);
+			
+		}
 		
 		//初始化ViewPager
 		//表单
@@ -310,14 +324,19 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			contentSpinner.setVisibility(View.VISIBLE);
 			String [] subs = new String[field.optionList.size()];
 			Option opt = null;
+			int selection = 0;
 			for(int i=0; i<field.optionList.size(); i++) {
 				opt = field.optionList.get(i);
 				subs[i] = opt.text;
+				if(TextUtils.equals(opt.value, field.value)) {
+					selection = i;
+				}
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 					this, android.R.layout.simple_spinner_item, subs);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			contentSpinner.setAdapter(adapter);
+			contentSpinner.setSelection(selection);
 			contentSpinner.setOnItemSelectedListener(mSpinnerOnItemClickListener);
 			contentSpinner.setTag(field);
 			
