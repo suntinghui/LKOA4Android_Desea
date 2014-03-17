@@ -51,20 +51,35 @@ public class ApplicationEnvironment {
 		return preferences;
 	}
 	
+	public void setRememberPassword(boolean remember) {
+		saveToPreference(Constant.kREMEBERPWD, remember);
+	}
+	
+	public void setAutoLogin(boolean autoLogin) {
+		saveToPreference(Constant.kAUTOLOGIN, autoLogin);
+	}
+	
 	public String getUserId() {
-		return getFromPreference("userId");
+		return getFromPreference(Constant.kUSERID);
 	}
 	
-	public String getPwd() {
-		return getFromPreference("pwd");
+	public String getPassword() {
+		return getFromPreference(Constant.kPASSWORD);
 	}
 	
-	public String getUser() {
-		return getFromPreference("user");
+	public String getUserName() {
+		return getFromPreference(Constant.KUSERNAM);
 	}
 	
 	public String getLatestTime() {
 		return getFromPreference("latestTime");
+	}
+	
+	public void saveToPreference(String key, boolean value) {
+		SharedPreferences pref = getPreferences();
+		Editor editor = pref.edit();
+		editor.putBoolean(key, value);
+		editor.commit();
 	}
 	
 	public void saveToPreference(String key, String value) {

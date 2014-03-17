@@ -2,6 +2,7 @@ package com.lkoa.activity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -87,7 +88,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	private void setupViews() {
 		ApplicationEnvironment app = ApplicationEnvironment.getInstance();
-		String userName = app.getUser();
+		String userName = app.getUserName();
 		String latestTime = app.getLatestTime();
 		String welcome = null;
 		if(TextUtils.isEmpty(latestTime)) {
@@ -206,11 +207,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         	if(back_counts == 1){
         		this.showToast("再次点击将退出程序！");
         	}else {
-        		finish();
+        		destory();
         		android.os.Process.killProcess(android.os.Process.myPid());
         	}
 			
         }
 		return false;  
     }
+	
+	private void destory() {
+		List<BaseActivity> list = getAllActiveActivity();
+		for(BaseActivity a : list) {
+			a.finish();
+		}
+	}
 }
