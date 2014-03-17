@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"> 
+
+    <LinearLayout
+        android:id="@+id/linear_bdcb"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="@dimen/margin_12"
+        android:background="@drawable/process_work_handle_forms_item_bg"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/process_work_handle_forms_item_left_margin"
+        android:paddingRight="@dimen/process_work_handle_forms_item_left_margin" >
+    </LinearLayout>
+
+</HorizontalScrollView>

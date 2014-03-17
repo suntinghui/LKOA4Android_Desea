@@ -24,5 +24,8 @@
     <dimen name="margin_middle_extra">8dip</dimen>
     <dimen name="margin_big">12dip</dimen>
     <dimen name="margin_big_extra">14dip</dimen>
+    
+    <dimen name="table_row_head_height">45dip</dimen>
+    <dimen name="table_row_body_height">50dip</dimen>
 
 </resources>

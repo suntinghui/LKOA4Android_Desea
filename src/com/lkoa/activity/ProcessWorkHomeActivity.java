@@ -133,8 +133,8 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		view.setOnClickListener(this);
 	}
 	
-	private void startActivity(int titleResId, int type) {
-		ProcessWorkListActivity.start(this, titleResId, type);
+	private void startActivity(int titleResId, int type, String innerType) {
+		ProcessWorkListActivity.start(this, titleResId, type, innerType);
 	}
 
 	@Override
@@ -142,27 +142,27 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		switch (v.getId()) {
 		case R.id.process_work_my_todo:
 			//我的待办
-			startActivity(R.string.process_work_my_todo, mTypes[0]);
+			startActivity(R.string.process_work_my_todo, mTypes[0], "0");
 			break;
 			
 		case R.id.process_work_doing:
 			//正在办理
-			startActivity(R.string.process_work_doing, mTypes[1]);
+			startActivity(R.string.process_work_doing, mTypes[1], "1");
 			break;
 			
 		case R.id.process_work_record_history:
 			//历史记录
-			startActivity(R.string.process_work_record_history, mTypes[2]);
+			startActivity(R.string.process_work_record_history, mTypes[2], "2");
 			break;
 			
 		case R.id.process_work_file_special:
 			//特批文件
-			startActivity(R.string.process_work_file_special, mTypes[3]);
+			startActivity(R.string.process_work_file_special, mTypes[3], "3");
 			break;
 			
 		case R.id.process_work_revocation_box:
 			//撤销箱
-			startActivity(R.string.process_work_revocation_box, mTypes[4]);
+			startActivity(R.string.process_work_revocation_box, mTypes[4], "4");
 			break;
 
 		default:

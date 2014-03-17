@@ -6,8 +6,8 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.sax.StartElementListener;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.lkoa.R;
@@ -30,6 +32,11 @@ import com.lkoa.business.AttachmentManager;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.Attachment;
+import com.lkoa.model.BDCBTable;
+import com.lkoa.model.BDCBTable.Body;
+import com.lkoa.model.BDCBTable.Column;
+import com.lkoa.model.BDCBTable.Head;
+import com.lkoa.model.BDCBTable.Row;
 import com.lkoa.model.ProcessContentInfo;
 import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Field.ContentType;
@@ -51,13 +58,15 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		R.string.process_work_handle_forms,
 		R.string.process_work_handle_text,
 		R.string.process_work_handle_attachment,
+		R.string.process_work_handle_cb,
 	};
 	
 	public static final int INDEX_FORMS = 0;
 	public static final int INDEX_TEXT = 1;
 	public static final int INDEX_ATTACHMENT = 2;
+	public static final int INDEX_CB = 3;	//从表
 	
-	private View [] mTabViews = new View[3];
+	private View [] mTabViews = new View[4];
 	
 	public enum ProcessWorkType {
 		TYPE_MY_TODO,
@@ -76,6 +85,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private String mInfoId;	//流程序号
 	private String mType;
+	private String mInnerType;
 	
 	private ProcessWorkManager mProcessWorkMgr;
 	private AttachmentManager mAttachmentMgr;
@@ -84,7 +94,9 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	private WebView mWebViewText;
 	private TextView mAttachmentCount;
 	
-	private boolean mFormsDataLoaded, mTextDataLoaded, mAttachmentLoaded;
+	private LinearLayout mLinearTables;
+	
+	private boolean mFormsDataLoaded, mTextDataLoaded, mAttachmentLoaded, mCBLoaded;
 	
 	private ProcessContentInfo mContentInfo;
 	
@@ -120,6 +132,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		Intent intent = getIntent();
 		mInfoId = intent.getStringExtra("InfoId");
 		mType = intent.getStringExtra("sType");
+		mInnerType = intent.getStringExtra("innerType");
 		
 		findViews();
 		setupViews();
@@ -132,6 +145,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mTabViews[0] = findViewById(R.id.process_work_handle_forms);
 		mTabViews[1] = findViewById(R.id.process_work_handle_text);
 		mTabViews[2] = findViewById(R.id.process_work_handle_attachment);
+		mTabViews[3] = findViewById(R.id.process_work_handle_cb);
 		for(int i=0; i<mTabViews.length; i++) {
 			TextView name = (TextView)mTabViews[i].findViewById(R.id.tv_tab_name);
 			name.setText(mTabNameResIds[i]);
@@ -217,6 +231,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mLinearAttachments = (LinearLayout)view.findViewById(R.id.attachments);
 		mAttachmentCount = (TextView)view.findViewById(R.id.attachment_count);
 		views.add(view);
+		
+		//从表
+		//TODO: 获取从表 View
+		view = inflater.inflate(R.layout.process_work_handle_content_bdcb, null);
+		mLinearTables = (LinearLayout)view.findViewById(R.id.linear_bdcb);
+		views.add(view);
+		
 		mContentPager.setAdapter(new MyPagerAdapter(views));
 		mContentPager.setOnPageChangeListener(new MyOnPageChangeListener());
 		
@@ -441,10 +462,63 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				}
 			});
 			break;
+			
+		case INDEX_CB:
+			//表单从表 
+			mProcessWorkMgr.getLCBDCB(mInfoId, MainActivity.USER_ID, mInnerType, 
+					new LKAsyncHttpResponseHandler() {
+				
+				@Override
+				public void successAction(Object obj) {
+					mCBLoaded = true;
+					LogUtil.i(TAG, "obj="+obj);
+					buildBDCB((ArrayList<BDCBTable>)obj);
+				}
+			});
+			break;
 
 		default:
 			break;
 		}
+	}
+	
+	private void buildBDCB(List<BDCBTable> list) {
+		if(mLinearTables != null) mLinearTables.removeAllViews();
+		
+		//TODO: 构建从表
+		for(BDCBTable table : list) {
+			TableLayout layout = buildBDCB(table);
+			mLinearTables.addView(layout);
+		}
+	}
+	
+	private TableLayout buildBDCB(BDCBTable table) {
+		TableLayout tableL = new TableLayout(this);
+
+		Head head = table.head;
+		Body body = table.body;
+		TableRow rowHead = buildRow(head.row);
+		rowHead.setBackgroundColor(Color.GRAY);
+		tableL.addView(rowHead);
+		
+		for(Row row : body.rows) {
+			TableRow rowBody = buildRow(row);
+			tableL.addView(rowBody);
+		}
+		
+		return tableL;
+	}
+	
+	private TableRow buildRow(Row row) {
+		TableRow tableRow = new TableRow(this);
+		for(Column c : row.columns) {
+			TextView tv = new TextView(this);
+			tv.setText(c.des);
+			tv.setPadding(5, 5, 5, 5);
+			tableRow.addView(tv);
+		}
+		
+		return tableRow;
 	}
 	
 	private void collectionData() {
@@ -530,6 +604,15 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		
 	}
 	
+	public static void start(Context ctx, String userId, 
+			String infoId, String innerType, String sType) {
+		Intent intent = new Intent(ctx, ProcessWorkHandleActivity.class);
+		intent.putExtra("InfoId", infoId);
+		intent.putExtra("sType", sType);
+		intent.putExtra("innerType", innerType);
+		ctx.startActivity(intent);
+	}
+	
 	private class MyPagerAdapter extends PagerAdapter {
 		List<View> mViews = null;
 
@@ -588,6 +671,10 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				
 			case INDEX_ATTACHMENT:
 				loadData = !mAttachmentLoaded;
+				break;
+				
+			case INDEX_CB:
+				loadData = !mCBLoaded;
 				break;
 
 			default:

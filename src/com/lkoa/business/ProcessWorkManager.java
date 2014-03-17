@@ -82,6 +82,38 @@ public class ProcessWorkManager {
 	}
 	
 	/**
+	 * 流程管理-流程办理-从表
+	 */
+	public void getLCBDCB(String infoId, String sUserId, String type, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_LCBD_CB);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		paramMap.put("InfoId", infoId);
+		paramMap.put("sType", type);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
+	/**
+	 * 流程管理-流程办理-关联流程列表
+	 */
+	public void getGLLCList(String infoId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_GLLC_LIST);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("InfoId", infoId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
+	/**
 	 * 流程管理-流程办理-保存
 	 */
 	public void setGLBD(String userId, String type, String infor, final LKAsyncHttpResponseHandler handler) {

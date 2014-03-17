@@ -16,6 +16,9 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.lkoa.model.Attachment;
+import com.lkoa.model.BDCBTable;
+import com.lkoa.model.BDCBTable.Column;
+import com.lkoa.model.BDCBTable.Row;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.ContactItem;
 import com.lkoa.model.DepartmentItem;
@@ -168,6 +171,14 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_GWGL_COUNT:
 				//公文管理-条数
 				return getGWGLCount();
+				
+			case TransferRequestTag.GET_LCBD_CB:
+				//流程管理-流程办理-从表
+				return getLCBDCB();
+				
+			/*case TransferRequestTag.GET_GLLC_LIST:
+				//流程管理-流程办理-关联流程列表
+				return getGLLCList();*/
 			}
 			
 		} catch(XmlPullParserException e){
@@ -1368,6 +1379,54 @@ public class ParseResponseXML {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 流程管理-流程办理-从表
+	 */
+	private static Object getLCBDCB() throws XmlPullParserException, IOException{
+		List<BDCBTable> list = new ArrayList<BDCBTable>();
+		
+		BDCBTable table = null;
+		Row row = null;
+		Column column = null;
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Table".equalsIgnoreCase(parser.getName())) {
+					table = new BDCBTable();
+					list.add(table);
+					
+				} else if("Thead".equalsIgnoreCase(parser.getName())) {
+					table.head = table.newHead();
+					
+				} else if("Tbody".equalsIgnoreCase(parser.getName())) {
+					table.body = table.newBody();
+					
+				} else if("Tr".equalsIgnoreCase(parser.getName())) {
+					row = table.newRow();
+					if(table.body != null) {
+						table.body.rows.add(row);
+					} else {
+						table.head.row = row;
+					}
+					
+				} else if("des".equalsIgnoreCase(parser.getName())) {
+					String des = parser.nextText();
+					column = table.newColumn();
+					column.des = des;
+					row.columns.add(column);
+					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
 	}
 	
 	private static void parseFJs(XmlPullParser parser, List<Attachment> outList) throws XmlPullParserException, IOException {

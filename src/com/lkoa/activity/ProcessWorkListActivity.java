@@ -24,6 +24,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 	
 	private int mTitleResId;
 	private String mType;
+	private String mInnerType;
 	
 	private ProcessWorkManager mProcessWorkMgr;
 
@@ -36,6 +37,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 		Intent intent = getIntent();
 		mType = String.valueOf(intent.getIntExtra("type", 0));
 		mTitleResId = intent.getIntExtra("titleResId", -1);
+		mInnerType = intent.getStringExtra("innerType");
 		
 		findViews();
 		setupViews();
@@ -77,16 +79,15 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 		ProcessItem item = list.get(position);
 		String infoId = item.id;
 		
-		Intent intent = new Intent(this, ProcessWorkHandleActivity.class);
-		intent.putExtra("InfoId", infoId);
-		intent.putExtra("sType", mType);
-		startActivity(intent);
+		ProcessWorkHandleActivity.start(this, MainActivity.USER_ID, 
+				infoId, mInnerType, mType);
 	}
 	
-	public static void start(Context ctx, int titleResId, int type) {
+	public static void start(Context ctx, int titleResId, int type, String innerType) {
 		Intent intent = new Intent(ctx, ProcessWorkListActivity.class);
 		intent.putExtra("titleResId", titleResId);
 		intent.putExtra("type", type);
+		intent.putExtra("innerType", innerType);
 		ctx.startActivity(intent);
 	}
 }
