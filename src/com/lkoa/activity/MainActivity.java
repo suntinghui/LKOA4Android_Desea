@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		mCenterMgrTextViews = new TextView[linear.getChildCount()];
 		for(int i=0; i<linear.getChildCount(); i++) {
 			mCenterMgrTextViews[i] = (TextView)linear.getChildAt(i);
+			mCenterMgrTextViews[i].setOnClickListener(this);
 		}
 	}
 	
@@ -150,22 +151,26 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			//管理中心
 			break;
 			
+		case R.id.tv_center_msg:
 		case R.id.iv_center_msg:
 			//信息中心
 			startActivity(new Intent(this, CenterMsgHomeActivity.class));
 			break;
 			
+		case R.id.tv_my_todo:
 		case R.id.iv_process_work:
 			//流程办理
 			ProcessWorkHomeActivity.start(this, null, 
 					R.string.process_work_title, true);
 			break;
 			
+		case R.id.tv_my_received_today:
 		case R.id.iv_doc_handing:
 			//公文办理
 			startActivity(new Intent(this, DocMgrHomeActivity.class));
 			break;
 			
+		case R.id.tv_schedule:
 		case R.id.iv_schedule:
 			//日程安排
 			startActivity(new Intent(this, ScheduleHomeActivity.class));
@@ -178,6 +183,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			MainActivity.this.startActivity(intent5);*/
 			break;
 			
+		case R.id.tv_my_email:
 		case R.id.iv_my_email:
 			//我的邮件
 			startActivity(new Intent(this, MyMailHomeActivity.class));
