@@ -3,6 +3,9 @@ package com.lkoa.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -20,6 +23,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.lkoa.R;
 import com.lkoa.business.AttachmentManager;
@@ -43,6 +48,7 @@ import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Field.ContentType;
 import com.lkoa.model.ProcessContentInfo.Option;
 import com.lkoa.util.LogUtil;
+import com.lkoa.view.DateTimePickerDialog;
 
 /**
  * 流程办理
@@ -263,6 +269,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	 * 构建表单
 	 */
 	private void buildBD(ProcessContentInfo contentInfo) {
+		removeAllFormViews();
 		List<Field> list = contentInfo.filedList;
 		for(Field field : list) {
 			//TODO: 构建表单内容
@@ -370,6 +377,32 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				}
 			});
 			
+		} else if(contentType == ContentType.DATE_PICKER /*field.type == Field.DATA_TYPE_DATE*/) {
+			//日期选择
+			contentEdit.setVisibility(View.VISIBLE);
+			contentEdit.setText(field.showContent);
+			contentText.setVisibility(View.GONE);
+			contentEdit.setTag(field);
+			contentEdit.setOnClickListener(mDatePickerListener);
+			
+		} else if(contentType == ContentType.TIME_PICKER /*field.type == Field.DATA_TYPE_TIME*/) {
+			//时间选择
+			contentEdit.setVisibility(View.VISIBLE);
+			contentEdit.setText(field.showContent);
+			contentText.setVisibility(View.GONE);
+			contentEdit.setTag(field);
+			contentEdit.setOnClickListener(mTimePickerListener);
+			
+		} else if(contentType == ContentType.DATE_TIME_PICKER /*field.type == Field.DATA_TYPE_DATE_AND_TIME*/) {
+			//日期时间选择
+			contentEdit.setVisibility(View.VISIBLE);
+			contentEdit.setText(field.showContent);
+			contentText.setVisibility(View.GONE);
+			contentEdit.setTag(field);
+			DateTimeOnClickListener listener = new DateTimeOnClickListener();
+			listener.mDateTimeET = contentEdit;
+			contentEdit.setOnClickListener(listener);
+			
 		} else {
 			contentEdit.setVisibility(View.GONE);
 			contentText.setText(field.showContent);
@@ -378,6 +411,67 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		view.setTag(field);
 		mLinearForms.addView(view);
 	}
+	
+	private OnClickListener mDatePickerListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			final Field field = (Field)v.getTag();
+			//TODO: 获取年月日
+			String date = field.showContent;
+			String subs [] = null;
+			if(!TextUtils.isEmpty(date)) {
+				subs = date.split("-");
+			}
+			if(subs == null || subs.length != 3) {
+				return;
+			}
+			
+			DatePickerDialog datePicker = new DatePickerDialog(ProcessWorkHandleActivity.this, 
+					new OnDateSetListener() {
+						@Override
+						public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+							StringBuffer buffer = new StringBuffer();
+							buffer.append(year).append("-");
+							buffer.append(monthOfYear+1).append("-");
+							buffer.append(dayOfMonth);
+							field.showContent = buffer.toString();
+							field.value = buffer.toString();
+							buildBD(mContentInfo);
+						}
+				}, Integer.parseInt(subs[0]), Integer.parseInt(subs[1]), Integer.parseInt(subs[2]));
+			datePicker.show();
+		}
+	};
+	
+	private OnClickListener mTimePickerListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			final Field field = (Field)v.getTag();
+			//TODO: 获取年月日
+			String date = field.showContent;
+			String subs [] = null;
+			if(!TextUtils.isEmpty(date)) {
+				subs = date.split(":");
+			}
+			if(subs == null || subs.length != 2) {
+				return;
+			}
+			
+			TimePickerDialog datePicker = new TimePickerDialog(ProcessWorkHandleActivity.this, 
+					new TimePickerDialog.OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+							StringBuffer buffer = new StringBuffer();
+							buffer.append(hourOfDay).append(":");
+							buffer.append(minute);
+							field.showContent = buffer.toString();
+							field.value = buffer.toString();
+							buildBD(mContentInfo);
+						}
+					}, Integer.parseInt(subs[0]), Integer.parseInt(subs[1]), true);
+			datePicker.show();
+		}
+	};
 	
 	private void selectContacts(Field field, ContentType type) {
 		Intent intent = new Intent(
@@ -701,6 +795,16 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			}
 			
 			setActiveTab(index, loadData);
+		}
+	}
+	
+	private class DateTimeOnClickListener implements OnClickListener {
+		public TextView mDateTimeET;
+
+		@Override
+		public void onClick(View v) {
+			DateTimePickerDialog dateTimePicKDialog = new DateTimePickerDialog(ProcessWorkHandleActivity.this);
+			dateTimePicKDialog.dateTimePicKDialog((EditText)mDateTimeET, 0);
 		}
 	}
 }

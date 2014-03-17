@@ -22,11 +22,13 @@ import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -109,16 +111,6 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(resultCode == RESULT_OK) {
-			mContentInfo = (ProcessContentInfo)data.getSerializableExtra("bundle");
-			buildPageWarper();
-		}
-	}
-	
-	@Override
 	protected void setupViews() {
 		super.setupViews();
 		//导航栏
@@ -127,16 +119,47 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		mTvRight1.setVisibility(View.GONE);
 		mTvRight2.setText(R.string.process_work_handle_commit);
 		mTvRight2.setOnClickListener(this);
-		mNodeNext.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(ProcessWorkCommitActivity.this, ProcessWorkNodeSelectActivity.class);
-				intent.putExtra("bundle", mContentInfo);
-				startActivityForResult(intent, 0);
-			}
-		});
+		mNodeNext.setOnClickListener(this);
+		mNodeZbr.setOnClickListener(this);
+		mNodeCyr.setOnClickListener(this);
 		
 		buildPageWarper();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(resultCode == RESULT_OK) {
+			int mode = data.getIntExtra(ContactsSelectorActivity.RESULT_KEY_MODE, 
+					ContactsSelectorActivity.SELECT_MODE_SINGLE);
+			String showContent = data.getStringExtra(
+					ContactsSelectorActivity.RESULT_KEY_SHOWCONTENT);
+			String userId = data.getStringExtra(
+					ContactsSelectorActivity.RESULT_KEY_VALUE);
+			
+			if(mode == ContactsSelectorActivity.SELECT_MODE_SINGLE) {
+				if(mCurrActivity.zbr == null) {
+					mCurrActivity.zbr = mContentInfo.newUser();
+				}
+				User user = mCurrActivity.zbr;
+				user.userId = userId;
+				user.userName = showContent;
+				
+			} else {
+				List<User> list = mCurrActivity.cyrs;
+				User user = null;
+				String [] userIds = userId.split(",");
+				String [] userNames = showContent.split(",");
+				for(int i=0; i<userIds.length; i++) {
+					user = mContentInfo.newUser();
+					user.userId = userIds[i];
+					user.userName = userNames[i];
+					list.add(user);
+				}
+			}
+			buildPageWarper();
+		}
 	}
 	
 	private void buildPageWarper() {
@@ -156,6 +179,25 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	private void buildPage(final Activity activity) {
+		switch (activity.mode) {
+		case 0:
+			//主办人模式：主办人必须有，相关办理人可以没有。
+			break;
+			
+		case 1:
+			//会签人模式：主办人的选择要隐去，相关办理人必须有，且可以多选
+			mNodeZbr.setVisibility(View.GONE);
+			break;
+			
+		case 2:
+			//单人签发模式：主办人的选择要隐去，相关办理人必须有，且可以多选
+			mNodeZbr.setVisibility(View.GONE);
+			break;
+
+		default:
+			break;
+		}
+		
 		setItem(mNodeNext, R.string.process_work_node_next, activity.name);
 		setItem(mNodeDealtime, R.string.process_work_node_dealtime, activity.dealTime);
 		setItem(mNodeZbr, R.string.process_work_node_zbr, activity.zbr.userName);
@@ -167,9 +209,16 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	private void setItem(View view, int titleResId, String value) {
 		TextView title = (TextView)view.findViewById(R.id.title);
 		TextView text = (TextView)view.findViewById(R.id.content_text);
-		if(view == mNodeNext) {
+		EditText edit = (EditText)view.findViewById(R.id.content_edit);
+		if(view == mNodeNext || view == mNodeCyr || view == mNodeZbr) {
 			ImageView toRightArrow = (ImageView)view.findViewById(R.id.to_right_arrow);
 			toRightArrow.setVisibility(View.VISIBLE);
+		}
+		
+		if(view == mNodeDealtime) {
+			text.setVisibility(View.GONE);
+			edit.setVisibility(View.VISIBLE);
+			edit.setText(value);
 		}
 		
 		title.setText(titleResId);
@@ -195,7 +244,44 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		return builder.toString();
 	}
 	
+	private boolean checkValid() {
+		EditText edit = (EditText)mNodeDealtime.findViewById(R.id.content_edit);
+		String dealTime = edit.getText().toString();
+		if(TextUtils.isEmpty(dealTime)) return false;
+		try {
+			Float.parseFloat(dealTime);
+		} catch(Exception e) {
+			return false;
+		}
+		
+		switch (mCurrActivity.mode) {
+		case 0:
+			//主办人模式：主办人必须有，相关办理人可以没有。
+			User zbr = mCurrActivity.zbr;
+			if(zbr == null || TextUtils.isEmpty(zbr.userId)) return false;
+			break;
+			
+		case 1:
+		case 2:
+			//会签人模式：主办人的选择要隐去，相关办理人必须有，且可以多选
+			//单人签发模式：主办人的选择要隐去，相关办理人必须有，且可以多选
+			mNodeZbr.setVisibility(View.GONE);
+			List<User> list = mCurrActivity.cyrs;
+			if(list.size() < 1) return false;
+			break;
+
+		default:
+			break;
+		}
+		return true;
+	}
+	
 	private void commit() {
+		if(!checkValid()) {
+			Toast.makeText(this, "请检查输入是否正确！", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		mCurrActivity.dealTime = "2";
 		mCurrActivity.select = 1;
 		try {
@@ -221,6 +307,37 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		case R.id.tv_right_2:
 			//提交
 			commit();
+			break;
+			
+		case R.id.node_next:
+			//下级节点选择
+			Intent intent = new Intent(ProcessWorkCommitActivity.this, ProcessWorkNodeSelectActivity.class);
+			intent.putExtra("bundle", mContentInfo);
+			startActivityForResult(intent, 0);
+			break;
+			
+		case R.id.node_zbr:
+			//主办人选择
+			ContactsSelectorActivity.startForResult(this,
+					ContactsSelectorActivity.SELECT_MODE_SINGLE, 
+					mCurrActivity.zbr.userId);
+			break;
+			
+		case R.id.node_cyr:
+			//参与人选择
+			StringBuilder builder = new StringBuilder();
+			int size = mCurrActivity.cyrs.size();
+			for(int i=0; i<size; i++) {
+				User u = mCurrActivity.cyrs.get(i);
+				if(i != size-1) {
+					builder.append(u.userId).append(",");
+				} else {
+					builder.append(u.userId);
+				}
+			}
+			ContactsSelectorActivity.startForResult(this,
+					ContactsSelectorActivity.SELECT_MODE_MULTI, 
+					builder.toString());
 			break;
 			
 		default:

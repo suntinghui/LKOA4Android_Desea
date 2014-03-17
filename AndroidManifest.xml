@@ -177,7 +177,6 @@
       <activity
             android:name=".activity.ProcessWorkCommitActivity"
             android:exported="true"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@android:style/Theme.NoTitleBar" />

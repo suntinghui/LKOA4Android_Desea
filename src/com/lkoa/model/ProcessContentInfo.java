@@ -206,7 +206,10 @@ public class ProcessContentInfo implements Serializable {
 			TEXT, EDITTEXT, PULLDOWNLIST, 
 			SINGLE_PEOPLE, MULTI_PEOPLE, 
 			SINGLE_DEPT, MULTI_DEPT, 
-			TEXT_EDITTEXT	//用于意见
+			TEXT_EDITTEXT,	//用于意见
+			DATE_PICKER, //日期选择
+			TIME_PICKER,	//时间选择
+			DATE_TIME_PICKER	//日期时间选择
 		}
 		
 		public String id;	//数据项标识
@@ -249,6 +252,15 @@ public class ProcessContentInfo implements Serializable {
 					
 				} else if(type == DATA_TYPE_MULTI_DEPARTMENT) {
 					return ContentType.MULTI_DEPT;
+					
+				} else if(type == DATA_TYPE_DATE) {
+					return ContentType.DATE_PICKER;
+					
+				} else if(type == DATA_TYPE_TIME) {
+					return ContentType.TIME_PICKER;
+					
+				} else if(type == DATA_TYPE_DATE_AND_TIME) {
+					return ContentType.DATE_TIME_PICKER;
 				}
 				
 				return ContentType.TEXT;

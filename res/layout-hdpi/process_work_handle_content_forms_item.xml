@@ -59,6 +59,7 @@
     	    android:layout_toRightOf="@id/title"
     	    android:layout_centerVertical="true"
     	    android:visibility="gone" />
+
     </RelativeLayout>
     <include layout="@layout/process_w_handle_line_divider" />
 

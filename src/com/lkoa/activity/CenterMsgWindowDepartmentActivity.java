@@ -95,6 +95,8 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 		}
 		view.setOnClickListener(this);
 		view.setTag(item);
+		number.setOnClickListener(this);
+		number.setTag(item);
 		
 		mLinearItems.addView(view);
 	}
@@ -114,6 +116,16 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 	
 	@Override
 	public void onClick(View v) {
+		if(v.getId() == R.id.iv_center_msg_number) {
+			WindowDepartmentItem two = (WindowDepartmentItem)v.getTag();
+			Intent intent = new Intent(this, CenterMsgNewsActivity.class);
+			intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_WIN_DEPARTMENT);
+			intent.putExtra("sId", two.id);
+			intent.putExtra("title", two.name);
+			startActivity(intent);
+			return;
+		}
+		
 		WindowDepartmentItem item = (WindowDepartmentItem)v.getTag();
 		Intent intent = new Intent(this, CenterMsgWinDepartmentTwoActivity.class);
 		Bundle bundle = new Bundle();

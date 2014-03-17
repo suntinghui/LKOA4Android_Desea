@@ -35,6 +35,10 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 	public static final String KEY_SELECT_MODE = "key_select_mode";
 	public static final String KEY_SELECTED_CONTACT = "key_selected_contact";
 	
+	public static final String RESULT_KEY_MODE = "mode";
+	public static final String RESULT_KEY_SHOWCONTENT = "showContent";
+	public static final String RESULT_KEY_VALUE = "value";
+	
 	private ListView mSortByNameLv;
 	private ContactsSelectorAdapter mAdapter;
 	
@@ -101,8 +105,9 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 					}
 				}
 				Intent data = new Intent();
-				data.putExtra("showContent", showContent.toString());
-				data.putExtra("value", value.toString());
+				data.putExtra(RESULT_KEY_SHOWCONTENT, showContent.toString());
+				data.putExtra(RESULT_KEY_VALUE, value.toString());
+				data.putExtra(RESULT_KEY_MODE, mMode);
 				setResult(RESULT_OK, data);
 				
 				finish();
@@ -157,6 +162,10 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 		mAdapter.notifyDataSetChanged();
 	}
 	
+	/**
+	 * @param mode	选择模式，单选或多选
+	 * @param selected	已选中联系人的用户id
+	 */
 	public static void startForResult(Context ctx, int mode, String selected) {
 		Intent intent = new Intent(ctx, ContactsSelectorActivity.class);
 		intent.putExtra(KEY_SELECT_MODE, mode);

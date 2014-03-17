@@ -91,6 +91,8 @@ public class CenterMsgWinDepartmentTwoActivity extends CenterMsgBaseActivity imp
 			number.setVisibility(View.VISIBLE);
 			number.setText(String.valueOf(two.count));
 		}
+		number.setOnClickListener(this);
+		number.setTag(two);
 		view.setOnClickListener(this);
 		view.setTag(two);
 	}
@@ -109,6 +111,16 @@ public class CenterMsgWinDepartmentTwoActivity extends CenterMsgBaseActivity imp
 	
 	@Override
 	public void onClick(View v) {
+		if(v.getId() == R.id.iv_center_msg_number) {
+			WindowDepartmentItem two = (WindowDepartmentItem)v.getTag();
+			Intent intent = new Intent(this, CenterMsgNewsActivity.class);
+			intent.putExtra("listType", CenterMsgNewsActivity.LIST_TYPE_WIN_DEPARTMENT);
+			intent.putExtra("sId", two.id);
+			intent.putExtra("title", two.name);
+			startActivity(intent);
+			return;
+		}
+		
 		WindowDepartmentItem two = (WindowDepartmentItem)v.getTag();
 		if(two.list != null && two.list.size() > 0) {
 			//TODO: 构建选项列表
