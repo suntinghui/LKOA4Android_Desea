@@ -212,13 +212,13 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private Boolean checkValue() {
-		// if(userNameET.length() == 0){
-		// this.showToast("用户名不能为空！");
-		// return false;
-		// }else if(pwdET.length() == 0){
-		// this.showToast("密码不能为空！");
-		// return false;
-		// }
+		 if(tv_username.getText().length() == 0){
+		 this.showToast("用户名不能为空！");
+		 return false;
+		 }else if(tv_pwd.getText().length() == 0){
+		 this.showToast("密码不能为空！");
+		 return false;
+		 }
 		return true;
 	}
 
