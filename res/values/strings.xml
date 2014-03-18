@@ -66,7 +66,7 @@
 	<string name="process_work_my_todo">我的待办</string>
 	<string name="process_work_doing">正在办理</string>
 	<string name="process_work_record_history">历史记录</string>
-	<string name="process_work_file_special">特批文件</string>
+	<string name="process_work_file_special">待批文件</string>
 	<string name="process_work_revocation_box">撤销箱</string>
 	<string name="process_work_handle_forms">表单</string>
 	<string name="process_work_handle_text">正文</string>

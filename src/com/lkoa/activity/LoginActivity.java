@@ -49,14 +49,14 @@ public class LoginActivity extends BaseActivity {
 
 	private TextWithIconView tv_username;
 	private TextWithIconView tv_pwd;
-	
+
 	private ApplicationEnvironment mApp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
+
 		mApp = ApplicationEnvironment.getInstance();
 
 		tv_username = (TextWithIconView) this.findViewById(R.id.tv_username);
@@ -70,8 +70,8 @@ public class LoginActivity extends BaseActivity {
 				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
 		ipET = (EditText) this.findViewById(R.id.ipET);
-		ipET.setText(mApp.getPreferences()
-				.getString(Constant.kHOSTNAME, Constant.DEFAULTHOST));
+		ipET.setText(mApp.getPreferences().getString(Constant.kHOSTNAME,
+				Constant.DEFAULTHOST));
 
 		ipLayout = (LinearLayout) this.findViewById(R.id.toplayout);
 
@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity {
 		} else {
 			remeberIV.setBackgroundResource(R.drawable.select_button_n);
 		}
-		
+
 		// remberTV
 		remberTV = (TextView) this.findViewById(R.id.remeber_pwdTV);
 
@@ -120,11 +120,11 @@ public class LoginActivity extends BaseActivity {
 			autoLoginIV.setBackgroundResource(R.drawable.select_button_n);
 		}
 	}
-	
+
 	private void fillUserAndPassword() {
 		String userName = mApp.getUserName();
 		String password = mApp.getPassword();
-		if(!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password)) {
+		if (!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password)) {
 			tv_username.setText(userName);
 			tv_pwd.setText(password);
 		}
@@ -175,7 +175,7 @@ public class LoginActivity extends BaseActivity {
 				break;
 
 			case R.id.selectIV_left:
-				//记住密码
+				// 记住密码
 				mIsRemeberPwd = !mIsRemeberPwd;
 				if (mIsRemeberPwd) {
 					remeberIV.setBackgroundResource(R.drawable.select_button_s);
@@ -186,10 +186,11 @@ public class LoginActivity extends BaseActivity {
 				break;
 
 			case R.id.selectIV_right:
-				//自动登陆
+				// 自动登陆
 				mIsAutoLogin = !mIsAutoLogin;
 				if (mIsAutoLogin) {
-					autoLoginIV.setBackgroundResource(R.drawable.select_button_s);
+					autoLoginIV
+							.setBackgroundResource(R.drawable.select_button_s);
 					LoginActivity.this.disableRemberPwdButton();
 				} else {
 					autoLoginIV
@@ -212,13 +213,13 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private Boolean checkValue() {
-		 if(tv_username.getText().length() == 0){
-		 this.showToast("用户名不能为空！");
-		 return false;
-		 }else if(tv_pwd.getText().length() == 0){
-		 this.showToast("密码不能为空！");
-		 return false;
-		 }
+		if (tv_username.getText().length() == 0) {
+			this.showToast("用户名不能为空！");
+			return false;
+		} else if (tv_pwd.getText().length() == 0) {
+			this.showToast("密码不能为空！");
+			return false;
+		}
 		return true;
 	}
 
@@ -226,60 +227,65 @@ public class LoginActivity extends BaseActivity {
 
 		if (this.checkValue()) {
 
+			final String userName = tv_username.getText().toString();
+			final String password = tv_pwd.getText().toString();
+			
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
 			map.put(Constant.kMETHODNAME, TransferRequestTag.LOGIN);
 
 			HashMap<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("LoginName", tv_username.getText().toString());
-			paramMap.put("Pwd", tv_pwd.getText().toString());
+			paramMap.put("LoginName", userName);
+			paramMap.put("Pwd", password);
 			map.put(Constant.kPARAMNAME, paramMap);
 
-			LKHttpRequest req1 = new LKHttpRequest(map, loginHandler());
+			MyLKAsyncHttpResponseHandler handler = loginHandler();
+			handler.mUserName = userName;
+			LKHttpRequest req1 = new LKHttpRequest(map, handler);
 
 			new LKHttpRequestQueue().addHttpRequest(req1).executeQueue(
 					"正在登录...", new LKHttpRequestQueueDone() {
-
 						@Override
 						public void onComplete() {
 							super.onComplete();
-
 						}
-
 					});
 		}
 
 	}
+	
+	private class MyLKAsyncHttpResponseHandler extends LKAsyncHttpResponseHandler {
+		public String mUserName;
 
-	private LKAsyncHttpResponseHandler loginHandler() {
-		return new LKAsyncHttpResponseHandler() {
+		@Override
+		public void successAction(Object obj) {
+			String str = (String) obj;
+			String[] results = str.split("[;]");
+			String status = results[0];
+			if (status.equals("0")) {// 登录成功
+				ApplicationEnvironment app = ApplicationEnvironment
+						.getInstance();
+				app.saveToPreference(Constant.kUSERID, results[1]);
+				app.saveToPreference(Constant.KUSERNAM, mUserName);
+				app.saveToPreference(Constant.kPASSWORD, tv_pwd.getText()
+						.toString());
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public void successAction(Object obj) {
-				String str = (String) obj;
-				String[] results = str.split("[;]");
-				String status = results[0];
-				if (status.equals("0")) {// 登录成功
-					ApplicationEnvironment app = ApplicationEnvironment
-							.getInstance();
-					app.saveToPreference(Constant.kUSERID, results[1]);
-					app.saveToPreference(Constant.KUSERNAM, results[2]);
-					app.saveToPreference(Constant.kPASSWORD, tv_pwd.getText().toString());
-
-					Intent intent = new Intent(LoginActivity.this,
-							MainActivity.class);
-					LoginActivity.this.startActivity(intent);
-				} else if (status.equals("1")) {// 密码错误
-					LoginActivity.this.showToast("密码错误！");
-				} else if (status.equals("2")) {// 此帐号已删除
-					LoginActivity.this.showToast("此帐号已删除！");
-				} else if (status.equals("3")) {// 此帐号不存在
-					LoginActivity.this.showToast("此帐号不存在！");
-				}
-
+				Intent intent = new Intent(LoginActivity.this,
+						MainActivity.class);
+				LoginActivity.this.startActivity(intent);
+			} else if (status.equals("1")) {// 密码错误
+				LoginActivity.this.showToast("密码错误！");
+			} else if (status.equals("2")) {// 此帐号已删除
+				LoginActivity.this.showToast("此帐号已删除！");
+			} else if (status.equals("3")) {// 此帐号不存在
+				LoginActivity.this.showToast("此帐号不存在！");
 			}
-		};
+		}
+		
+	}
+	
+	private MyLKAsyncHttpResponseHandler loginHandler() {
+		return new MyLKAsyncHttpResponseHandler();
 	}
 
 	@Override

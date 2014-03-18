@@ -62,6 +62,13 @@ public class ScheduleHomeActivity extends CenterMsgBaseActivity implements OnCli
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		mScheduleMgr.getRCCount(mApp.getUserId(), getRCCountHandler());
+	}
+	
+	@Override
 	protected void findViews() {
 		super.findViews();
 		
@@ -80,8 +87,6 @@ public class ScheduleHomeActivity extends CenterMsgBaseActivity implements OnCli
 		for(int i=0; i<mViews.length; i++) {
 			setupItem(mViews[i], i, 0);
 		}
-		
-		mScheduleMgr.getRCCount(MainActivity.USER_ID, getRCCountHandler());
 	}
 	
 	private LKAsyncHttpResponseHandler getRCCountHandler() {

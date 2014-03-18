@@ -209,7 +209,8 @@ public class ProcessContentInfo implements Serializable {
 			TEXT_EDITTEXT,	//用于意见
 			DATE_PICKER, //日期选择
 			TIME_PICKER,	//时间选择
-			DATE_TIME_PICKER	//日期时间选择
+			DATE_TIME_PICKER,	//日期时间选择
+			MONTH_AND_YEAR_PICKER	//年月
 		}
 		
 		public String id;	//数据项标识
@@ -261,6 +262,10 @@ public class ProcessContentInfo implements Serializable {
 					
 				} else if(type == DATA_TYPE_DATE_AND_TIME) {
 					return ContentType.DATE_TIME_PICKER;
+					
+				} else if(type == DATA_TYPE_MONTH_AND_YEAR) {
+					//年月
+					return ContentType.MONTH_AND_YEAR_PICKER;
 				}
 				
 				return ContentType.TEXT;

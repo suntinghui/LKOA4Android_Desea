@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,7 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.DownloadListener;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -85,7 +88,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private ProcessWorkType mWorkType = ProcessWorkType.TYPE_MY_TODO;
 	
-	private static final String [] TYPES_SHOW_SAVE_COMMIT = new String [] {"0", "1", "7", "8", "12", "13"};
+	private static final String [] TYPES_SHOW_SAVE_COMMIT = new String [] {"0", "1", "3", "7", "8", "10", "12", "13", "15"};
 	
 	private int mTextColorSelected;
 	private int mTextColorUnselected;
@@ -101,6 +104,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private LinearLayout mLinearForms, mLinearAttachments;
 	private WebView mWebViewText;
+	private TextView mTvNoData;
 	private TextView mAttachmentCount;
 	
 	private LinearLayout mLinearTables;
@@ -245,8 +249,11 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		views.add(view);
 		
 		//正文
-		mWebViewText = (WebView)inflater.inflate(R.layout.process_work_handle_content_text, null); 
-		views.add(mWebViewText);
+		view = inflater.inflate(R.layout.process_work_handle_content_text, null);
+		mWebViewText = (WebView)view.findViewById(R.id.webview);
+		mTvNoData = (TextView) view.findViewById(R.id.tv_no_data);
+		configWebView();
+		views.add(view);
 		
 		//附件
 		view = inflater.inflate(R.layout.process_work_handle_content_attachment, null);
@@ -325,6 +332,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			contentText.setText(field.showContent);
 			contentText.setVisibility(View.VISIBLE);
 			contentEdit.setVisibility(View.VISIBLE);
+			contentEdit.setText(field.value);
 			
 		} else if(contentType == ContentType.PULLDOWNLIST) {
 			//TODO: 处理弹出选择dialog
@@ -405,6 +413,14 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			listener.mDateTimeET = contentEdit;
 			contentEdit.setOnClickListener(listener);
 			
+		} else if(contentType == ContentType.MONTH_AND_YEAR_PICKER) {
+			//年月选择
+			contentEdit.setVisibility(View.VISIBLE);
+			contentEdit.setText(field.showContent);
+			contentText.setVisibility(View.GONE);
+			contentEdit.setTag(field);
+			contentEdit.setOnClickListener(mMonthAndYearPickerListener);
+			
 		} else {
 			contentEdit.setVisibility(View.GONE);
 			contentText.setText(field.showContent);
@@ -440,7 +456,37 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 							field.value = buffer.toString();
 							buildBD(mContentInfo);
 						}
-				}, Integer.parseInt(subs[0]), Integer.parseInt(subs[1]), Integer.parseInt(subs[2]));
+				}, Integer.parseInt(subs[0]), Integer.parseInt(subs[1]) - 1, Integer.parseInt(subs[2]));
+			datePicker.show();
+		}
+	};
+	
+	private OnClickListener mMonthAndYearPickerListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			final Field field = (Field)v.getTag();
+			//TODO: 获取年月
+			String date = field.showContent;
+			String subs [] = null;
+			if(!TextUtils.isEmpty(date)) {
+				subs = date.split("-");
+			}
+			if(subs == null || subs.length != 2) {
+				return;
+			}
+			
+			DatePickerDialog datePicker = new DatePickerDialog(ProcessWorkHandleActivity.this, 
+					new OnDateSetListener() {
+						@Override
+						public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+							StringBuffer buffer = new StringBuffer();
+							buffer.append(year).append("-");
+							buffer.append(monthOfYear+1);
+							field.showContent = buffer.toString();
+							field.value = buffer.toString();
+							buildBD(mContentInfo);
+						}
+				}, Integer.parseInt(subs[0]), Integer.parseInt(subs[1]) - 1, 1);
 			datePicker.show();
 		}
 	};
@@ -534,7 +580,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		switch (index) {
 		case INDEX_FORMS:
 			//表单数据
-			mProcessWorkMgr.getLCBD(mType, mInfoId, MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			mProcessWorkMgr.getLCBD(mType, mInfoId, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {
@@ -548,12 +594,24 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case INDEX_TEXT:
 			//正文数据
-			mProcessWorkMgr.getLCZW(mInfoId, MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			mProcessWorkMgr.getLCZW(mInfoId, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {
 					LogUtil.i(TAG, obj.toString());
+					String path = (String) obj;
+					if(TextUtils.isEmpty(path)) {
+						//TODO: 提示用户，没有正文数据
+						mTvNoData.setVisibility(View.VISIBLE);
+						mWebViewText.setVisibility(View.GONE);
+						return;
+					}
+					
+					mWebViewText.setVisibility(View.VISIBLE);
 					mTextDataLoaded = true;
+					//TODO: 加载流程正文链接文档
+					String url = mAttachmentMgr.getUrl(path);
+					mWebViewText.loadUrl(url);
 				}
 			});
 			break;
@@ -576,7 +634,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case INDEX_CB:
 			//表单从表 
-			mProcessWorkMgr.getLCBDCB(mInfoId, MainActivity.USER_ID, mInnerType, 
+			mProcessWorkMgr.getLCBDCB(mInfoId, mApp.getUserId(), mInnerType, 
 					new LKAsyncHttpResponseHandler() {
 				
 				@Override
@@ -665,7 +723,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	private void save() {
 		try {
 			collectionData();
-			mProcessWorkMgr.setGLBD(MainActivity.USER_ID, TYPE_SAVE, 
+			mProcessWorkMgr.setGLBD(mApp.getUserId(), TYPE_SAVE, 
 					mContentInfo.buildXml(false), new LKAsyncHttpResponseHandler() {
 
 						@Override
@@ -739,10 +797,6 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		@Override
 		public Object instantiateItem(View arg0, int arg1) {
 			View view = mViews.get(arg1);
-			if(view instanceof WebView) {
-				((WebView)view).loadUrl("www.baidu.com"); 
-			}
-			
 			mContentPager.addView(view, 0);
 			return mViews.get(arg1);
 		}
@@ -804,5 +858,37 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			DateTimePickerDialog dateTimePicKDialog = new DateTimePickerDialog(ProcessWorkHandleActivity.this);
 			dateTimePicKDialog.dateTimePicKDialog((EditText)mDateTimeET, 0);
 		}
+	}
+	
+	private void configWebView() {
+		mWebViewText.setWebViewClient(new AppWebViewClients());
+		mWebViewText.getSettings().setJavaScriptEnabled(true);
+		mWebViewText.getSettings().setUseWideViewPort(true);
+		mWebViewText.getSettings().setSupportZoom(true);
+		
+		mWebViewText.setDownloadListener(new DownloadListener() {
+			@Override
+			public void onDownloadStart(String url, String userAgent,
+					String contentDisposition, String mimetype, long contentLength) {
+				Uri uri = Uri.parse(url);  
+	            Intent intent = new Intent(Intent.ACTION_VIEW, uri);  
+	            startActivity(intent);   
+			}
+		});
+	}
+	
+	private class AppWebViewClients extends WebViewClient {
+
+	    @Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	        view.loadUrl(url);
+	        return true;
+	    }
+
+	    @Override
+	    public void onPageFinished(WebView view, String url) {
+	        super.onPageFinished(view, url);
+
+	    }
 	}
 }

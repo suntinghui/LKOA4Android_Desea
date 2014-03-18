@@ -56,7 +56,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 		
 		mTvTitle.setText(mTitleResId);
 		
-		mProcessWorkMgr.getLCList(mType, MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+		mProcessWorkMgr.getLCList(mType, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {
@@ -79,7 +79,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 		ProcessItem item = list.get(position);
 		String infoId = item.id;
 		
-		ProcessWorkHandleActivity.start(this, MainActivity.USER_ID, 
+		ProcessWorkHandleActivity.start(this, mApp.getUserId(), 
 				infoId, mInnerType, mType);
 	}
 	

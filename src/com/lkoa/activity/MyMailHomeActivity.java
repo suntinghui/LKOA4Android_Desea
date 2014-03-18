@@ -53,6 +53,20 @@ public class MyMailHomeActivity extends CenterMsgBaseActivity implements OnClick
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		mMainMgr.getMailCount(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, obj.toString());
+				mMailCount = (Integer)obj;
+				setupItem(mItemViews[1], 1, mMailCount);
+			}
+		});
+	}
+	
+	@Override
 	protected void findViews() {
 		super.findViews();
 		mItemViews[0] = findViewById(R.id.my_email_external);
@@ -68,15 +82,6 @@ public class MyMailHomeActivity extends CenterMsgBaseActivity implements OnClick
 		for(int i=0; i<mItemViews.length; i++) {
 			setupItem(mItemViews[i], i, 0);
 		}
-		
-		mMainMgr.getMailCount(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
-			@Override
-			public void successAction(Object obj) {
-				LogUtil.i(TAG, obj.toString());
-				mMailCount = (Integer)obj;
-				setupItem(mItemViews[1], 1, mMailCount);
-			}
-		});
 	}
 	
 	private void setupItem(View view, int index, int count) {

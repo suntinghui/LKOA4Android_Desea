@@ -121,7 +121,7 @@ public class MyMessageWriteActivity extends CenterMsgBaseActivity implements OnC
 				Toast.makeText(this, "收件人和短信内容都不能为空！", Toast.LENGTH_SHORT).show();
 				return;
 			}
-			mSmsMgr.writeSMS(MainActivity.USER_ID, mUserIds, 
+			mSmsMgr.writeSMS(mApp.getUserId(), mUserIds, 
 					mUserNames, content, getResponseHandler());
 			break;
 

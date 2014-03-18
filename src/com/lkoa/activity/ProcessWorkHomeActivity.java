@@ -68,9 +68,14 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 		
 		findViews();
 		setupViews();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		
 		if(mLoadCount) {
-			mProcessWorkMgr.getLCGLCount(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			mProcessWorkMgr.getLCGLCount(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.CenterMsgManager;
+import com.lkoa.business.WebViewConfig;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.util.LogUtil;
@@ -59,14 +60,15 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 	protected void setupViews() {
 		super.setupViews();
 		mTvTitle.setText(R.string.news_detail);
+		new WebViewConfig(this).config(mContentView);
 		loadData();
 	}
 	
 	private void loadData() {
 		if(mListType == CenterMsgNewsActivity.LIST_TYPE_NOTICE) {
-			mNewsMgr.getTZ(mInfoId, MainActivity.USER_ID, getResponseHandler());
+			mNewsMgr.getTZ(mInfoId, mApp.getUserId(), getResponseHandler());
 		} else {
-			mNewsMgr.getXX(mInfoId, MainActivity.USER_ID, getResponseHandler());
+			mNewsMgr.getXX(mInfoId, mApp.getUserId(), getResponseHandler());
 		}
 	}
 	
@@ -80,7 +82,8 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 				mDateView.setText(item.date);
 				String encoding = "utf-8";
 				mContentView.getSettings().setDefaultTextEncodingName(encoding);
-				mContentView.loadDataWithBaseURL(null, item.content, "text/html",  encoding, null);
+				String tmp = item.content.replaceAll("&amp;nbsp;", " ");
+				mContentView.loadDataWithBaseURL(null, tmp, "text/html",  encoding, null);
 			}
 		};
 	}

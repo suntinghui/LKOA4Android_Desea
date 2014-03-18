@@ -253,15 +253,6 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	private boolean checkValid() {
-		EditText edit = (EditText)mNodeDealtime.findViewById(R.id.content_edit);
-		String dealTime = edit.getText().toString();
-		if(TextUtils.isEmpty(dealTime)) return false;
-		try {
-			Float.parseFloat(dealTime);
-		} catch(Exception e) {
-			return false;
-		}
-		
 		switch (mCurrActivity.mode) {
 		case 0:
 			//主办人模式：主办人必须有，相关办理人可以没有。
@@ -292,7 +283,7 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		
 		mCurrActivity.select = 1;
 		try {
-			mProcessWorkMgr.setGLBD(MainActivity.USER_ID, TYPE_COMMIT, 
+			mProcessWorkMgr.setGLBD(mApp.getUserId(), TYPE_COMMIT, 
 					mContentInfo.buildXml(true), new LKAsyncHttpResponseHandler() {
 				
 				@Override

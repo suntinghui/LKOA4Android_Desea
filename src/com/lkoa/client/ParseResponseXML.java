@@ -36,8 +36,10 @@ import com.lkoa.model.RCContentItem;
 import com.lkoa.model.RCListItem;
 import com.lkoa.model.SmsMessage;
 import com.lkoa.model.WindowDepartmentItem;
+import com.lkoa.util.LogUtil;
 
 public class ParseResponseXML {
+	private static final String TAG = "ParseResponseXML";
 	
 	private static InputStream inStream = null;
 	
@@ -327,8 +329,9 @@ public class ParseResponseXML {
 					//图片路径
 					item.iconUrl = parser.nextText();
 				} else if("state".equalsIgnoreCase(parser.getName())) {
-					//未读已读标志
+					//状态标志，0-未读	1-已读
 					item.state = parser.nextText();
+					LogUtil.i(TAG, "getXXList(), state=" + item.state);
 				} 
 				break;
 				
@@ -418,6 +421,11 @@ public class ParseResponseXML {
 				} else if("NTE_30_COL_150".equalsIgnoreCase(parser.getName())) {
 					//时间
 					item.date = parser.nextText();
+					
+				} else if("state".equalsIgnoreCase(parser.getName())) {
+					//状态标志， 0-未读	1-已读
+					item.state = parser.nextText();
+					LogUtil.i(TAG, "getTZList(), state=" + item.state);
 					
 				}
 				break;

@@ -64,7 +64,7 @@ public class ScheduleActiveContentActivity extends CenterMsgBaseActivity {
 		super.setupViews();
 		
 		mTvTitle.setText(mTitleResId);
-		mScheduleMgr.getJTHD(MainActivity.USER_ID, mInfoId, new LKAsyncHttpResponseHandler() {
+		mScheduleMgr.getJTHD(mApp.getUserId(), mInfoId, new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {

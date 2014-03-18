@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
+import com.lkoa.client.ApplicationEnvironment;
 
 public class CenterMsgBaseActivity extends BaseActivity{
 	protected ImageView mIvBack;

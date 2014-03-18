@@ -58,7 +58,7 @@ public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnI
 		
 		if(mType < 4) {
 			//日程列表
-			mScheduleMgr.getRCList(String.valueOf(mType), MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			mScheduleMgr.getRCList(String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {
@@ -73,7 +73,7 @@ public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnI
 			
 		} else {
 			//集团活动
-			mScheduleMgr.getJTHDList(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+			mScheduleMgr.getJTHDList(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {

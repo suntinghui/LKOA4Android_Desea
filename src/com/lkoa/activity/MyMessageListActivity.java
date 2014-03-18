@@ -64,7 +64,7 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 			}
 		});
 		
-		mSmsMgr.getSmsList(MainActivity.USER_ID, mType, new LKAsyncHttpResponseHandler() {
+		mSmsMgr.getSmsList(mApp.getUserId(), mType, new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {

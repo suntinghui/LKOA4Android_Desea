@@ -157,9 +157,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 		final String finalState = state;
 		//获取数据
 		if(mListType == LIST_TYPE_NOTICE) {
-			mNewsMgr.getTZList(finalState, MainActivity.USER_ID, getResponseHandler(state));
+			mNewsMgr.getTZList(finalState, mApp.getUserId(), getResponseHandler(state));
 		} else {
-			mNewsMgr.getXXList(finalState, mId, MainActivity.USER_ID, getResponseHandler(state));
+			mNewsMgr.getXXList(finalState, mId, mApp.getUserId(), getResponseHandler(state));
 		}
 	}
 	
@@ -181,6 +181,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 					} else {
 						mLatestNewsAdapter.setData(list);
 					}
+					setupAdapter();
 					mLatestNewsAdapter.notifyDataSetChanged();
 					
 				} else {
@@ -193,10 +194,20 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 					} else {
 						mMoreNewsAdapter.setData(list);
 					}
+					setupAdapter();
 					mMoreNewsAdapter.notifyDataSetChanged();
 				}
 			}
 		};
+	}
+	
+	private void setupAdapter() {
+		if(mListType == LIST_TYPE_PUBLIC 
+				|| mListType == LIST_TYPE_WIN_DEPARTMENT) {
+			//集团公告和部门之窗不显示图标
+			if(mLatestNewsAdapter != null) mLatestNewsAdapter.setShowIconFlag(false);
+			if(mMoreNewsAdapter != null) mMoreNewsAdapter.setShowIconFlag(false);
+		}
 	}
 	
 	@Override

@@ -65,7 +65,7 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 		
 		mTvTitle.setText(mTitleResId);
 		
-		mMainMgr.getMailList(String.valueOf(mState), String.valueOf(mType), MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+		mMainMgr.getMailList(String.valueOf(mState), String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, obj.toString());

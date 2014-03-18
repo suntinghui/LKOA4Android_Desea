@@ -127,7 +127,7 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 			String content = mContent.getText().toString();
 			
 			if(check(title, content)) {
-				mMailMgr.writeMail(MainActivity.USER_ID, sUserIds, mMailId, 
+				mMailMgr.writeMail(mApp.getUserId(), sUserIds, mMailId, 
 						URLEncoder.encode(title), URLEncoder.encode(content), 
 						STATE_SEND, getResponseHandler());
 			}

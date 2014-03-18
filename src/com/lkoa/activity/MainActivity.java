@@ -32,8 +32,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		R.string.my_email
 	};
 	
-	public static final String USER_ID = "1";
-	
 	private TextView mTvWelcome, mTvLogout;
 	private ImageView mIvPhoto;
 	private LinearLayout mLayoutCenterMgr;
@@ -54,6 +52,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		
 		findViews();
 		setupViews();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		loadGLZXCount();
 	}
 	
 	private void findViews() {
@@ -116,9 +120,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		mIvMyEmail.setOnClickListener(this);
 		mIvMyMsg.setOnClickListener(this);
 		mIvMgrPeople.setOnClickListener(this);
-		
+	}
+	
+	private void loadGLZXCount() {
 		final Resources res = getResources();
-		mMainMgr.getGLZXCount("1", new LKAsyncHttpResponseHandler() {
+		mMainMgr.getGLZXCount(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 
 			@Override
 			public void successAction(Object obj) {

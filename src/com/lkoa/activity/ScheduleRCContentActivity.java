@@ -68,7 +68,7 @@ public class ScheduleRCContentActivity extends CenterMsgBaseActivity implements 
 		super.setupViews();
 		
 		mTvTitle.setText(mTitleResId);
-		mScheduleMgr.getRC(MainActivity.USER_ID, mInfoId, new LKAsyncHttpResponseHandler() {
+		mScheduleMgr.getRC(mApp.getUserId(), mInfoId, new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {

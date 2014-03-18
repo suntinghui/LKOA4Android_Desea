@@ -25,6 +25,8 @@ public class BaseActivity extends Activity {
 	public static final int MODAL_DIALOG		= 1; // 带确定按纽的提示框，需要用户干预才能消失
 	public static final int ALL_DIALOG			= 3; 
 	
+	protected ApplicationEnvironment mApp;
+	
 	// 要命的static
 	private static LKProgressDialog progressDialog = null;
 	private LKAlertDialog alertDialog = null;
@@ -36,6 +38,7 @@ public class BaseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mApp = ApplicationEnvironment.getInstance();
 		
 		stack.push(this);
 	}

@@ -60,6 +60,12 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		loadXXZXCount();
+	}
+	
+	@Override
 	protected void findViews() {
 		super.findViews();
 		mItemViews[0] = findViewById(R.id.center_msg_news);
@@ -74,9 +80,11 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 		for(int i=0; i<mItemViews.length; i++) {
 			setupItem(mItemViews[i], i, 0, null);
 		}
-		
+	}
+	
+	private void loadXXZXCount() {
 		//获取数据
-		mCenterMsgMgr.getXXZXCount("1", new LKAsyncHttpResponseHandler() {
+		mCenterMsgMgr.getXXZXCount(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 
 			@Override
 			public void successAction(Object obj) {

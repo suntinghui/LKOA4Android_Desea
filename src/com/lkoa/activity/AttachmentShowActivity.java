@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 
 import com.lkoa.R;
 import com.lkoa.business.AttachmentManager;
+import com.lkoa.business.WebViewConfig;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.util.LogUtil;
 
@@ -53,26 +54,9 @@ public class AttachmentShowActivity extends CenterMsgBaseActivity {
 		super.setupViews();
 		mTvTitle.setText(R.string.attachment_show_title);
 		
-		configWebView();
+		new WebViewConfig(this).config(mContentWebView);
 		
 		mAttachmentMgr.getAtt(mAttId, getAttachmentResponseHandler());
-	}
-	
-	private void configWebView() {
-		mContentWebView.setWebViewClient(new AppWebViewClients());
-		mContentWebView.getSettings().setJavaScriptEnabled(true);
-		mContentWebView.getSettings().setUseWideViewPort(true);
-		mContentWebView.getSettings().setSupportZoom(true);
-		
-		mContentWebView.setDownloadListener(new DownloadListener() {
-			@Override
-			public void onDownloadStart(String url, String userAgent,
-					String contentDisposition, String mimetype, long contentLength) {
-				Uri uri = Uri.parse(url);  
-	            Intent intent = new Intent(Intent.ACTION_VIEW, uri);  
-	            startActivity(intent);   
-			}
-		});
 	}
 	
 	private LKAsyncHttpResponseHandler getAttachmentResponseHandler() {
@@ -94,20 +78,5 @@ public class AttachmentShowActivity extends CenterMsgBaseActivity {
 		Intent intent = new Intent(ctx, AttachmentShowActivity.class);
 		intent.putExtra(AttachmentShowActivity.KEY_ATT_ID, attId);
 		ctx.startActivity(intent);
-	}
-	
-	public class AppWebViewClients extends WebViewClient {
-
-	    @Override
-	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-	        view.loadUrl(url);
-	        return true;
-	    }
-
-	    @Override
-	    public void onPageFinished(WebView view, String url) {
-	        super.onPageFinished(view, url);
-
-	    }
 	}
 }

@@ -52,6 +52,24 @@ public class DocMgrHomeActivity extends CenterMsgBaseActivity implements OnClick
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		mDocMgr.getGWGLCount(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
+			
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, "successAction(), obj="+obj);
+				String result = (String) obj;
+				String [] counts = result.split(";");
+				setupItem(mReceivedToday, 0, Integer.parseInt(counts[0]));
+				setupItem(mReceivedManagement, 1, Integer.parseInt(counts[1]));
+				setupItem(mSendManagement, 2, Integer.parseInt(counts[2]));
+			}
+		});
+	}
+	
+	@Override
 	protected void findViews() {
 		super.findViews();
 		
@@ -69,19 +87,6 @@ public class DocMgrHomeActivity extends CenterMsgBaseActivity implements OnClick
 		setupItem(mReceivedToday, 0, 0);
 		setupItem(mReceivedManagement, 1, 0);
 		setupItem(mSendManagement, 2, 0);
-		
-		mDocMgr.getGWGLCount(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
-			
-			@Override
-			public void successAction(Object obj) {
-				LogUtil.i(TAG, "successAction(), obj="+obj);
-				String result = (String) obj;
-				String [] counts = result.split(";");
-				setupItem(mReceivedToday, 0, Integer.parseInt(counts[0]));
-				setupItem(mReceivedManagement, 1, Integer.parseInt(counts[1]));
-				setupItem(mSendManagement, 2, Integer.parseInt(counts[2]));
-			}
-		});
 	}
 	
 	private void setupItem(View view, int index, int count) {

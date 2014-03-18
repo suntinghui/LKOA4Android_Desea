@@ -102,7 +102,7 @@ public class CenterMsgWindowDepartmentActivity extends CenterMsgBaseActivity imp
 	}
 	
 	private void loadData() {
-		mNewsMgr.getBMZC(MainActivity.USER_ID, new LKAsyncHttpResponseHandler() {
+		mNewsMgr.getBMZC(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction()");

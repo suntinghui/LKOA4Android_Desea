@@ -71,7 +71,7 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 		super.setupViews();
 		
 		mTvTitle.setText(R.string.my_email_details);
-		mMailMgr.getMail(MainActivity.USER_ID, mMailId, new LKAsyncHttpResponseHandler() {
+		mMailMgr.getMail(mApp.getUserId(), mMailId, new LKAsyncHttpResponseHandler() {
 			
 			@Override
 			public void successAction(Object obj) {

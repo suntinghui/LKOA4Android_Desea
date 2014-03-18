@@ -56,59 +56,57 @@ public class DateTimePickerDialog implements OnDateChangedListener,
 		timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
 	}
 
-	public AlertDialog dateTimePicKDialog(final EditText dateTimeTextEdite, int type) {
+	public AlertDialog dateTimePicKDialog(final EditText dateTimeTextEdite,
+			int type) {
 		Calendar c = Calendar.getInstance();
 		switch (type) {
 		case 1:
 			new DatePickerDialog(activity,
-			new DatePickerDialog.OnDateSetListener() {
-				public void onDateSet(DatePicker datePicker, int year,
-						int monthOfYear,
-						int dayOfMonth) {
+					new DatePickerDialog.OnDateSetListener() {
+						public void onDateSet(DatePicker datePicker, int year,
+								int monthOfYear, int dayOfMonth) {
 							Calendar calendar = Calendar.getInstance();
 
-					calendar.set(datePicker.getYear(), datePicker.getMonth(),
+							calendar.set(datePicker.getYear(),
+									datePicker.getMonth(),
+									datePicker.getDayOfMonth());
+							SimpleDateFormat sdf = new SimpleDateFormat(
+									"yyyy-MM-dd");
 
-					datePicker.getDayOfMonth());
+							dateTime = sdf.format(calendar.getTime());
+							dateTimeTextEdite.setText(dateTime);
+						}
 
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-					dateTime = sdf.format(calendar.getTime());
-
-					dateTimeTextEdite.setText(dateTime);
-
-				}
-
-			},
-			c.get(Calendar.YEAR),
-			c.get(Calendar.MONTH),
-			c.get(Calendar.DATE)).show();
+					}, c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+					c.get(Calendar.DATE)).show();
 			return null;
 
 		case 2:
 			new TimePickerDialog(activity,
-			new TimePickerDialog.OnTimeSetListener() {
-				public void onTimeSet(TimePicker timePicker, int hourOfDay,
-						int minute) {
-					Calendar calendar = Calendar.getInstance();
-					calendar.set(Calendar.YEAR, Calendar.MONTH,
-					Calendar.DAY_OF_MONTH, timePicker.getCurrentHour(),
-					timePicker.getCurrentMinute());
-					SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-					dateTime = sdf.format(calendar.getTime());
-					dateTimeTextEdite.setText(dateTime);
-				}
-			},
+					new TimePickerDialog.OnTimeSetListener() {
+						public void onTimeSet(TimePicker timePicker,
+								int hourOfDay, int minute) {
+							Calendar calendar = Calendar.getInstance();
+							calendar.set(Calendar.YEAR, Calendar.MONTH,
+									Calendar.DAY_OF_MONTH,
+									timePicker.getCurrentHour(),
+									timePicker.getCurrentMinute());
+							SimpleDateFormat sdf = new SimpleDateFormat(
+									"HH:mm:ss");
+							dateTime = sdf.format(calendar.getTime());
+							dateTimeTextEdite.setText(dateTime);
+						}
+					},
 
-			c.get(Calendar.HOUR_OF_DAY),
-			c.get(Calendar.MINUTE),
-			true).show();
+					c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true)
+					.show();
 			return null;
 
 		default:
 
 			LinearLayout dateTimeLayout = (LinearLayout) activity
-					.getLayoutInflater().inflate(R.layout.layout_datetime, null);
+					.getLayoutInflater()
+					.inflate(R.layout.layout_datetime, null);
 
 			datePicker = (DatePicker) dateTimeLayout
 					.findViewById(R.id.datepicker);
@@ -122,19 +120,20 @@ public class DateTimePickerDialog implements OnDateChangedListener,
 
 			timePicker.setOnTimeChangedListener(this);
 
-			ad = new AlertDialog.Builder(activity)
-					.setTitle(initDateTime)
+			ad = new AlertDialog.Builder(activity).setTitle(initDateTime)
 					.setView(dateTimeLayout).setPositiveButton("设置",
 
 					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton){
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
 							dateTimeTextEdite.setText(dateTime);
 						}
 
 					}).setNegativeButton("取消",
 
 					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
 							dateTimeTextEdite.setText("");
 						}
 					}).show();
@@ -150,11 +149,12 @@ public class DateTimePickerDialog implements OnDateChangedListener,
 		onDateChanged(null, 0, 0, 0);
 	}
 
-	public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+	public void onDateChanged(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(datePicker.getYear(), datePicker.getMonth(),
-		datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
-		timePicker.getCurrentMinute());
+				datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
+				timePicker.getCurrentMinute());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dateTime = sdf.format(calendar.getTime());
 		ad.setTitle(dateTime);

@@ -3,6 +3,7 @@ package com.lkoa.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,11 +15,14 @@ import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.model.CenterMsgNewsItem;
+import com.lkoa.util.LogUtil;
 
 public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 
 	private LayoutInflater mLayoutInflater;
 	private List<CenterMsgNewsItem> mDataList;
+	
+	private boolean mShowIcon = true;
 
 	public CenterMsgNewsAdapter(Context context, int resource,
 			List<CenterMsgNewsItem> objects) {
@@ -60,14 +64,22 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 		CenterMsgNewsItem item = getItem(position);
 		holder.title.setText(item.title);
 		if(TextUtils.equals(item.state, "0")) {
-			holder.title.getPaint().setFakeBoldText(true);
+			Paint p = holder.title.getPaint();
+			p.setTypeface(Typeface.DEFAULT_BOLD);
+			p.setFakeBoldText(true);
 		}
+		LogUtil.i("CenterMsgNewsAdapter", "item.state="+item.state);
+		
 		holder.date.setText(item.date);
 		holder.details.setText(item.content);
 		if(item.iconUrl == null) {
 			holder.icon.setVisibility(View.GONE);
 		} else {
 			holder.icon.setVisibility(View.VISIBLE);
+		}
+		if(!mShowIcon) {
+			//隐藏标题图片
+			holder.icon.setVisibility(View.GONE);
 		}
 		
 		return convertView;
@@ -79,6 +91,10 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 	
 	public List<CenterMsgNewsItem> getData() {
 		return mDataList;
+	}
+	
+	public void setShowIconFlag(boolean showIcon) {
+		mShowIcon = showIcon;
 	}
 	
 	private class ViewHolder {
