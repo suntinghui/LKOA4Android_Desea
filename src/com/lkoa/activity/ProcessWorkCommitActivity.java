@@ -215,12 +215,6 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 			toRightArrow.setVisibility(View.VISIBLE);
 		}
 		
-		if(view == mNodeDealtime) {
-			text.setVisibility(View.GONE);
-			edit.setVisibility(View.VISIBLE);
-			edit.setText(value);
-		}
-		
 		title.setText(titleResId);
 		text.setText(value);
 	}
@@ -282,7 +276,6 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 			return;
 		}
 		
-		mCurrActivity.dealTime = "2";
 		mCurrActivity.select = 1;
 		try {
 			mProcessWorkMgr.setGLBD(MainActivity.USER_ID, TYPE_COMMIT, 

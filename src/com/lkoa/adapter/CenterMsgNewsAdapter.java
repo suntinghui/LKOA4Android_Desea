@@ -59,11 +59,9 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 		
 		CenterMsgNewsItem item = getItem(position);
 		holder.title.setText(item.title);
-		/*if(TextUtils.equals(item.state, "0")) {
+		if(TextUtils.equals(item.state, "0")) {
 			holder.title.getPaint().setFakeBoldText(true);
-		} else {
-			holder.title.getPaint().setFakeBoldText(false);
-		}*/
+		}
 		holder.date.setText(item.date);
 		holder.details.setText(item.content);
 		if(item.iconUrl == null) {
