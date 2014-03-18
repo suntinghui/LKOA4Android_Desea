@@ -170,7 +170,7 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity
 		Intent intent = new Intent(ctx, ContactsSelectorActivity.class);
 		intent.putExtra(KEY_SELECT_MODE, mode);
 		intent.putExtra(KEY_SELECTED_CONTACT, selected);
-		((Activity)ctx).startActivityForResult(intent, 0);
+		((Activity)ctx).startActivityForResult(intent, mode);
 	}
 	
 }

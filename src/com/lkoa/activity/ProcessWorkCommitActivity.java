@@ -131,34 +131,42 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if(resultCode == RESULT_OK) {
-			int mode = data.getIntExtra(ContactsSelectorActivity.RESULT_KEY_MODE, 
-					ContactsSelectorActivity.SELECT_MODE_SINGLE);
-			String showContent = data.getStringExtra(
-					ContactsSelectorActivity.RESULT_KEY_SHOWCONTENT);
-			String userId = data.getStringExtra(
-					ContactsSelectorActivity.RESULT_KEY_VALUE);
-			
-			if(mode == ContactsSelectorActivity.SELECT_MODE_SINGLE) {
-				if(mCurrActivity.zbr == null) {
-					mCurrActivity.zbr = mContentInfo.newUser();
+			if(requestCode == 8) {
+				ProcessContentInfo info = (ProcessContentInfo)data.getSerializableExtra("bundle");
+				if(info != null) {
+					mContentInfo = info;
+					buildPageWarper();
 				}
-				User user = mCurrActivity.zbr;
-				user.userId = userId;
-				user.userName = showContent;
-				
 			} else {
-				List<User> list = mCurrActivity.cyrs;
-				User user = null;
-				String [] userIds = userId.split(",");
-				String [] userNames = showContent.split(",");
-				for(int i=0; i<userIds.length; i++) {
-					user = mContentInfo.newUser();
-					user.userId = userIds[i];
-					user.userName = userNames[i];
-					list.add(user);
+				int mode = data.getIntExtra(ContactsSelectorActivity.RESULT_KEY_MODE, 
+						ContactsSelectorActivity.SELECT_MODE_SINGLE);
+				String showContent = data.getStringExtra(
+						ContactsSelectorActivity.RESULT_KEY_SHOWCONTENT);
+				String userId = data.getStringExtra(
+						ContactsSelectorActivity.RESULT_KEY_VALUE);
+				
+				if(mode == ContactsSelectorActivity.SELECT_MODE_SINGLE) {
+					if(mCurrActivity.zbr == null) {
+						mCurrActivity.zbr = mContentInfo.newUser();
+					}
+					User user = mCurrActivity.zbr;
+					user.userId = userId;
+					user.userName = showContent;
+					
+				} else {
+					List<User> list = mCurrActivity.cyrs;
+					User user = null;
+					String [] userIds = userId.split(",");
+					String [] userNames = showContent.split(",");
+					for(int i=0; i<userIds.length; i++) {
+						user = mContentInfo.newUser();
+						user.userId = userIds[i];
+						user.userName = userNames[i];
+						list.add(user);
+					}
 				}
+				buildPageWarper();
 			}
-			buildPageWarper();
 		}
 	}
 	
@@ -232,8 +240,14 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	
 	private String getCyrs(List<User> list) {
 		StringBuilder builder = new StringBuilder();
-		for(User u : list) {
-			builder.append(u.toString());
+		User u = null;
+		for(int i=0; i<list.size(); i++) {
+			u = list.get(i);
+			if(i != list.size()-1) {
+				builder.append(u.toString()).append(",");
+			} else {
+				builder.append(u.toString());
+			}
 		}
 		return builder.toString();
 	}
@@ -306,7 +320,7 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 			//下级节点选择
 			Intent intent = new Intent(ProcessWorkCommitActivity.this, ProcessWorkNodeSelectActivity.class);
 			intent.putExtra("bundle", mContentInfo);
-			startActivityForResult(intent, 0);
+			startActivityForResult(intent, 8);
 			break;
 			
 		case R.id.node_zbr:

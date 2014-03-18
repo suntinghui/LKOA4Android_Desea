@@ -177,6 +177,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == RESULT_OK) {
 			if(requestCode == ContactsSelectorActivity.SELECT_MODE_SINGLE) {
+				//单选联系人
 				String showContent = data.getStringExtra("showContent");
 				String value = data.getStringExtra("value");
 				
@@ -185,6 +186,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				field.value = value;
 				
 			} else if(requestCode == ContactsSelectorActivity.SELECT_MODE_MULTI) {
+				//多选联系人
 				String showContent = data.getStringExtra("showContent");
 				String value = data.getStringExtra("value");
 				
@@ -474,10 +476,6 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	};
 	
 	private void selectContacts(Field field, ContentType type) {
-		Intent intent = new Intent(
-				ProcessWorkHandleActivity.this, 
-				ContactsSelectorActivity.class);
-		int mode = -1;
 		if(type == ContentType.SINGLE_PEOPLE) {
 			ContactsSelectorActivity.startForResult(this, 
 					ContactsSelectorActivity.SELECT_MODE_SINGLE,
