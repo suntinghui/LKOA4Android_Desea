@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
@@ -65,6 +68,9 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	private View mNodeNext, mNodeDealtime, mNodeMode, mNodeZbr, mNodeCyr;
 	private Activity mCurrActivity;	//当前节点
 	
+	private String mInnerType = null;
+	private String mType = null;
+	
 	private OnItemSelectedListener mSpinnerOnItemClickListener = new OnItemSelectedListener() {
 
 		@Override
@@ -94,6 +100,11 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		Intent intent = getIntent();
 		Bundle bundle = intent.getBundleExtra("bundle");
 		mContentInfo = (ProcessContentInfo)bundle.getSerializable("processInfo");
+		mInnerType = bundle.getString("innerType");
+		mType = bundle.getString("type");
+		if(TextUtils.isEmpty(mType)) {
+			mType = "0";
+		}
 		
 		findViews();
 		setupViews();
@@ -253,6 +264,11 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	private boolean checkValid() {
+		if(mCurrActivity.type == 2) {
+			//如果节点类型为结束即Activity/ Type 值是 2 时，则不验证主办人、办理人，直接提交
+			return true;
+		}
+		
 		switch (mCurrActivity.mode) {
 		case 0:
 			//主办人模式：主办人必须有，相关办理人可以没有。
@@ -264,7 +280,6 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		case 2:
 			//会签人模式：主办人的选择要隐去，相关办理人必须有，且可以多选
 			//单人签发模式：主办人的选择要隐去，相关办理人必须有，且可以多选
-			mNodeZbr.setVisibility(View.GONE);
 			List<User> list = mCurrActivity.cyrs;
 			if(list.size() < 1) return false;
 			break;
@@ -291,11 +306,32 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 					LogUtil.i(TAG, "setGLBD(), successAction obj="+obj);
 					if(obj != null) {
 						showDialog(MODAL_DIALOG, "提交表单成功!");
+						mAlertDialog.setOnDismissListener(new OnDismissListener() {
+							@Override
+							public void onDismiss(DialogInterface dialog) {
+								ProcessWorkListActivity.start(ProcessWorkCommitActivity.this, 
+										getListTitleResId(), Integer.parseInt(mType), mInnerType);
+								finish();
+							}
+						});
 					}
 				}
 			});
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private int getListTitleResId() {
+		if(TextUtils.equals(mInnerType, "0")) {
+			return R.string.process_work_my_todo;
+			
+		} else if(TextUtils.equals(mInnerType, "1")) {
+			return R.string.process_work_doing;
+			
+		} else {
+			return R.string.process_work_file_special;
+			
 		}
 	}
 	
@@ -341,5 +377,15 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 		default:
 			break;
 		}
+	}
+	
+	public static void start(Context ctx, String type, String innerType, ProcessContentInfo info) {
+		Intent intent = new Intent(ctx, ProcessWorkCommitActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("processInfo", info);
+		bundle.putString("innerType", innerType);
+		bundle.putString("type", type);
+		intent.putExtra("bundle", bundle);
+		ctx.startActivity(intent);
 	}
 }

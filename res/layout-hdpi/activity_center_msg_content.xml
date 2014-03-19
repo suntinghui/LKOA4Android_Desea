@@ -43,7 +43,7 @@
             android:layout_height="0dip"
             android:layout_weight="1"
             android:scrollbars="none"
-			android:background="#f3f3f3" />
+			android:background="@color/common_bg" />
     </LinearLayout>
     </ScrollView>
     

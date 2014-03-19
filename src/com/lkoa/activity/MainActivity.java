@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -42,11 +43,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private TextView [] mCenterMgrTextViews;
 	
 	private MainManager mMainMgr;
+	
+	private String mUserName;	//用户名称，非登录名
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		Intent intent = getIntent();
+		mUserName = intent.getStringExtra("userName");
 		
 		mMainMgr = new MainManager();
 		
@@ -95,16 +101,15 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	private void setupViews() {
 		ApplicationEnvironment app = ApplicationEnvironment.getInstance();
-		String userName = app.getUserName();
 		String latestTime = app.getLatestTime();
 		String welcome = null;
 		if(TextUtils.isEmpty(latestTime)) {
 			//首次登陆
-			welcome = getResources().getString(R.string.hello_user_and_time_first, userName);
+			welcome = getResources().getString(R.string.hello_user_and_time_first, mUserName);
 			
 		} else {
 			//非首次
-			welcome = getResources().getString(R.string.hello_user_and_time, userName, latestTime);
+			welcome = getResources().getString(R.string.hello_user_and_time, mUserName, latestTime);
 		}
 		saveLatestTime(app);
 		mTvWelcome.setText(welcome);
@@ -239,5 +244,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		for(BaseActivity a : list) {
 			a.finish();
 		}
+	}
+	
+	public static void start(Context ctx, String userName) {
+		Intent intent = new Intent(ctx, MainActivity.class);
+		intent.putExtra("userName", userName);
+		ctx.startActivity(intent);
 	}
 }

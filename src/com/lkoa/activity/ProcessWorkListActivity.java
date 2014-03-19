@@ -42,19 +42,10 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 		findViews();
 		setupViews();
 	}
-	
+
 	@Override
-	protected void findViews() {
-		super.findViews();
-		mListView = (ListView)findViewById(android.R.id.list);
-		mListView.setOnItemClickListener(this);
-	}
-	
-	@Override
-	protected void setupViews() {
-		super.setupViews();
-		
-		mTvTitle.setText(mTitleResId);
+	protected void onResume() {
+		super.onResume();
 		
 		mProcessWorkMgr.getLCList(mType, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			
@@ -72,6 +63,20 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 			}
 		});
 	}
+	
+	@Override
+	protected void findViews() {
+		super.findViews();
+		mListView = (ListView)findViewById(android.R.id.list);
+		mListView.setOnItemClickListener(this);
+	}
+	
+	@Override
+	protected void setupViews() {
+		super.setupViews();
+		
+		mTvTitle.setText(mTitleResId);
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
@@ -83,6 +88,12 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 				infoId, mInnerType, mType);
 	}
 	
+	/**
+	 * @param ctx	上下文
+	 * @param titleResId	标题名称资源id
+	 * @param type	流程列表类型参数
+	 * @param innerType	获取表单从表时，类型参数
+	 */
 	public static void start(Context ctx, int titleResId, int type, String innerType) {
 		Intent intent = new Intent(ctx, ProcessWorkListActivity.class);
 		intent.putExtra("titleResId", titleResId);

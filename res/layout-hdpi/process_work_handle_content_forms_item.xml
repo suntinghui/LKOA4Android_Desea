@@ -37,11 +37,23 @@
     	    android:visibility="visible"
     	    style="@style/ProcessWorkFormsTitle" />
     	
+    	<TextView android:id="@+id/tv_no_empty"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_marginRight="@dimen/margin_middle_extra"
+    	    android:layout_alignParentRight="true"
+    	    android:layout_centerVertical="true"
+    	    android:textSize="12sp"
+    	    android:textColor="@color/red"
+    	    android:visibility="gone"
+    	    android:text="必填" />
+    	
     	<EditText 
     	    android:id="@+id/content_edit"
     	    android:layout_width="fill_parent"
     	    android:layout_height="wrap_content"
     	    android:layout_toRightOf="@id/title"
+    	    android:layout_toLeftOf="@id/tv_no_empty"
     	    android:layout_below="@id/content_text"
     	    android:layout_marginTop="@dimen/margin_middle_extra"
     	    android:layout_marginLeft="@dimen/margin_middle_extra"

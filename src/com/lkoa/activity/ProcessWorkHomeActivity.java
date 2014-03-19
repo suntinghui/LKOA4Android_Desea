@@ -176,7 +176,7 @@ public class ProcessWorkHomeActivity extends CenterMsgBaseActivity implements On
 			break;
 			
 		case R.id.process_work_file_special:
-			//特批文件
+			//待批文件
 			startActivity(R.string.process_work_file_special, mTypes[3], "3");
 			break;
 			

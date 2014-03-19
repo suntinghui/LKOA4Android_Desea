@@ -35,6 +35,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.lkoa.R;
 import com.lkoa.business.AttachmentManager;
@@ -317,8 +318,14 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		TextView title = (TextView)view.findViewById(R.id.title);
 		TextView contentText = (TextView)view.findViewById(R.id.content_text);
 		TextView contentEdit = (TextView)view.findViewById(R.id.content_edit);
+		TextView noEmpty = (TextView)view.findViewById(R.id.tv_no_empty);
 		ImageView toRightArrow = (ImageView)view.findViewById(R.id.to_right_arrow);
 		Spinner contentSpinner = (Spinner) view.findViewById(R.id.content_spinner);
+		
+		if(field.editMode == ProcessContentInfo.Field.EDIT_MODE_MUST) {
+			//必填
+			noEmpty.setVisibility(View.VISIBLE);
+		}
 		
 		title.setText(field.name);
 		ContentType contentType = field.getContentType();
@@ -690,26 +697,57 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		return tableRow;
 	}
 	
-	private void collectionData() {
+	/**
+	 * @return 标志采集数据是否成功
+	 */
+	private boolean collectionData() {
 		//TODO: 采集数据，保存到mContentInfo对象
 		int count = mLinearForms.getChildCount();
 		for(int i=0; i<count; i++) {
 			View view = mLinearForms.getChildAt(i);
 			Field field = (Field)view.getTag();
-			setField(field, view);
+			if(!setField(field, view)) {
+				return false;
+			}
 		}
+		return true;
 	}
 	
-	private void setField(Field field, View view) {
+	/**
+	 * @param field	字段数据	
+	 * @param value	待验证的值
+	 * @return	验证是否通过	true-通过	false-不通过
+	 */
+	private boolean checkValid(Field field, String value) {
+		if(field.editMode == ProcessContentInfo.Field.EDIT_MODE_MUST
+				&& TextUtils.isEmpty(value)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean setField(Field field, View view) {
 		ContentType type = field.getContentType();
 		if(type == ContentType.EDITTEXT) {
 			EditText et = (EditText)view.findViewById(R.id.content_edit);
-//			field.showContent = et.getText().toString();
-			field.value = et.getText().toString();
+			String value = et.getText().toString();
+			
+			if(!checkValid(field, value)) {
+				return false;
+			}
+			
+			field.value = value;
 			
 		} else if(type == ContentType.TEXT_EDITTEXT) {
 			EditText et = (EditText)view.findViewById(R.id.content_edit);
-			field.value = et.getText().toString();
+			String value = et.getText().toString();
+			
+			if(!checkValid(field, value)) {
+				return false;
+			}
+			
+			field.value = value;
 			
 		} else if(type == ContentType.SINGLE_PEOPLE
 				|| type == ContentType.SINGLE_DEPT
@@ -718,11 +756,17 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			TextView text = (TextView)view.findViewById(R.id.content_text);
 			field.showContent = text.getText().toString();
 		}
+		
+		return true;
 	}
 	
 	private void save() {
 		try {
-			collectionData();
+			if(!collectionData()) {
+				//采集数据失败，必填项没有填
+				Toast.makeText(this, "请检查必填项是否为空！", Toast.LENGTH_SHORT).show();
+				return;
+			}
 			mProcessWorkMgr.setGLBD(mApp.getUserId(), TYPE_SAVE, 
 					mContentInfo.buildXml(false), new LKAsyncHttpResponseHandler() {
 
@@ -742,11 +786,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	private void commit() {
-		Intent intent = new Intent(this, ProcessWorkCommitActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("processInfo", mContentInfo);
-		intent.putExtra("bundle", bundle);
-		startActivity(intent);
+		if(!collectionData()) {
+			Toast.makeText(this, "请检查必填项是否为空！", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		ProcessWorkCommitActivity.start(this, mType, mInnerType, mContentInfo);
 	}
 
 	@Override
@@ -773,6 +818,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		
 	}
 	
+	/**
+	 * @param ctx	上下文
+	 * @param userId	用户id
+	 * @param infoId	
+	 * @param innerType	获取表单从表时，需要的类型id
+	 * @param sType		获取表单数据需要的类型id
+	 */
 	public static void start(Context ctx, String userId, 
 			String infoId, String innerType, String sType) {
 		Intent intent = new Intent(ctx, ProcessWorkHandleActivity.class);

@@ -33,7 +33,7 @@
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_centerInParent="true"
-	                android:text="@string/latest_news"
+	                android:text="@string/latest_msg"
 	                style="@style/CenterMsgNewsTabText" />
 	            <View
 			        android:id="@+id/v_latest_news_line_selected"
@@ -51,7 +51,7 @@
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_centerInParent="true"
-	                android:text="@string/more_news"
+	                android:text="@string/more_msg"
 	                style="@style/CenterMsgNewsTabUnSelectedText" />
 	            <View
 			        android:id="@+id/v_more_news_line_selected"

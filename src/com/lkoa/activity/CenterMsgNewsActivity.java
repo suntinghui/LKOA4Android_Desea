@@ -3,6 +3,7 @@ package com.lkoa.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.util.LogUtil;
 
 /**
- * 信息中心-集团新闻
+ * 信息中心-集团新闻、集团公告、通知信息、部门之窗信息列表页
  */
 public class CenterMsgNewsActivity extends CenterMsgBaseActivity 
 	implements OnClickListener, OnItemClickListener {
@@ -37,10 +38,10 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	private static final String NEWS_UNREAD = "0";
 	private static final String NEWS_READED = "1";
 	
-	public static final int LIST_TYPE_NEWS = 0;
-	public static final int LIST_TYPE_PUBLIC = 1;
-	public static final int LIST_TYPE_NOTICE = 2;
-	public static final int LIST_TYPE_WIN_DEPARTMENT = 3;
+	public static final int LIST_TYPE_NEWS = 0;	//集团新闻
+	public static final int LIST_TYPE_PUBLIC = 1;	//集团公告
+	public static final int LIST_TYPE_NOTICE = 2;	//通知信息
+	public static final int LIST_TYPE_WIN_DEPARTMENT = 3;	//部门之窗
 	
 	private int mListType = LIST_TYPE_NEWS;
 	
@@ -118,6 +119,10 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 			mTvTitle.setText(mTitleResId);
 		}
 		
+		int [] tabResIds = getTabResIds();
+		mTvLatestNews.setText(tabResIds[0]);
+		mTvMoreNews.setText(tabResIds[1]);
+		
 		mParentLatestNews.setOnClickListener(this);
 		mParentMoreNews.setOnClickListener(this);
 		
@@ -129,6 +134,38 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 		
 		//获取数据
 		loadNewsList(NEWS_UNREAD);
+	}
+	
+	private int [] getTabResIds() {
+		int [] retArray = new int[2];
+		switch (mListType) {
+		case LIST_TYPE_NEWS:
+			//集团新闻
+			retArray[0] = R.string.latest_news;
+			retArray[1] = R.string.more_news;
+			break;
+			
+		case LIST_TYPE_PUBLIC:
+			//集团公告
+			retArray[0] = R.string.latest_public;
+			retArray[1] = R.string.more_public;
+			break;
+
+		case LIST_TYPE_NOTICE:
+			//集团通知
+			retArray[0] = R.string.latest_notice;
+			retArray[1] = R.string.more_notice;
+			break;
+			
+		case LIST_TYPE_WIN_DEPARTMENT:
+		default:
+			//部门之窗
+			retArray[0] = R.string.latest_msg;
+			retArray[1] = R.string.more_msg;
+			break;
+		}
+		
+		return retArray;
 	}
 	
 	private void switchTo(int activeIdx) {
@@ -294,6 +331,14 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 			intent.putExtra("listType", mListType);
 			startActivity(intent);
 		}
+	}
+	
+	public static void start(Context ctx, int titleResId, String sId, int listType) {
+		Intent intent = new Intent(ctx, CenterMsgNewsActivity.class);
+		intent.putExtra("titleResId", R.string.center_msg_news);
+		intent.putExtra("sId", sId);
+		intent.putExtra("listType", listType);
+		ctx.startActivity(intent);
 	}
 	
 }

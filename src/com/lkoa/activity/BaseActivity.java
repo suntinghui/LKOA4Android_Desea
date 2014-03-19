@@ -29,9 +29,9 @@ public class BaseActivity extends Activity {
 	
 	// 要命的static
 	private static LKProgressDialog progressDialog = null;
-	private LKAlertDialog alertDialog = null;
+	protected LKAlertDialog mAlertDialog = null;
 	
-	private String message = null;
+	private String mMessage = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +130,7 @@ public class BaseActivity extends Activity {
 	}
 	
 	public void showDialog(final int type, String message){
-		this.message = message;
+		this.mMessage = message;
 		
 		this.runOnUiThread(new Runnable(){
 			@Override
@@ -162,7 +162,7 @@ public class BaseActivity extends Activity {
 			
 			this.createProgressDialog();
 			
-			progressDialog.setMessage(null==message?"":message);
+			progressDialog.setMessage(null==mMessage?"":mMessage);
 			/***
 			Activity activity = (Activity) ((ContextThemeWrapper)progressDialog.getContext()).getBaseContext();
 			//android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@438e7108 is not valid; is your activity running?
@@ -183,16 +183,8 @@ public class BaseActivity extends Activity {
 			this.hideDialog(ALL_DIALOG);
 			
 			this.createAlertDialog();
-			
-			alertDialog.setMessage(null == message?"":message);
-			/*
-			Activity act = (Activity) ((ContextThemeWrapper)alertDialog.getContext()).getBaseContext();
-			// android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@438e7108 is not valid; is your activity running?
-			if (!act.isFinishing()){
-				alertDialog.create().show();
-			} 
-			**/
-			alertDialog.create().show();
+			mAlertDialog.setMessage(null == mMessage ? "" : mMessage);
+			mAlertDialog.create().show();
 		} catch(Exception e){
 			e.printStackTrace();
 		}
@@ -207,8 +199,8 @@ public class BaseActivity extends Activity {
 			break;
 			
 		case MODAL_DIALOG:
-			if (null != alertDialog && alertDialog.isShowing()){
-				alertDialog.dismiss();
+			if (null != mAlertDialog && mAlertDialog.isShowing()){
+				mAlertDialog.dismiss();
 			}
 			break;
 			
@@ -216,8 +208,8 @@ public class BaseActivity extends Activity {
 			if (null != progressDialog && progressDialog.isShowing()){
 				progressDialog.dismiss();
 			}
-			if (null != alertDialog && alertDialog.isShowing()){
-				alertDialog.dismiss();
+			if (null != mAlertDialog && mAlertDialog.isShowing()){
+				mAlertDialog.dismiss();
 			}
 			break;
 		}
@@ -253,11 +245,11 @@ public class BaseActivity extends Activity {
 //		} else {
 //			alertDialog = new LKAlertDialog(this);
 //		}
-		alertDialog = new LKAlertDialog(this);
+		mAlertDialog = new LKAlertDialog(this);
 		
-		alertDialog.setTitle("提示");
-		alertDialog.setCancelable(false);
-		alertDialog.setPositiveButton("确定", new android.content.DialogInterface.OnClickListener() {
+		mAlertDialog.setTitle("提示");
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setPositiveButton("确定", new android.content.DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}

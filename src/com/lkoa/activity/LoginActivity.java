@@ -269,10 +269,7 @@ public class LoginActivity extends BaseActivity {
 				app.saveToPreference(Constant.KUSERNAM, mUserName);
 				app.saveToPreference(Constant.kPASSWORD, tv_pwd.getText()
 						.toString());
-
-				Intent intent = new Intent(LoginActivity.this,
-						MainActivity.class);
-				LoginActivity.this.startActivity(intent);
+				MainActivity.start(LoginActivity.this, results[2]);
 			} else if (status.equals("1")) {// 密码错误
 				LoginActivity.this.showToast("密码错误！");
 			} else if (status.equals("2")) {// 此帐号已删除

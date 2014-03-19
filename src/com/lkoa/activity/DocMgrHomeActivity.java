@@ -111,7 +111,8 @@ public class DocMgrHomeActivity extends CenterMsgBaseActivity implements OnClick
 		switch (v.getId()) {
 		case R.id.doc_mgr_received_today:
 			//今日收文
-			ProcessWorkListActivity.start(this, R.string.doc_mgr_received_today, 6, "0");
+			ProcessWorkListActivity.start(this, 
+					R.string.doc_mgr_received_today, 6, "0");
 			break;
 			
 		case R.id.doc_mgr_received_management:
