@@ -38,6 +38,9 @@
 	        <include android:id="@+id/process_work_handle_cb" 
 	            layout="@layout/process_work_tab_item"/>
 	        
+	        <include android:id="@+id/process_work_handle_gllc_list" 
+	            layout="@layout/process_work_tab_item"/>
+	        
 	    </LinearLayout>
     </RelativeLayout>
     

@@ -55,7 +55,6 @@
     	    android:layout_toRightOf="@id/title"
     	    android:layout_toLeftOf="@id/tv_no_empty"
     	    android:layout_below="@id/content_text"
-    	    android:layout_marginTop="@dimen/margin_middle_extra"
     	    android:layout_marginLeft="@dimen/margin_middle_extra"
     	    android:layout_marginRight="@dimen/margin_middle_extra"
     	    android:hint="输入"

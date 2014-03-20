@@ -335,7 +335,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	
 	public static void start(Context ctx, int titleResId, String sId, int listType) {
 		Intent intent = new Intent(ctx, CenterMsgNewsActivity.class);
-		intent.putExtra("titleResId", R.string.center_msg_news);
+		intent.putExtra("titleResId", titleResId);
 		intent.putExtra("sId", sId);
 		intent.putExtra("listType", listType);
 		ctx.startActivity(intent);

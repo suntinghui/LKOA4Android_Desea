@@ -79,6 +79,7 @@
 	<string name="process_work_handle_text">正文</string>
 	<string name="process_work_handle_attachment">附件</string>
 	<string name="process_work_handle_cb">从表</string>
+	<string name="process_work_handle_gllc_list">关联流程</string>
 	<string name="process_work_handle_attachment_added">已添加%1$s个附件</string>
 	<string name="process_work_list_type">工作类型&#160;&#160;&#160;&#160;&#160;%1$s</string>
 	<string name="process_work_list_task">工作任务&#160;&#160;&#160;&#160;&#160;%1$s</string>

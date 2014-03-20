@@ -178,9 +178,9 @@ public class ParseResponseXML {
 				//流程管理-流程办理-从表
 				return getLCBDCB();
 				
-			/*case TransferRequestTag.GET_GLLC_LIST:
+			case TransferRequestTag.GET_GLLC_LIST:
 				//流程管理-流程办理-关联流程列表
-				return getGLLCList();*/
+				return getGLLCList();
 			}
 			
 		} catch(XmlPullParserException e){
@@ -356,6 +356,7 @@ public class ParseResponseXML {
 		parser.setInput(inStream, "UTF-8");
 		int eventType = parser.getEventType();// 产生第一个事件
 		CenterMsgNewsItem item = null;
+		Attachment attachment = null;
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
@@ -381,6 +382,20 @@ public class ParseResponseXML {
 				} else if("IFC_50_COL_30".equalsIgnoreCase(parser.getName())) {
 					//图片路径
 					item.iconUrl = parser.nextText();
+				} else if("Fjs".equalsIgnoreCase(parser.getName())) {
+					//附件列表
+					item.attachments = new ArrayList<Attachment>();
+					
+				} else if("Fj".equalsIgnoreCase(parser.getName())) {
+					attachment = new Attachment();
+				} else if("Id".equalsIgnoreCase(parser.getName())) {
+					attachment.id = parser.nextText();
+				} else if("Title".equalsIgnoreCase(parser.getName())) {
+					attachment.title = parser.nextText();
+				} else if("Type".equalsIgnoreCase(parser.getName())) {
+					attachment.type = parser.nextText();
+				} else if("Size".equalsIgnoreCase(parser.getName())) {
+					attachment.size = parser.nextText();
 				}
 				break;
 			}
@@ -1431,6 +1446,53 @@ public class ParseResponseXML {
 					column.des = des;
 					row.columns.add(column);
 					
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 流程管理-流程办理-关联流程列表
+	 */
+	private static Object getGLLCList() throws XmlPullParserException, IOException{
+		List<ProcessItem> list = new ArrayList<ProcessItem>();
+		ProcessItem item = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new ProcessItem();
+					
+				} else if("FEG_20_COL_10".equalsIgnoreCase(parser.getName())) {
+					item.id = parser.nextText();
+					
+				} else if("FEG_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					item.title = parser.nextText();
+					
+				} else if("FEG_15_COL_20".equalsIgnoreCase(parser.getName())) {
+					item.type = parser.nextText();
+					
+				} else if("FRM_20_COL_20".equalsIgnoreCase(parser.getName())) {
+					item.task = parser.nextText();
+					
+				} else if("SYS_30_COL_30".equalsIgnoreCase(parser.getName())) {
+					item.sender = parser.nextText();
+					
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if ("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
 				}
 				break;
 			}

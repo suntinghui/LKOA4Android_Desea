@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +31,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -38,11 +42,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.lkoa.R;
+import com.lkoa.adapter.ProcessWorkListAdapter;
 import com.lkoa.business.AttachmentManager;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.Attachment;
 import com.lkoa.model.BDCBTable;
+import com.lkoa.model.ProcessItem;
 import com.lkoa.model.BDCBTable.Body;
 import com.lkoa.model.BDCBTable.Column;
 import com.lkoa.model.BDCBTable.Head;
@@ -70,14 +76,16 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		R.string.process_work_handle_text,
 		R.string.process_work_handle_attachment,
 		R.string.process_work_handle_cb,
+		R.string.process_work_handle_gllc_list
 	};
 	
 	public static final int INDEX_FORMS = 0;
 	public static final int INDEX_TEXT = 1;
 	public static final int INDEX_ATTACHMENT = 2;
 	public static final int INDEX_CB = 3;	//从表
+	public static final int INDEX_GLLC_LIST = 4;	//关联流程
 	
-	private View [] mTabViews = new View[4];
+	private View [] mTabViews = new View[5];
 	
 	public enum ProcessWorkType {
 		TYPE_MY_TODO,
@@ -110,9 +118,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private LinearLayout mLinearTables;
 	
-	private boolean mFormsDataLoaded, mTextDataLoaded, mAttachmentLoaded, mCBLoaded;
+	private ListView mGLLCListView;
+	
+	private boolean mFormsDataLoaded, mTextDataLoaded, mAttachmentLoaded, mCBLoaded, mGLLCLoaded;
 	
 	private ProcessContentInfo mContentInfo;
+	
+	private ProcessWorkListAdapter mGLLCListAdapter;	//关联流程列表适配器
 	
 	private OnItemSelectedListener mSpinnerOnItemClickListener = new OnItemSelectedListener() {
 
@@ -168,6 +180,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mTabViews[1] = findViewById(R.id.process_work_handle_text);
 		mTabViews[2] = findViewById(R.id.process_work_handle_attachment);
 		mTabViews[3] = findViewById(R.id.process_work_handle_cb);
+		mTabViews[4] = findViewById(R.id.process_work_handle_gllc_list);
 		for(int i=0; i<mTabViews.length; i++) {
 			TextView name = (TextView)mTabViews[i].findViewById(R.id.tv_tab_name);
 			name.setText(mTabNameResIds[i]);
@@ -268,6 +281,11 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mLinearTables = (LinearLayout)view.findViewById(R.id.linear_bdcb);
 		views.add(view);
 		
+		//管理流程
+		view = inflater.inflate(R.layout.layout_list_view, null);
+		mGLLCListView = (ListView)view.findViewById(android.R.id.list);
+		views.add(view);
+		
 		mContentPager.setAdapter(new MyPagerAdapter(views));
 		mContentPager.setOnPageChangeListener(new MyOnPageChangeListener());
 		
@@ -325,6 +343,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		if(field.editMode == ProcessContentInfo.Field.EDIT_MODE_MUST) {
 			//必填
 			noEmpty.setVisibility(View.VISIBLE);
+		}
+		
+		if(TextUtils.equals(field.id, "0")) {
+			//fiedl.id为0，居中显示contentText的内容
+			title.setVisibility(View.GONE);
+			toRightArrow.setVisibility(View.GONE);
+			contentText.setGravity(Gravity.CENTER);
 		}
 		
 		title.setText(field.name);
@@ -652,6 +677,18 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				}
 			});
 			break;
+			
+		case INDEX_GLLC_LIST:
+			//关联流程
+			mProcessWorkMgr.getGLLCList(mInfoId, new LKAsyncHttpResponseHandler() {
+				@Override
+				public void successAction(Object obj) {
+					mGLLCLoaded = true;
+					LogUtil.i(TAG, "getGLLCList: obj="+obj);
+					buildGLLCList((ArrayList<ProcessItem>)obj);
+				}
+			});
+			break;
 
 		default:
 			break;
@@ -665,6 +702,15 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		for(BDCBTable table : list) {
 			TableLayout layout = buildBDCB(table);
 			mLinearTables.addView(layout);
+		}
+	}
+	
+	private void buildGLLCList(List<ProcessItem> list) {
+		//TODO: 构建关联流程列表
+		if(mGLLCListAdapter == null) {
+			mGLLCListAdapter = new ProcessWorkListAdapter(
+					ProcessWorkHandleActivity.this, 0, list);
+			mGLLCListView.setAdapter(mGLLCListAdapter);
 		}
 	}
 	
@@ -892,6 +938,10 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 				
 			case INDEX_CB:
 				loadData = !mCBLoaded;
+				break;
+				
+			case INDEX_GLLC_LIST:
+				loadData = !mGLLCLoaded;
 				break;
 
 			default:

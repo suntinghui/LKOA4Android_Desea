@@ -1,15 +1,21 @@
 package com.lkoa.activity;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.business.CenterMsgManager;
 import com.lkoa.business.WebViewConfig;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.model.Attachment;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.util.LogUtil;
 
@@ -28,6 +34,7 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 	private ImageView mIconView;
 	private TextView mDateView;
 	private WebView mContentView;
+	private LinearLayout mLinearAttachments;
 	
 	private int mListType;
 
@@ -54,6 +61,8 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 		mDateView = (TextView) findViewById(R.id.date);
 		mIconView = (ImageView) findViewById(R.id.icon);
 		mContentView = (WebView) findViewById(R.id.content);
+		
+		mLinearAttachments = (LinearLayout)findViewById(R.id.attachments);
 	}
 	
 	@Override
@@ -84,7 +93,35 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 				mContentView.getSettings().setDefaultTextEncodingName(encoding);
 				String tmp = item.content.replaceAll("&amp;nbsp;", " ");
 				mContentView.loadDataWithBaseURL(null, tmp, "text/html",  encoding, null);
+				
+				buildAttachment(item.attachments);
 			}
 		};
+	}
+	
+	/**
+	 * 构建附件页面
+	 */
+	private void buildAttachment(List<Attachment> list) {
+		if(mLinearAttachments != null) {
+			mLinearAttachments.removeAllViews();
+		}
+		
+		for(Attachment att : list) {
+			//TODO: 构建附件页面
+			View view = mLayoutInflater.inflate(R.layout.process_work_handle_content_attachment_item, null);
+			TextView name = (TextView)view.findViewById(R.id.tv_attachment_name);
+			name.setText(att.title);
+			final String attId = att.id;
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					AttachmentShowActivity.showAttachment(
+							CenterMsgContentActivity.this, attId);
+				}
+			});
+			
+			mLinearAttachments.addView(view);
+		}
 	}
 }
