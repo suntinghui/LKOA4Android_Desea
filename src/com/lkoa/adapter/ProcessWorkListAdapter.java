@@ -32,6 +32,7 @@ public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
 	
 	@Override
 	public ProcessItem getItem(int position) {
+		if(position > mDataList.size() - 1) return null;
 		return mDataList.get(position);
 	}
 	
@@ -69,7 +70,8 @@ public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
 	}
 	
 	public void setData(List<ProcessItem> data) {
-		this.mDataList = data;
+		this.mDataList.clear();
+		mDataList.addAll(data);
 	}
 	
 	public List<ProcessItem> getData() {

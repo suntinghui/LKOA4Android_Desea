@@ -60,6 +60,10 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 					mAdapter = new ProcessWorkListAdapter(
 							ProcessWorkListActivity.this, 0, list);
 					mListView.setAdapter(mAdapter);
+				} else {
+					mAdapter.setData(list);
+					mAdapter.notifyDataSetInvalidated();
+					mAdapter.notifyDataSetChanged();
 				}
 			}
 		});

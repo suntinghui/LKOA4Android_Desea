@@ -719,7 +719,7 @@ public class ParseResponseXML {
 					if(zbr != null) {
 						zbr.userId = parser.nextText();
 					} else {
-						cyr.userName = parser.nextText();
+						cyr.userId = parser.nextText();
 					}
 				} else if("UserName".equalsIgnoreCase(parser.getName())) {
 					//用户名称
