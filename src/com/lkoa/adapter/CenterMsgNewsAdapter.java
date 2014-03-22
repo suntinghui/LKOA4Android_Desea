@@ -67,6 +67,10 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 			Paint p = holder.title.getPaint();
 			p.setTypeface(Typeface.DEFAULT_BOLD);
 			p.setFakeBoldText(true);
+		} else {
+			Paint p = holder.title.getPaint();
+			p.setTypeface(Typeface.DEFAULT);
+			p.setFakeBoldText(false);
 		}
 		LogUtil.i("CenterMsgNewsAdapter", "item.state="+item.state);
 		
