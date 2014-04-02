@@ -52,6 +52,26 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		mMainMgr.getMailList(String.valueOf(mState), String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
+			@Override
+			public void successAction(Object obj) {
+				LogUtil.i(TAG, obj.toString());
+				ArrayList<MailItemInfo> list = (ArrayList<MailItemInfo>)obj;
+				if(mAdapter == null) {
+					mAdapter = new MyMailListAdapter(MyMailInternalListActivity.this, 0, list);
+					mListView.setAdapter(mAdapter);
+				} else {
+					mAdapter.setData(list);
+					mAdapter.notifyDataSetChanged();
+				}
+			}
+		});
+	}
+	
+	@Override
 	protected void findViews() {
 		super.findViews();
 		
@@ -64,18 +84,6 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 		super.setupViews();
 		
 		mTvTitle.setText(mTitleResId);
-		
-		mMainMgr.getMailList(String.valueOf(mState), String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
-			@Override
-			public void successAction(Object obj) {
-				LogUtil.i(TAG, obj.toString());
-				ArrayList<MailItemInfo> list = (ArrayList<MailItemInfo>)obj;
-				if(mAdapter == null) {
-					mAdapter = new MyMailListAdapter(MyMailInternalListActivity.this, 0, list);
-					mListView.setAdapter(mAdapter);
-				}
-			}
-		});
 	}
 	
 	@Override

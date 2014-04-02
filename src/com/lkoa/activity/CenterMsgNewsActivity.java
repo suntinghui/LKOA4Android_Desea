@@ -131,6 +131,11 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 		list.add(mMoreNewsLv);
 		mViewPager.setAdapter(new MyPagerAdapter(list));
 		mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		
 		//获取数据
 		loadNewsList(NEWS_UNREAD);

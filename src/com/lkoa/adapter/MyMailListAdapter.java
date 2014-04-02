@@ -73,7 +73,8 @@ public class MyMailListAdapter extends ArrayAdapter<MailItemInfo> {
 	}
 	
 	public void setData(List<MailItemInfo> data) {
-		this.mDataList = data;
+		this.mDataList.clear();
+		this.mDataList.addAll(data);
 	}
 	
 	public List<MailItemInfo> getData() {

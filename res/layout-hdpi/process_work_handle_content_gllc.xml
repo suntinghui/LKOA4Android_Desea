@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/process_work_handle_forms_item_left_margin"
+    android:paddingRight="@dimen/process_work_handle_forms_item_left_margin"
+    android:background="@drawable/process_work_handle_forms_item_bg" >
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="35dip"
+        android:layout_marginBottom="@dimen/process_work_handle_forms_item_left_margin" >
+        
+        <TextView 
+            android:id="@+id/gllc_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关联流程列表（0）"
+            android:layout_centerVertical="true"
+            style="@style/ProcessWorkFormsTag" />
+        
+    </RelativeLayout>
+    
+    <include layout="@layout/layout_list_view" />
+
+
+</LinearLayout>

@@ -38,6 +38,11 @@ public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnI
 		Intent intent = getIntent();
 		mTitleResId = intent.getIntExtra("titleResId", -1);
 		mType = intent.getIntExtra("sType", 1);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		
 		findViews();
 		setupViews();

@@ -8,6 +8,6 @@
     <!-- Navigation -->
     <include layout="@layout/navigation" />
     
-    <include layout="@layout/layout_list_view" />
+    <include layout="@layout/layout_listview_with_alpha" />
     
 </LinearLayout>

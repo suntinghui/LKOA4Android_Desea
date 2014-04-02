@@ -25,6 +25,7 @@ import android.webkit.DownloadListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -119,6 +120,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	private LinearLayout mLinearTables;
 	
 	private ListView mGLLCListView;
+	private TextView mGLLCCount;
 	
 	private boolean mFormsDataLoaded, mTextDataLoaded, mAttachmentLoaded, mCBLoaded, mGLLCLoaded;
 	
@@ -281,9 +283,10 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		mLinearTables = (LinearLayout)view.findViewById(R.id.linear_bdcb);
 		views.add(view);
 		
-		//管理流程
-		view = inflater.inflate(R.layout.layout_list_view, null);
+		//关联流程
+		view = inflater.inflate(R.layout.process_work_handle_content_gllc, null);
 		mGLLCListView = (ListView)view.findViewById(android.R.id.list);
+		mGLLCCount = (TextView)view.findViewById(R.id.gllc_count);
 		views.add(view);
 		
 		mContentPager.setAdapter(new MyPagerAdapter(views));
@@ -706,11 +709,26 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	}
 	
 	private void buildGLLCList(List<ProcessItem> list) {
+		int count = list == null ? 0 : list.size();
 		//TODO: 构建关联流程列表
 		if(mGLLCListAdapter == null) {
+			mGLLCCount.setText(getResources().getString(R.string.process_work_handle_gllc_count, count));
 			mGLLCListAdapter = new ProcessWorkListAdapter(
 					ProcessWorkHandleActivity.this, 0, list);
 			mGLLCListView.setAdapter(mGLLCListAdapter);
+			mGLLCListView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> adapterView, View view,
+						int position, long id) {
+					List<ProcessItem> list = mGLLCListAdapter.getData();
+					ProcessItem item = list.get(position);
+					String infoId = item.id;
+					
+					ProcessWorkHandleActivity.start(ProcessWorkHandleActivity.this, mApp.getUserId(), 
+							infoId, mInnerType, mType);
+				}
+			});
 		}
 	}
 	
