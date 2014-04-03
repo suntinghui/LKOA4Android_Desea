@@ -12,7 +12,7 @@ public class WebViewConfig {
 	
 	private Context mContext;
 	
-	public WebViewConfig(Context context) {
+	public WebViewConfig(Context context) { 
 		mContext = context;
 	}
 
