@@ -4,6 +4,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import com.lkoa.R;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessItem;
 import com.lkoa.model.SmsMessage;
+import com.lkoa.util.LogUtil;
 
 public class MyMailListAdapter extends ArrayAdapter<MailItemInfo> {
 
@@ -62,6 +66,34 @@ public class MyMailListAdapter extends ArrayAdapter<MailItemInfo> {
 		holder.sender.setText(item.sender);
 		holder.subject.setText(item.subject);
 		holder.date.setText(item.date);
+		
+		LogUtil.i("MyMailListAdapter", "getView(), item.state="+item.state);
+		if(item.state == 0) {
+			Paint p = holder.sender.getPaint();
+			p.setTypeface(Typeface.DEFAULT_BOLD);
+			p.setFakeBoldText(true);
+			
+			p = holder.subject.getPaint();
+			p.setTypeface(Typeface.DEFAULT_BOLD);
+			p.setFakeBoldText(true);
+			
+			p = holder.date.getPaint();
+			p.setTypeface(Typeface.DEFAULT_BOLD);
+			p.setFakeBoldText(true);
+			
+		} else {
+			Paint p = holder.sender.getPaint();
+			p.setTypeface(Typeface.DEFAULT);
+			p.setFakeBoldText(false);
+			
+			p = holder.subject.getPaint();
+			p.setTypeface(Typeface.DEFAULT);
+			p.setFakeBoldText(false);
+			
+			p = holder.date.getPaint();
+			p.setTypeface(Typeface.DEFAULT);
+			p.setFakeBoldText(false);
+		}
 		
 		if(item.fjCount > 0) {
 			holder.fj.setVisibility(View.VISIBLE);

@@ -385,17 +385,8 @@ public class ParseResponseXML {
 				} else if("Fjs".equalsIgnoreCase(parser.getName())) {
 					//附件列表
 					item.attachments = new ArrayList<Attachment>();
+					parseFJs(parser, item.attachments);
 					
-				} else if("Fj".equalsIgnoreCase(parser.getName())) {
-					attachment = new Attachment();
-				} else if("Id".equalsIgnoreCase(parser.getName())) {
-					attachment.id = parser.nextText();
-				} else if("Title".equalsIgnoreCase(parser.getName())) {
-					attachment.title = parser.nextText();
-				} else if("Type".equalsIgnoreCase(parser.getName())) {
-					attachment.type = parser.nextText();
-				} else if("Size".equalsIgnoreCase(parser.getName())) {
-					attachment.size = parser.nextText();
 				}
 				break;
 			}
@@ -745,7 +736,13 @@ public class ParseResponseXML {
 					field.type = Integer.parseInt(parser.nextText());
 				} else if("LK_FIELDEDITMODE".equalsIgnoreCase(parser.getName())) {
 					//处理模式
-					field.editMode = Integer.parseInt(parser.nextText());
+					try {
+						field.editMode = Integer.parseInt(parser.nextText());
+					} catch(Exception e) {
+						field.editMode = 0;
+						LogUtil.i(TAG, "Exception: editMode is not int, set to mode 0");
+					}
+					
 				} else if("SHOWCONTENT".equalsIgnoreCase(parser.getName())) {
 					//显示内容
 					field.showContent = parser.nextText();
@@ -917,6 +914,9 @@ public class ParseResponseXML {
 					
 				} else if("FJCounts".equalsIgnoreCase(parser.getName())) {
 					item.fjCount = Integer.parseInt(parser.nextText());
+					
+				}  else if("state".equalsIgnoreCase(parser.getName())) {
+					item.state = Integer.parseInt(parser.nextText());
 					
 				}
 				break;

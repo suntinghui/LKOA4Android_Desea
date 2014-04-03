@@ -107,6 +107,7 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 			mLinearAttachments.removeAllViews();
 		}
 		
+		LogUtil.i(TAG, "buildAttachment(), list.size="+list.size());
 		for(Attachment att : list) {
 			//TODO: 构建附件页面
 			View view = mLayoutInflater.inflate(R.layout.process_work_handle_content_attachment_item, null);

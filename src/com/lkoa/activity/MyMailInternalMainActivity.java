@@ -18,10 +18,10 @@ import com.lkoa.util.LogUtil;
 public class MyMailInternalMainActivity extends CenterMsgBaseActivity implements OnClickListener {
 	private static final String TAG = "MyMailInternalMainActivity";
 	
-	public static final int TYPE_DRAFTS = 0;
-	public static final int TYPE_INBOX = 1;
-	public static final int TYPE_OUTBOX = 2;
-	public static final int TYPE_DELETED = 3;
+	public static final int TYPE_DRAFTS = 0;	//草稿箱
+	public static final int TYPE_INBOX = 1;	//收件箱
+	public static final int TYPE_OUTBOX = 2;	//发件箱
+	public static final int TYPE_DELETED = 3;	//已删除
 	
 	private static final int [] mTitleResIds = new int[] {
 		R.string.my_email_internal_inbox,

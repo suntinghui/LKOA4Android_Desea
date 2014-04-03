@@ -7,4 +7,5 @@ public class MailItemInfo {
 	public String sender;
 	public String date;
 	public int fjCount;
+	public int state;	//0-未读	1-已读
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.webkit.DownloadListener;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,6 +20,8 @@ public class WebViewConfig {
 		webView.setWebViewClient(new AppWebViewClients());
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setUseWideViewPort(true);
+		webView.getSettings().setLoadWithOverviewMode(true);
+		webView.getSettings().setTextSize(WebSettings.TextSize.LARGER);
 		webView.getSettings().setSupportZoom(true);
 		
 		webView.setDownloadListener(new DownloadListener() {
