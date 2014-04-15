@@ -7,6 +7,7 @@ import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebSettings.LayoutAlgorithm;
 
 public class WebViewConfig {
 	
@@ -18,11 +19,36 @@ public class WebViewConfig {
 
 	public void config(WebView webView) {
 		webView.setWebViewClient(new AppWebViewClients());
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.getSettings().setUseWideViewPort(true);
-		webView.getSettings().setLoadWithOverviewMode(true);
-		webView.getSettings().setTextSize(WebSettings.TextSize.LARGER);
+		WebSettings settings = webView.getSettings();
+		settings.setJavaScriptEnabled(true);
+		settings.setUseWideViewPort(true);
+		settings.setLoadWithOverviewMode(true);
+		settings.setSupportZoom(true);
+		
+		webView.setDownloadListener(new DownloadListener() {
+			@Override
+			public void onDownloadStart(String url, String userAgent,
+					String contentDisposition, String mimetype, long contentLength) {
+				Uri uri = Uri.parse(url);  
+	            Intent intent = new Intent(Intent.ACTION_VIEW, uri);  
+	            mContext.startActivity(intent);   
+			}
+		});
+	}
+	
+	public void configAttachment(WebView webView) {
+		
+		webView.setWebViewClient(new AppWebViewClients());
+		WebSettings settings = webView.getSettings();
 		webView.getSettings().setSupportZoom(true);
+		settings.setJavaScriptEnabled(true);
+		webView.getSettings().setDomStorageEnabled(true);  
+		webView.getSettings().setAllowFileAccess(true);  
+		webView.getSettings().setPluginsEnabled(true);  
+		webView.getSettings().setUseWideViewPort(true);  
+		webView.getSettings().setBuiltInZoomControls(true); 
+		settings.setUseWideViewPort(true);
+		settings.setSupportZoom(true);
 		
 		webView.setDownloadListener(new DownloadListener() {
 			@Override

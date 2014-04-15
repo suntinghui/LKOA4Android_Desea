@@ -114,11 +114,11 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 			TextView name = (TextView)view.findViewById(R.id.tv_attachment_name);
 			name.setText(att.title);
 			final String attId = att.id;
+			final String title = att.title;
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					AttachmentShowActivity.showAttachment(
-							CenterMsgContentActivity.this, attId);
+					loadAttachment(title, attId);
 				}
 			});
 			

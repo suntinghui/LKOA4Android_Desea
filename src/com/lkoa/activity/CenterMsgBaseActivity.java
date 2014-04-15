@@ -9,7 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lkoa.R;
+import com.lkoa.business.AttachmentManager;
 import com.lkoa.client.ApplicationEnvironment;
+import com.lkoa.client.DownloadFileRequest;
+import com.lkoa.client.LKAsyncHttpResponseHandler;
+import com.lkoa.util.LogUtil;
 
 public class CenterMsgBaseActivity extends BaseActivity{
 	protected ImageView mIvBack;
@@ -21,10 +25,13 @@ public class CenterMsgBaseActivity extends BaseActivity{
 	
 	protected LayoutInflater mLayoutInflater;
 	
+	protected AttachmentManager mAttachmentMgr;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLayoutInflater = LayoutInflater.from(this);
+		mAttachmentMgr = new AttachmentManager();
 	}
 	
 	private OnClickListener mBackOnClickListener = new OnClickListener() {
@@ -48,5 +55,22 @@ public class CenterMsgBaseActivity extends BaseActivity{
 		mIvBack.setOnClickListener(mBackOnClickListener);
 		mIvRight.setVisibility(View.GONE);
 		mLinearRight.setVisibility(View.GONE);
+	}
+	
+	private LKAsyncHttpResponseHandler getAttachmentResponseHandler(final String fileName) {
+		return new LKAsyncHttpResponseHandler() {
+			@Override
+			public void successAction(Object obj) {
+				if(obj == null) return;
+				
+				String fileUrl = mAttachmentMgr.getUrl((String)obj);
+				DownloadFileRequest.sharedInstance().downloadAndOpen(
+						CenterMsgBaseActivity.this, fileUrl, fileName);
+			}
+		};
+	}
+	
+	protected void loadAttachment(String fileName, String attId) {
+		mAttachmentMgr.getAtt(attId, getAttachmentResponseHandler(fileName));
 	}
 }

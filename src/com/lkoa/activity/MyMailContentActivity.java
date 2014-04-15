@@ -125,6 +125,6 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 	@Override
 	public void onClick(View v) {
 		Attachment att = (Attachment)v.getTag();
-		AttachmentShowActivity.showAttachment(this, att.id);
+		loadAttachment(att.title, att.id);
 	}
 }

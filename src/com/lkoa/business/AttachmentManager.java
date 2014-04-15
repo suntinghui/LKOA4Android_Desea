@@ -50,8 +50,7 @@ public class AttachmentManager {
 	}
 	
 	public String getUrl(String path) {
-		StringBuilder builder = new StringBuilder("http://docs.google.com/gview?embedded=true&url=");
-		builder.append(Constant.DEFAULTHOST);
+		StringBuilder builder = new StringBuilder(Constant.DEFAULTHOST);
 		builder.append(path);
 		
 		return builder.toString();
