@@ -916,7 +916,11 @@ public class ParseResponseXML {
 					item.fjCount = Integer.parseInt(parser.nextText());
 					
 				}  else if("state".equalsIgnoreCase(parser.getName())) {
-					item.state = Integer.parseInt(parser.nextText());
+					try {
+						item.state = Integer.parseInt(parser.nextText());
+					} catch(Exception e) {
+						item.state = 1;
+					}
 					
 				}
 				break;

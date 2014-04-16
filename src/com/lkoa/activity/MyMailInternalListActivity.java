@@ -20,7 +20,7 @@ import com.lkoa.util.LogUtil;
 /**
  * 我的邮件-内部邮件-列表页
  */
-public class MyMailInternalListActivity extends CenterMsgBaseActivity implements OnItemClickListener {
+public class MyMailInternalListActivity extends CenterMsgBaseListActivity<MailItemInfo> implements OnItemClickListener {
 	private static final String TAG = "MyMailInternalListActivity";
 	
 	public static final int STATE_UNREAD = 0;
@@ -31,7 +31,6 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 	private int mTitleResId;
 	
 	private ListView mListView;
-	private MyMailListAdapter mAdapter;
 	
 	private int mState = STATE_ALL;
 	private int mType;
@@ -60,6 +59,7 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, obj.toString());
 				ArrayList<MailItemInfo> list = (ArrayList<MailItemInfo>)obj;
+				resetPageState(list);
 				if(mAdapter == null) {
 					mAdapter = new MyMailListAdapter(MyMailInternalListActivity.this, 0, list);
 					mListView.setAdapter(mAdapter);
@@ -87,8 +87,8 @@ public class MyMailInternalListActivity extends CenterMsgBaseActivity implements
 	}
 	
 	@Override
-	public void onItemClick(AdapterView<?> adapterView, View view, int pos, long arg3) {
-		MailItemInfo item = mAdapter.getData().get(pos);
+	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
+		MailItemInfo item = mAdapter.getData().get(getRealPosition(position));
 		String mailId = item.id;
 		Intent intent = new Intent(this, MyMailContentActivity.class);
 		intent.putExtra("mailId", mailId);

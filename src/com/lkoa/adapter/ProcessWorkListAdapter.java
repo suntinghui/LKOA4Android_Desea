@@ -13,27 +13,11 @@ import android.widget.TextView;
 import com.lkoa.R;
 import com.lkoa.model.ProcessItem;
 
-public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
-
-	private LayoutInflater mLayoutInflater;
-	private List<ProcessItem> mDataList;
-	
-	private Resources mRes;
+public class ProcessWorkListAdapter extends BaseListAdapter<ProcessItem> {
 
 	public ProcessWorkListAdapter(Context context, int resource,
 			List<ProcessItem> objects) {
 		super(context, resource, objects);
-		
-		mRes = context.getResources();
-		
-		mLayoutInflater = LayoutInflater.from(context);
-		mDataList = objects;
-	}
-	
-	@Override
-	public ProcessItem getItem(int position) {
-		if(position > mDataList.size() - 1) return null;
-		return mDataList.get(position);
 	}
 	
 	@Override
@@ -52,6 +36,8 @@ public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
+		position = getRealPosition(position);
+		
 		if(position % 2 == 0) {
 			//135
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_135);
@@ -67,15 +53,6 @@ public class ProcessWorkListAdapter extends ArrayAdapter<ProcessItem> {
 		holder.sender.setText(mRes.getString(R.string.process_work_list_sender, item.sender));
 		
 		return convertView;
-	}
-	
-	public void setData(List<ProcessItem> data) {
-		this.mDataList.clear();
-		mDataList.addAll(data);
-	}
-	
-	public List<ProcessItem> getData() {
-		return mDataList;
 	}
 	
 	private class ViewHolder {

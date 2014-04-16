@@ -20,22 +20,11 @@ import com.lkoa.model.ProcessItem;
 import com.lkoa.model.SmsMessage;
 import com.lkoa.util.LogUtil;
 
-public class MyMailListAdapter extends ArrayAdapter<MailItemInfo> {
-
-	private LayoutInflater mLayoutInflater;
-	private List<MailItemInfo> mDataList;
+public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 	
 	public MyMailListAdapter(Context context, int resource,
 			List<MailItemInfo> objects) {
 		super(context, resource, objects);
-		
-		mLayoutInflater = LayoutInflater.from(context);
-		mDataList = objects;
-	}
-	
-	@Override
-	public MailItemInfo getItem(int position) {
-		return mDataList.get(position);
 	}
 	
 	@Override
@@ -62,7 +51,7 @@ public class MyMailListAdapter extends ArrayAdapter<MailItemInfo> {
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_246);
 		}
 		
-		MailItemInfo item = getItem(position);
+		MailItemInfo item = getItem(getRealPosition(position));
 		holder.sender.setText(item.sender);
 		holder.subject.setText(item.subject);
 		holder.date.setText(item.date);
@@ -102,15 +91,6 @@ public class MyMailListAdapter extends ArrayAdapter<MailItemInfo> {
 		}
 		
 		return convertView;
-	}
-	
-	public void setData(List<MailItemInfo> data) {
-		this.mDataList.clear();
-		this.mDataList.addAll(data);
-	}
-	
-	public List<MailItemInfo> getData() {
-		return mDataList;
 	}
 	
 	private class ViewHolder {

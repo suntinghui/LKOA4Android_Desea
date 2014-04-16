@@ -12,15 +12,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.lkoa.R;
+import com.lkoa.adapter.BaseListAdapter;
 import com.lkoa.adapter.ProcessWorkListAdapter;
 import com.lkoa.business.ProcessWorkManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.ProcessItem;
 
-public class ProcessWorkListActivity extends CenterMsgBaseActivity implements OnItemClickListener {
+public class ProcessWorkListActivity extends CenterMsgBaseListActivity<ProcessItem> implements OnItemClickListener {
 	
 	private ListView mListView = null;
-	private ProcessWorkListAdapter mAdapter;
 	
 	private int mTitleResId;
 	private String mType;	//流程列表参数
@@ -52,6 +52,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 			@Override
 			public void successAction(Object obj) {
 				ArrayList<ProcessItem> list = (ArrayList<ProcessItem>)obj;
+				resetPageState(list);
 				String title = getResources().getString(mTitleResId);
 				StringBuffer buffer = new StringBuffer(title);
 				buffer.append("（").append(list.size()).append("）");
@@ -86,7 +87,7 @@ public class ProcessWorkListActivity extends CenterMsgBaseActivity implements On
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 		List<ProcessItem> list = mAdapter.getData();
-		ProcessItem item = list.get(position);
+		ProcessItem item = list.get(getRealPosition(position));
 		String infoId = item.id;
 		
 		ProcessWorkHandleActivity.start(this, mApp.getUserId(), 
