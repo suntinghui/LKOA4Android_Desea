@@ -24,12 +24,14 @@ public class BaseActivity extends Activity {
 	public static final int PROGRESS_DIALOG 	= 0; // 带滚动条的提示框 
 	public static final int MODAL_DIALOG		= 1; // 带确定按纽的提示框，需要用户干预才能消失
 	public static final int ALL_DIALOG			= 3; 
+	public static final int DOUBLE_MODAL_DIALOG		= 3; // 带确定取消按钮
 	
 	protected ApplicationEnvironment mApp;
 	
 	// 要命的static
 	private static LKProgressDialog progressDialog = null;
 	protected LKAlertDialog mAlertDialog = null;
+	protected LKAlertDialog mDoubleAlertDialog = null;
 	
 	private String mMessage = null;
 
@@ -150,6 +152,10 @@ public class BaseActivity extends Activity {
 		case MODAL_DIALOG:
 			this.showAlertDialog();
 			break;
+			
+		case DOUBLE_MODAL_DIALOG:
+			showDoubleAlertDialog();
+			break;
 		}
 		
 		return super.onCreateDialog(id);
@@ -190,6 +196,19 @@ public class BaseActivity extends Activity {
 		}
 	}
 	
+	private void showDoubleAlertDialog(){
+		try{
+			// 这里应该关闭其它提示型的对话框
+			this.hideDialog(ALL_DIALOG);
+			
+			this.createDoubleAlertDialog();
+			mDoubleAlertDialog.setMessage(null == mMessage ? "" : mMessage);
+			mDoubleAlertDialog.create().show();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	public void hideDialog(int type){
 		switch(type){
 		case PROGRESS_DIALOG:
@@ -204,12 +223,21 @@ public class BaseActivity extends Activity {
 			}
 			break;
 			
+		case DOUBLE_MODAL_DIALOG:
+			if (null != mDoubleAlertDialog && mDoubleAlertDialog.isShowing()){
+				mDoubleAlertDialog.dismiss();
+			}
+			break;
+			
 		default:
 			if (null != progressDialog && progressDialog.isShowing()){
 				progressDialog.dismiss();
 			}
 			if (null != mAlertDialog && mAlertDialog.isShowing()){
 				mAlertDialog.dismiss();
+			}
+			if (null != mDoubleAlertDialog && mDoubleAlertDialog.isShowing()){
+				mDoubleAlertDialog.dismiss();
 			}
 			break;
 		}
@@ -240,11 +268,6 @@ public class BaseActivity extends Activity {
 	}
 	
 	private void createAlertDialog(){
-//		if (this.getParent() instanceof MainActivityGroup){
-//			alertDialog = new LKAlertDialog(this.getParent());
-//		} else {
-//			alertDialog = new LKAlertDialog(this);
-//		}
 		mAlertDialog = new LKAlertDialog(this);
 		
 		mAlertDialog.setTitle("提示");
@@ -256,10 +279,32 @@ public class BaseActivity extends Activity {
 		});
 	}
 	
+	private void createDoubleAlertDialog(){
+		mDoubleAlertDialog = new LKAlertDialog(this);
+		
+		mDoubleAlertDialog.setTitle("提示");
+		mDoubleAlertDialog.setCancelable(false);
+		mDoubleAlertDialog.setPositiveButton("确定", new android.content.DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				onClickConfirm();
+			}
+		}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+	}
+	
 	public void showToast(String message){
 		Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
+	}
+	
+	protected void onClickConfirm() {
+		//do nothing
 	}
 	
 }

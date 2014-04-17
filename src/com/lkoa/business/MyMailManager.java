@@ -81,6 +81,46 @@ public class MyMailManager {
 		execute(map, handler);
 	}
 	
+	/**
+	 * 我的邮件-放到已删除
+	 * @param sUserIds
+	 * @param Ids		邮件接收序号, 多个用英文逗号隔
+	 * @param handler
+	 */
+	public void delMail(String sUserIds, String Ids, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.DEL_MAIL);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserIds", sUserIds);
+		paramMap.put("sType", "0");
+		paramMap.put("Ids", Ids);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute(map, handler);
+	}
+	
+	/**
+	 * 我的邮件-彻底删除即清空
+	 * @param sUserIds
+	 * @param Ids		邮件接收序号, 多个用英文逗号隔
+	 * @param handler
+	 */
+	public void clearMail(String sUserIds, String Ids, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.DEL_MAIL);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserIds", sUserIds);
+		paramMap.put("sType", "1");
+		paramMap.put("Ids", Ids);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute(map, handler);
+	}
+	
 	private void execute(HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)

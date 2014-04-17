@@ -1,5 +1,6 @@
 package com.lkoa.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -10,7 +11,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +24,8 @@ import com.lkoa.model.SmsMessage;
 import com.lkoa.util.LogUtil;
 
 public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
+	
+	private List<String> mCheckedIds = new ArrayList<String>();
 	
 	public MyMailListAdapter(Context context, int resource,
 			List<MailItemInfo> objects) {
@@ -37,6 +42,7 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 			holder.subject = (TextView)convertView.findViewById(R.id.subject);
 			holder.date = (TextView)convertView.findViewById(R.id.date);
 			holder.fj = (ImageView)convertView.findViewById(R.id.iv_fj);
+			holder.check = (CheckBox)convertView.findViewById(R.id.check_box);
 			convertView.setTag(holder);
 			
 		} else {
@@ -51,8 +57,11 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_246);
 		}
 		
-		MailItemInfo item = getItem(getRealPosition(position));
-		holder.sender.setText(item.sender);
+		int realPosition = getRealPosition(position);
+		MailItemInfo item = getItem(realPosition);
+		holder.check.setOnClickListener(mCheckOnClickListener);
+		holder.check.setTag(item);
+		holder.sender.setText((realPosition+1)+". "+item.sender);
 		holder.subject.setText(item.subject);
 		holder.date.setText(item.date);
 		
@@ -87,7 +96,7 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 		if(item.fjCount > 0) {
 			holder.fj.setVisibility(View.VISIBLE);
 		} else {
-			holder.fj.setVisibility(View.GONE);
+			holder.fj.setVisibility(View.INVISIBLE);
 		}
 		
 		return convertView;
@@ -98,6 +107,25 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 		TextView subject;
 		TextView date;
 		ImageView fj;
+		CheckBox check;
 	}
+	
+	public List<String> getCheckeIds() {
+		return mCheckedIds;
+	}
+	
+	private OnClickListener mCheckOnClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			MailItemInfo info = (MailItemInfo)v.getTag();
+			CheckBox check = (CheckBox) v;
+			if(check.isChecked()) {
+				mCheckedIds.add(info.id);
+			} else {
+				mCheckedIds.remove(info.id);
+			}
+		}
+	};
 
 }

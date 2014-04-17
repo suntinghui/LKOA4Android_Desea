@@ -1,14 +1,16 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import com.lkoa.R;
 import com.lkoa.adapter.MyMailListAdapter;
@@ -20,14 +22,17 @@ import com.lkoa.util.LogUtil;
 /**
  * 我的邮件-内部邮件-列表页
  */
-public class MyMailInternalListActivity extends CenterMsgBaseListActivity<MailItemInfo> implements OnItemClickListener {
+public class MyMailInternalListActivity 
+	extends CenterMsgBaseListActivity<MailItemInfo> 
+	implements OnItemClickListener, OnClickListener {
+	
 	private static final String TAG = "MyMailInternalListActivity";
 	
 	public static final int STATE_UNREAD = 0;
 	public static final int STATE_READED = 1;
 	public static final int STATE_ALL = 2;
 	
-	private MyMailManager mMainMgr;
+	private MyMailManager mMailMgr;
 	private int mTitleResId;
 	
 	private ListView mListView;
@@ -45,7 +50,7 @@ public class MyMailInternalListActivity extends CenterMsgBaseListActivity<MailIt
 		
 		setContentView(R.layout.activity_my_email_internal_list);
 		
-		mMainMgr = new MyMailManager();
+		mMailMgr = new MyMailManager();
 		findViews();
 		setupViews();
 	}
@@ -54,7 +59,7 @@ public class MyMailInternalListActivity extends CenterMsgBaseListActivity<MailIt
 	protected void onResume() {
 		super.onResume();
 		
-		mMainMgr.getMailList(String.valueOf(mState), String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
+		mMailMgr.getMailList(String.valueOf(mState), String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, obj.toString());
@@ -84,6 +89,25 @@ public class MyMailInternalListActivity extends CenterMsgBaseListActivity<MailIt
 		super.setupViews();
 		
 		mTvTitle.setText(mTitleResId);
+		
+		if(mType == MyMailInternalMainActivity.TYPE_DELETED) {
+			//已删除列表页，显示清空按钮
+			mLinearRight.setVisibility(View.VISIBLE);
+			mTvRight1.setVisibility(View.INVISIBLE);
+			mTvRight2.setVisibility(View.VISIBLE);
+			mTvRight2.setText(R.string.my_email_clear);
+			mTvRight2.setOnClickListener(this);
+			
+		} else {
+			//收件箱、发件箱、草稿箱，显示删除和清空按钮
+			mLinearRight.setVisibility(View.VISIBLE);
+			mTvRight1.setVisibility(View.VISIBLE);
+			mTvRight2.setVisibility(View.VISIBLE);
+			mTvRight1.setText(R.string.my_email_delete);
+			mTvRight1.setOnClickListener(this);
+			mTvRight2.setText(R.string.my_email_clear);
+			mTvRight2.setOnClickListener(this);
+		}
 	}
 	
 	@Override
@@ -94,4 +118,112 @@ public class MyMailInternalListActivity extends CenterMsgBaseListActivity<MailIt
 		intent.putExtra("mailId", mailId);
 		startActivity(intent);
 	}
+	
+	private boolean checkValid() {
+		String s = buildIds();
+		return !TextUtils.isEmpty(s);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.tv_right_1:
+			//删除
+			if(checkValid()) {
+				mPendingId = R.id.tv_right_1;
+				showDialog(DOUBLE_MODAL_DIALOG, "确定删除选中项吗？");
+			} else {
+				showDialog(MODAL_DIALOG, "请选择后再操作！");
+			}
+			break;
+			
+		case R.id.tv_right_2:
+			//清空
+			if(checkValid()) {
+				mPendingId = R.id.tv_right_2;
+				showDialog(DOUBLE_MODAL_DIALOG, "确定清空选中项吗？");
+			} else {
+				showDialog(MODAL_DIALOG, "请选择后再操作！");
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	private int mPendingId = -1;
+	
+	@Override
+	protected void onClickConfirm() {
+		super.onClickConfirm();
+		switch (mPendingId) {
+		case R.id.tv_right_1:
+			//删除
+			String ids = buildIds();
+			mMailMgr.delMail(mApp.getUserId(), ids, getDelResHandler());
+			break;
+			
+		case R.id.tv_right_2:
+			//清空
+			ids = buildIds();
+			mMailMgr.clearMail(mApp.getUserId(), ids, getClearResHandler());
+			break;
+
+		default:
+			break;
+		}
+		
+		mPendingId = -1;
+	}
+	
+	private String buildIds() {
+		List<String> list = ((MyMailListAdapter)mAdapter).getCheckeIds();
+		if(list == null || list.size() < 1) return null;
+		
+		StringBuffer buffer = new StringBuffer();
+		for(String id : list) {
+			buffer.append(id);
+			buffer.append(",");
+		}
+		buffer.delete(buffer.length() - 1, buffer.length());
+		
+		return buffer.toString();
+	}
+	
+	private LKAsyncHttpResponseHandler getDelResHandler() {
+		return new LKAsyncHttpResponseHandler() {
+
+			@Override
+			public void successAction(Object obj) {
+				String result = (String) obj;
+				if(TextUtils.equals(result, "0")) {
+					//删除失败
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除失败！");
+					
+				} else {
+					//删除成功
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除成功！");
+				}
+			}
+		};
+	}
+	
+	private LKAsyncHttpResponseHandler getClearResHandler() {
+		return new LKAsyncHttpResponseHandler() {
+			@Override
+			public void successAction(Object obj) {
+				String result = (String) obj;
+				if(TextUtils.equals(result, "0")) {
+					//清空失败
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件清空失败！");
+					
+				} else {
+					//清空成功
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件清空成功！");
+				}
+			}
+		};
+	}
+	
 }

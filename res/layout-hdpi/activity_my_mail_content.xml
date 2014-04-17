@@ -9,7 +9,8 @@
     <include layout="@layout/navigation" />
     
     <ScrollView android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="0dip"
+        android:layout_weight="1" >
     <LinearLayout android:id="@+id/content"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
@@ -66,5 +67,40 @@
         
     </LinearLayout>
     </ScrollView>
+    
+    <LinearLayout 
+        android:id="@+id/linear_right"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dip"
+        android:paddingBottom="20dip"
+		android:gravity="right" >
+        <TextView
+	        android:id="@+id/tv_reply"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="15dip"
+	        android:visibility="visible"
+	        android:text="回复"
+	        style="@style/NavigationRightText" />
+        
+        <TextView
+	        android:id="@+id/tv_forwarding"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="15dip"
+	        android:visibility="visible"
+	        android:text="转发"
+	        style="@style/NavigationRightText" />
+        
+        <TextView
+	        android:id="@+id/tv_remove"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="15dip"
+	        android:visibility="visible"
+	        android:text="删除"
+	        style="@style/NavigationRightText" />
+    </LinearLayout>
     
 </LinearLayout>

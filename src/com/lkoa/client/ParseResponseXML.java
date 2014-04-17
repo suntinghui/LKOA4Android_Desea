@@ -170,6 +170,10 @@ public class ParseResponseXML {
 				//我的邮件-获取邮件内容
 				return writeMail();
 				
+			case TransferRequestTag.DEL_MAIL:
+				//我的邮件-删除
+				return delMail();
+				
 			case TransferRequestTag.GET_GWGL_COUNT:
 				//公文管理-条数
 				return getGWGLCount();
@@ -965,6 +969,9 @@ public class ParseResponseXML {
 				} else if("SYS_30_COL_30".equalsIgnoreCase(parser.getName())) {
 					item.sender = parser.nextText();
 					
+				} else if("EML_20_COL_90".equalsIgnoreCase(parser.getName())) {
+					item.senderId = parser.nextText();
+					
 				} else if("EML_20_COL_100".equalsIgnoreCase(parser.getName())) {
 					item.date = parser.nextText();
 					
@@ -999,6 +1006,29 @@ public class ParseResponseXML {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
 				if ("WriteMail".equalsIgnoreCase(parser.getName())) {
+					result = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 我的邮件-删除或清空
+	 */
+	private static Object delMail() throws XmlPullParserException, IOException{
+		String result = null;
+		
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("DelMail".equalsIgnoreCase(parser.getName())) {
 					result = parser.nextText();
 				}
 				break;

@@ -137,6 +137,8 @@
 	<string name="my_email_details">邮件详情</string>
 	<string name="my_email_send">发送</string>
 	<string name="my_email_write">写邮件</string>
+	<string name="my_email_clear">清空</string>
+	<string name="my_email_delete">删除</string>
 	
 	<!-- 通讯录 -->
 	<string name="contacts_title">通讯录</string>

@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -32,6 +33,10 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 	private String [] mNames = null;
 	
 	private LinearLayout mLinearAttachments;
+	
+	private TextView mTvReply, mTvForwarding, mTvRemove;
+	
+	private MailContentItemInfo mMailContentInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,10 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 		mLinearAttachments = (LinearLayout)findViewById(R.id.attachments);
 		
 		mViews[4].setVisibility(View.GONE);
+		
+		mTvReply = (TextView)findViewById(R.id.tv_reply);
+		mTvForwarding = (TextView)findViewById(R.id.tv_forwarding);
+		mTvRemove = (TextView)findViewById(R.id.tv_remove);
 	}
 	
 	@Override
@@ -76,11 +85,15 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 			@Override
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction(), obj="+obj);
-				MailContentItemInfo item = (MailContentItemInfo) obj;
+				mMailContentInfo = (MailContentItemInfo) obj;
 				mLinearContent.setVisibility(View.VISIBLE);
-				setViews(item);
+				setViews(mMailContentInfo);
 			}
 		});
+		
+		mTvReply.setOnClickListener(this);
+		mTvForwarding.setOnClickListener(this);
+		mTvRemove.setOnClickListener(this);
 	}
 	
 	private void setViews(MailContentItemInfo item) {
@@ -121,10 +134,46 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 			child.setOnClickListener(this);
 		}
 	}
+	
+	private LKAsyncHttpResponseHandler getDelResponseHandler() {
+		return new LKAsyncHttpResponseHandler() {
+			
+			@Override
+			public void successAction(Object obj) {
+				String result = (String) obj;
+				if(TextUtils.equals(result, "0")) {
+					//删除失败
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除失败！");
+					
+				} else {
+					//删除成功
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除成功！");
+				}
+			}
+		};
+	}
 
 	@Override
 	public void onClick(View v) {
-		Attachment att = (Attachment)v.getTag();
-		loadAttachment(att.title, att.id);
+		final int id = v.getId();
+		if(id == R.id.tv_reply) {
+			//回复
+			MyMailWriteActivity.start(this, mMailContentInfo, MyMailWriteActivity.TYPE_REPLY, 
+					mMailContentInfo.senderId, mMailContentInfo.sender);
+			
+		} else if(id == R.id.tv_forwarding) {
+			//转发
+			MyMailWriteActivity.start(this, mMailContentInfo, MyMailWriteActivity.TYPE_REPLY, 
+					null, null);
+			
+		} else if(id == R.id.tv_remove) {
+			//删除
+			mMailMgr.delMail(mApp.getUserId(), 
+					mMailContentInfo.id, getDelResponseHandler());
+			
+		} else {
+			Attachment att = (Attachment)v.getTag();
+			loadAttachment(att.title, att.id);
+		}
 	}
 }

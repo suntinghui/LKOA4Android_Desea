@@ -17,6 +17,7 @@ import com.lkoa.R;
 import com.lkoa.business.MyMailManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.ContactItem;
+import com.lkoa.model.MailContentItemInfo;
 
 /**
  * 我的邮件-写邮件
@@ -27,6 +28,15 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 	public static final String STATE_DRAFT = "0";	//来自草稿箱
 	public static final String STATE_SEND = "1";	//新建邮件
 	
+	public static final int TYPE_REPLY = 10;
+	public static final int TYPE_FORWARDING = 11;
+	
+	private static final String EXTRA_TYPE = "type";
+	private static final String EXTRA_TITLE = "title";
+	private static final String EXTRA_CONTENT = "content";
+	private static final String EXTRA_USERIDS = "userids";
+	private static final String EXTRA_USERNAMES = "usernames";
+	
 	private MyMailManager mMailMgr;
 	private String mMailId;
 
@@ -36,16 +46,27 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 	
 	private String sUserIds = null;
 	private String sUserNames = null;
+	
+	private String mTitleStr, mContentStr;
+	private int mType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_mail_write_mail);
-
+		
 		mMailMgr = new MyMailManager();
 		Intent intent = getIntent();
 		mMailId = intent.getStringExtra("mailId");
+		mType = intent.getIntExtra(EXTRA_TYPE, -1);
 		if(mMailId == null) mMailId = "";
+		if(mType != -1) {
+			mTitleStr = intent.getStringExtra(EXTRA_TITLE);
+			mContentStr = intent.getStringExtra(EXTRA_CONTENT);
+			sUserIds = intent.getStringExtra(EXTRA_USERIDS);
+			sUserNames = intent.getStringExtra(EXTRA_USERNAMES);
+		}
+		
 		ContactItem item = (ContactItem)intent.getSerializableExtra("contact");
 		if(item != null) {
 			sUserIds = item.userId;
@@ -78,6 +99,12 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 		mSjrAdd.setOnClickListener(this);
 		
 		mSjr.setText(sUserNames);
+		if(!TextUtils.isEmpty(mTitleStr)) {
+			mTitle.setText(mTitleStr);
+		}
+		if(!TextUtils.isEmpty(mContentStr)) {
+			mContent.setText(mContentStr);
+		}
 	}
 	
 	@Override
@@ -143,6 +170,21 @@ public class MyMailWriteActivity extends CenterMsgBaseActivity implements OnClic
 		Intent intent = new Intent(ctx, MyMailWriteActivity.class);
 		intent.putExtra("contact", item);
 		((Activity)ctx).startActivityForResult(intent, 0);
+	}
+	
+	/**
+	 * @param ctx
+	 * @param info	邮件详情
+	 * @param type	0-回复	1-转发
+	 */
+	public static void start(Context ctx, MailContentItemInfo info, int type, String userIds, String userNames) {
+		Intent intent = new Intent(ctx, MyMailWriteActivity.class);
+		intent.putExtra(EXTRA_TYPE, type);
+		intent.putExtra(EXTRA_TITLE, info.title);
+		intent.putExtra(EXTRA_CONTENT, info.content);
+		intent.putExtra(EXTRA_USERIDS, userIds);
+		intent.putExtra(EXTRA_USERNAMES, userNames);
+		ctx.startActivity(intent);
 	}
 
 }

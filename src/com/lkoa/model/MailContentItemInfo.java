@@ -11,6 +11,7 @@ public class MailContentItemInfo {
 	public String title;
 	public String content;
 	public String sender;
+	public String senderId;
 	public String date;
 	
 	public String sjr;

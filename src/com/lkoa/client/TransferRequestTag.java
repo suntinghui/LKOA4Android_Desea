@@ -38,6 +38,7 @@ public class TransferRequestTag {
 	public static final int GET_GWGL_COUNT = 29;	//公文管理-条数
 	public static final int GET_LCBD_CB = 30;	//流程管理-流程办理-从表
 	public static final int GET_GLLC_LIST = 31;	//流程管理-流程办理-关联流程列表
+	public static final int DEL_MAIL = 32;	//我的邮件-内部邮件-删除
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -72,6 +73,7 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_JTHD, "GetJTHD");
 			requestTagMap.put(GET_MAIL, "GetMail");
 			requestTagMap.put(WRITE_MAIL, "WriteMail");
+			requestTagMap.put(DEL_MAIL, "DelMail");
 			requestTagMap.put(GET_GWGL_COUNT, "GetGWGLCount");
 			requestTagMap.put(WRITE_SMS, "WriteSMS");
 			requestTagMap.put(GET_LCBD_CB, "GetLCBDCB");
