@@ -93,7 +93,7 @@ public class MyMailManager {
 		map.put(Constant.kMETHODNAME, TransferRequestTag.DEL_MAIL);
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("sUserIds", sUserIds);
+		paramMap.put("sUserId", sUserIds);
 		paramMap.put("sType", "0");
 		paramMap.put("Ids", Ids);
 		map.put(Constant.kPARAMNAME, paramMap);
@@ -113,7 +113,7 @@ public class MyMailManager {
 		map.put(Constant.kMETHODNAME, TransferRequestTag.DEL_MAIL);
 		
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("sUserIds", sUserIds);
+		paramMap.put("sUserId", sUserIds);
 		paramMap.put("sType", "1");
 		paramMap.put("Ids", Ids);
 		map.put(Constant.kPARAMNAME, paramMap);
