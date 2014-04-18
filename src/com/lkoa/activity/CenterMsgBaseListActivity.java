@@ -13,6 +13,9 @@ import com.lkoa.adapter.BaseListAdapter;
 import com.lkoa.model.ProcessItem;
 
 
+/**
+ * 封装分页操作
+ */
 public abstract class CenterMsgBaseListActivity<T> extends CenterMsgBaseActivity {
 	
 	protected Button mPagePrev, mPageNext;

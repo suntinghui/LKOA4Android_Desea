@@ -2,7 +2,8 @@ package com.lkoa.model;
 
 public class MailItemInfo {
 
-	public String id;
+	public String id;	//邮件序号
+	public String jsId;	//邮件接收序号
 	public String subject;
 	public String sender;
 	public String date;

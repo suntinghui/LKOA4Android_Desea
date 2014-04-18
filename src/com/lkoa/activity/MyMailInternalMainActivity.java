@@ -31,10 +31,10 @@ public class MyMailInternalMainActivity extends CenterMsgBaseActivity implements
 	};
 	
 	private static final int [] mIconResIds = new int[] {
-		R.drawable.ic_center_msg_news,
-		R.drawable.ic_center_msg_public,
-		R.drawable.ic_center_msg_news,
-		R.drawable.ic_center_msg_public
+		R.drawable.ic_mail_inbox,
+		R.drawable.ic_mail_outbox,
+		R.drawable.ic_mail_draft,
+		R.drawable.ic_mail_removed
 	};
 	
 	private static final int [] mBackgroundResIds = new int [] {

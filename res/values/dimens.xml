@@ -29,6 +29,7 @@
     <dimen name="table_row_body_height">50dip</dimen>
     
     <dimen name="text_bold_size">18sp</dimen>
+    <dimen name="text_bold_size_extra">22sp</dimen>
     
     
 

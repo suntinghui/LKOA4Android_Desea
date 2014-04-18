@@ -59,6 +59,10 @@ public class MyMailInternalListActivity
 	protected void onResume() {
 		super.onResume();
 		
+		loadData();
+	}
+	
+	private void loadData() {
 		mMailMgr.getMailList(String.valueOf(mState), String.valueOf(mType), mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			@Override
 			public void successAction(Object obj) {
@@ -68,6 +72,7 @@ public class MyMailInternalListActivity
 				if(mAdapter == null) {
 					mAdapter = new MyMailListAdapter(MyMailInternalListActivity.this, 0, list);
 					mListView.setAdapter(mAdapter);
+					((MyMailListAdapter)mAdapter).setOnClickListener(mOnItemClickLis);
 				} else {
 					mAdapter.setData(list);
 					mAdapter.notifyDataSetChanged();
@@ -116,8 +121,22 @@ public class MyMailInternalListActivity
 		String mailId = item.id;
 		Intent intent = new Intent(this, MyMailContentActivity.class);
 		intent.putExtra("mailId", mailId);
+		intent.putExtra("mailJsId", item.jsId);
 		startActivity(intent);
 	}
+	
+	private OnClickListener mOnItemClickLis = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			MailItemInfo item = (MailItemInfo)v.getTag(R.string.key_tag);
+			String mailId = item.id;
+			Intent intent = new Intent(MyMailInternalListActivity.this, MyMailContentActivity.class);
+			intent.putExtra("mailId", mailId);
+			intent.putExtra("mailJsId", item.jsId);
+			startActivity(intent);
+		}
+	};
 	
 	private boolean checkValid() {
 		String s = buildIds();
@@ -160,8 +179,15 @@ public class MyMailInternalListActivity
 		switch (mPendingId) {
 		case R.id.tv_right_1:
 			//删除
-			String ids = buildIds();
-			mMailMgr.delMail(mApp.getUserId(), ids, getDelResHandler());
+			String ids = buildJsIds();
+			if(mType == MyMailInternalMainActivity.TYPE_DRAFTS) {
+				//如果是草稿箱删除，sType=1 ,Ids=邮件序号
+				ids = buildIds();
+				mMailMgr.clearMail(mApp.getUserId(), ids, getClearResHandler());
+				
+			} else {
+				mMailMgr.delMail(mApp.getUserId(), ids, getDelResHandler());
+			}
 			break;
 			
 		case R.id.tv_right_2:
@@ -177,13 +203,35 @@ public class MyMailInternalListActivity
 		mPendingId = -1;
 	}
 	
-	private String buildIds() {
-		List<String> list = ((MyMailListAdapter)mAdapter).getCheckeIds();
+	/**
+	 * 构建邮件接收序号
+	 */
+	private String buildJsIds() {
+		MyMailListAdapter adapter = (MyMailListAdapter)mAdapter;
+		List<MailItemInfo> list = adapter.getCheckeIds();
 		if(list == null || list.size() < 1) return null;
 		
 		StringBuffer buffer = new StringBuffer();
-		for(String id : list) {
-			buffer.append(id);
+		for(MailItemInfo item : list) {
+			buffer.append(item.jsId);
+			buffer.append(",");
+		}
+		buffer.delete(buffer.length() - 1, buffer.length());
+		
+		return buffer.toString();
+	}
+	
+	/**
+	 * 构建邮件序号
+	 */
+	private String buildIds() {
+		MyMailListAdapter adapter = (MyMailListAdapter)mAdapter;
+		List<MailItemInfo> list = adapter.getCheckeIds();
+		if(list == null || list.size() < 1) return null;
+		
+		StringBuffer buffer = new StringBuffer();
+		for(MailItemInfo item : list) {
+			buffer.append(item.id);
 			buffer.append(",");
 		}
 		buffer.delete(buffer.length() - 1, buffer.length());
@@ -197,13 +245,14 @@ public class MyMailInternalListActivity
 			@Override
 			public void successAction(Object obj) {
 				String result = (String) obj;
-				if(TextUtils.equals(result, "0")) {
-					//删除失败
-					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除失败！");
-					
-				} else {
+				if(TextUtils.equals(result, "1")) {
 					//删除成功
 					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除成功！");
+					((MyMailListAdapter)mAdapter).clearCheckedItems();
+					
+				} else {
+					//删除失败
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件删除失败！");
 				}
 			}
 		};
@@ -214,13 +263,14 @@ public class MyMailInternalListActivity
 			@Override
 			public void successAction(Object obj) {
 				String result = (String) obj;
-				if(TextUtils.equals(result, "0")) {
-					//清空失败
-					showDialog(BaseActivity.MODAL_DIALOG, "邮件清空失败！");
-					
-				} else {
+				if(TextUtils.equals(result, "1")) {
 					//清空成功
 					showDialog(BaseActivity.MODAL_DIALOG, "邮件清空成功！");
+					((MyMailListAdapter)mAdapter).clearCheckedItems();
+					
+				} else {
+					//清空失败
+					showDialog(BaseActivity.MODAL_DIALOG, "邮件清空失败！");
 				}
 			}
 		};

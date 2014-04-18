@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="45dip"
-    android:background="@android:color/darker_gray"
+    android:background="#ADADAD"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="30dip"
@@ -13,6 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@color/page_control_btn_bg"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_bold_size"
+        android:padding="5dip"
         android:text="上一页" />
 
     <TextView
@@ -21,13 +26,19 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="1/2"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/white"
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/page_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_bold_size"
+        android:padding="5dip"
+        android:background="@color/page_control_btn_bg"
         android:text="下一页" />
 
 </RelativeLayout>

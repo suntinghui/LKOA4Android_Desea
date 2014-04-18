@@ -26,7 +26,7 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 	
 	private MyMailManager mMailMgr;
 	
-	private String mMailId;
+	private String mMailId, mMailJsId;
 	
 	private LinearLayout mLinearContent;
 	private View [] mViews = null;
@@ -46,6 +46,7 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 		mMailMgr = new MyMailManager();
 		Intent intent = getIntent();
 		mMailId = intent.getStringExtra("mailId");
+		mMailJsId = intent.getStringExtra("mailJsId");
 		
 		mNames = getResources().getStringArray(R.array.my_mail_content_item_names);
 		mViews = new View[mNames.length];
@@ -169,7 +170,7 @@ public class MyMailContentActivity extends CenterMsgBaseActivity implements OnCl
 		} else if(id == R.id.tv_remove) {
 			//删除
 			mMailMgr.delMail(mApp.getUserId(), 
-					mMailContentInfo.id, getDelResponseHandler());
+					mMailJsId, getDelResponseHandler());
 			
 		} else {
 			Attachment att = (Attachment)v.getTag();

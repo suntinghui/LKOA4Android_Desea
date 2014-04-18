@@ -98,7 +98,7 @@ public class MyMailManager {
 		paramMap.put("Ids", Ids);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute(map, handler, "正在删除数据..");
 	}
 	
 	/**
@@ -118,13 +118,17 @@ public class MyMailManager {
 		paramMap.put("Ids", Ids);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute(map, handler, "正在清空数据..");
 	}
 	
 	private void execute(HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {
+		execute(map, handler, "正在加载数据..");
+	}
+	
+	private void execute(HashMap<String, Object> map, LKAsyncHttpResponseHandler handler, String msg) {
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)
-		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+		.executeQueue(msg, new LKHttpRequestQueueDone(){
 
 			@Override
 			public void onComplete() {

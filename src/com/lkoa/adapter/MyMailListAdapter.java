@@ -25,7 +25,7 @@ import com.lkoa.util.LogUtil;
 
 public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 	
-	private List<String> mCheckedIds = new ArrayList<String>();
+	private List<MailItemInfo> mCheckedItems = new ArrayList<MailItemInfo>();
 	
 	public MyMailListAdapter(Context context, int resource,
 			List<MailItemInfo> objects) {
@@ -64,6 +64,12 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 		holder.sender.setText((realPosition+1)+". "+item.sender);
 		holder.subject.setText(item.subject);
 		holder.date.setText(item.date);
+		if(mCheckedItems.indexOf(item) != -1) {
+			holder.check.setChecked(true);
+		} else {
+			holder.check.setChecked(false);
+		}
+		
 		
 		LogUtil.i("MyMailListAdapter", "getView(), item.state="+item.state);
 		if(item.state == 0) {
@@ -99,6 +105,9 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 			holder.fj.setVisibility(View.INVISIBLE);
 		}
 		
+		convertView.setOnClickListener(mOnClickListener);
+		convertView.setTag(R.string.key_tag, item);
+		
 		return convertView;
 	}
 	
@@ -110,8 +119,30 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 		CheckBox check;
 	}
 	
-	public List<String> getCheckeIds() {
-		return mCheckedIds;
+	public List<MailItemInfo> getCheckeIds() {
+		return mCheckedItems;
+	}
+	
+	public void clearCheckedItems() {
+		List<MailItemInfo> list = new ArrayList<MailItemInfo>();
+		for(int i=mDataList.size()-1; i >= 0; i--) {
+			MailItemInfo item = mDataList.get(i);
+			if(!isChecked(item)) {
+				list.add(item);
+			} 
+		}
+		mCheckedItems.clear();
+		setData(list);
+		notifyDataSetChanged();
+	}
+	
+	private boolean isChecked(MailItemInfo item) {
+		if(item == null) return false;
+		
+		for(MailItemInfo i : mCheckedItems) {
+			if(TextUtils.equals(item.id, i.id)) return true;
+		}
+		return false;
 	}
 	
 	private OnClickListener mCheckOnClickListener = new OnClickListener() {
@@ -121,11 +152,16 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 			MailItemInfo info = (MailItemInfo)v.getTag();
 			CheckBox check = (CheckBox) v;
 			if(check.isChecked()) {
-				mCheckedIds.add(info.id);
+				mCheckedItems.add(info);
 			} else {
-				mCheckedIds.remove(info.id);
+				mCheckedItems.remove(info);
 			}
 		}
 	};
+	
+	private OnClickListener mOnClickListener;
+	public void setOnClickListener(OnClickListener listener) {
+		mOnClickListener = listener;
+	}
 
 }

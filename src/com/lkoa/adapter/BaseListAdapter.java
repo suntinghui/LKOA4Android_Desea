@@ -57,6 +57,13 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 		return mDataList;
 	}
 	
+	@Override
+	public void notifyDataSetChanged() {
+		mItemCount = mDataList.size();
+		mPageCount = (mItemCount + COUNT_PER_PAGE - 1) / COUNT_PER_PAGE;
+		super.notifyDataSetChanged();
+	}
+	
 	protected int getRealPosition(int position) {
 		return mCurrPage * COUNT_PER_PAGE + position;
 	}

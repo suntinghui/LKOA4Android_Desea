@@ -39,4 +39,6 @@
     <color name="common_bg">#f1f1f1</color>
     <color name="common_blue">#6f91d6</color>
     
+    <color name="page_control_btn_bg">#498fe2</color>
+    
 </resources>

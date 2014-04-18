@@ -151,4 +151,6 @@
 	<!-- 附件 -->
 	<string name="attachment_show_title">附件详情</string>
 	
+	<string name="key_tag">key tag</string>
+	
 </resources>

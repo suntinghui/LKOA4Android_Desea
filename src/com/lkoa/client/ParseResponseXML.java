@@ -907,6 +907,9 @@ public class ParseResponseXML {
 				} else if("EML_20_COL_10".equalsIgnoreCase(parser.getName())) {
 					item.id = parser.nextText();
 					
+				} else if("EML_30_COL_10".equalsIgnoreCase(parser.getName())) {
+					item.jsId = parser.nextText();
+					
 				} else if("EML_20_COL_20".equalsIgnoreCase(parser.getName())) {
 					item.subject = parser.nextText();
 					
@@ -1028,7 +1031,7 @@ public class ParseResponseXML {
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_TAG:
-				if ("DelMail".equalsIgnoreCase(parser.getName())) {
+				if ("DelMailResult".equalsIgnoreCase(parser.getName())) {
 					result = parser.nextText();
 				}
 				break;
