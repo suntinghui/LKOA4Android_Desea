@@ -43,6 +43,7 @@ public class DeptsAdapter extends ArrayAdapter<DepartmentItem> {
 			holder.alpha = (TextView)convertView.findViewById(R.id.alpha_text);
 			holder.name = (TextView)convertView.findViewById(R.id.name);
 			holder.number = (TextView)convertView.findViewById(R.id.number);
+			holder.number.setVisibility(View.GONE);
 			convertView.setTag(holder);
 			
 		} else {

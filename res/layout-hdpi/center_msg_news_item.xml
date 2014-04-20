@@ -19,6 +19,7 @@
         android:layout_toRightOf="@id/icon"
         android:layout_alignTop="@id/icon"
         android:layout_marginRight="14dip"
+        android:layout_marginLeft="10dip"
         android:orientation="vertical">
         <TextView
 	        android:id="@+id/title"
