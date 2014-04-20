@@ -26,8 +26,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="15sp"
-            android:textColor="#c9c9c6" />
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:textColor="#c9c9c6"
+            android:textSize="15sp" />
         
         <TextView
             android:id="@+id/tv_logout"
@@ -154,7 +158,7 @@
                 android:layout_marginLeft="@dimen/activity_main_common_margin"
                 android:background="@drawable/ic_contacts"/>
 		</LinearLayout>
-		
+
 		<!-- 我的邮件、我的短信、人事管理 -->
 		<LinearLayout 
 		    android:layout_width="fill_parent"
