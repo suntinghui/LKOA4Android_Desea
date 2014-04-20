@@ -44,11 +44,11 @@
 	
 	<string name="hello_user_and_time">%1$s，您好。上次登录时间%2$s</string>
 	<string name="hello_user_and_time_first">%1$s，您好。欢迎登陆！</string>
-	<string name="my_todo">流程管理&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
-	<string name="received_today">今日收文&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
-	<string name="center_msg">信息中心&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
-	<string name="schedule">日程安排&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
-	<string name="my_email">我的邮件&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;（%1$s）</string>
+	<string name="my_todo">流程管理&#160;&#160;（%1$s）</string>
+	<string name="received_today">今日收文&#160;&#160;（%1$s）</string>
+	<string name="center_msg">信息中心&#160;&#160;（%1$s）</string>
+	<string name="schedule">日程安排&#160;&#160;（%1$s）</string>
+	<string name="my_email">我的邮件&#160;&#160;（%1$s）</string>
 	
 	<!-- 信息中心 -->
 	<string name="center_msg_news">集团新闻</string>

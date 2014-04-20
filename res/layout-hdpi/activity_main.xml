@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/main_background" >
+    android:background="@drawable/main_background"
+    android:orientation="vertical" >
 
     <!-- Title -->
     <LinearLayout
@@ -65,37 +65,45 @@
                 android:paddingTop="58dip"
                 android:orientation="vertical"
                 android:layout_marginRight="@dimen/activity_main_common_margin"
-                android:paddingLeft="18dip"
+                android:paddingLeft="10dip"
+                android:gravity="center_horizontal"
                 android:background="@drawable/center_mgr_bg" >
                 <!-- 我的待办 -->
 	            <TextView android:id="@+id/tv_my_todo"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginBottom="@dimen/activity_main_center_mgr_margin"
+	                android:text="@string/my_todo"
+	                android:singleLine="true"
 	                style="@style/white_14"/>
 	            <!-- 我的收文 -->
 	            <TextView android:id="@+id/tv_my_received_today"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginBottom="@dimen/activity_main_center_mgr_margin"
+	                android:text="@string/received_today"
+	                android:singleLine="true"
 	                style="@style/white_14"/>
 	            <!-- 信息中心 -->
 	            <TextView android:id="@+id/tv_center_msg"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginBottom="@dimen/activity_main_center_mgr_margin"
+	                android:singleLine="true"
 	                style="@style/white_14"/>
 	            <!--  日程安排 -->
 	            <TextView android:id="@+id/tv_schedule"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginBottom="@dimen/activity_main_center_mgr_margin"
+	                android:singleLine="true"
 	                style="@style/white_14"/>
 	            <!-- 我的邮件 -->
 	            <TextView android:id="@+id/tv_my_email"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginBottom="@dimen/activity_main_center_mgr_margin"
+	                android:singleLine="true"
 	                style="@style/white_14"/>
             </LinearLayout>
             
