@@ -18,10 +18,9 @@ import com.lkoa.model.SmsMessage;
 /**
  * 我的短信-列表页
  */
-public class MyMessageListActivity extends CenterMsgBaseActivity {
+public class MyMessageListActivity extends CenterMsgBaseListActivity<SmsMessage> {
 	
 	private ListView mListView = null;
-	private SmsMessageListAdapter mAdapter;
 	
 	private int mTitleResId;
 	
@@ -69,10 +68,14 @@ public class MyMessageListActivity extends CenterMsgBaseActivity {
 			@Override
 			public void successAction(Object obj) {
 				ArrayList<SmsMessage> list = (ArrayList<SmsMessage>)obj;
+				resetPageState(list);
 				if(mAdapter == null) {
 					mAdapter = new SmsMessageListAdapter(
 							MyMessageListActivity.this, 0, list);
 					mListView.setAdapter(mAdapter);
+				} else {
+					mAdapter.setData(list);
+					mAdapter.notifyDataSetChanged();
 				}
 			}
 		});

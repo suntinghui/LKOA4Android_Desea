@@ -37,6 +37,14 @@ public abstract class CenterMsgBaseListActivity<T> extends CenterMsgBaseActivity
 		}
 	};
 	
+	protected OnClickListener mOnItemClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			onListItemClicked(v);
+		}
+	};
+	
 	@Override
 	protected void findViews() {
 		super.findViews();
@@ -110,4 +118,6 @@ public abstract class CenterMsgBaseListActivity<T> extends CenterMsgBaseActivity
 		if(mAdapter != null)mAdapter.showPage(mCurrPageNo);
 		updatePageControlState();
 	}
+	
+	protected void onListItemClicked(View v) {};
 }

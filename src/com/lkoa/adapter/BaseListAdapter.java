@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 
 public class BaseListAdapter<T> extends ArrayAdapter<T> {
@@ -17,6 +18,7 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 	
 	protected LayoutInflater mLayoutInflater;
 	protected Resources mRes;
+	protected OnClickListener mOnClickListener;
 
 	public BaseListAdapter(Context context, int textViewResourceId,
 			List<T> objects) {
@@ -26,6 +28,10 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 		mDataList = objects;		
 		mRes = context.getResources();
 		mLayoutInflater = LayoutInflater.from(context);
+	}
+	
+	public void setOnClickListener(OnClickListener listener) {
+		mOnClickListener = listener;
 	}
 	
 	public void showPage(int page) {

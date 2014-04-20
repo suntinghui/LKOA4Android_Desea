@@ -19,10 +19,9 @@ import com.lkoa.model.RCListItem;
 /**
  * 日程安排-列表页
  */
-public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnItemClickListener {
+public class ScheduleRCListActivity extends CenterMsgBaseListActivity<RCListItem> implements OnItemClickListener {
 	
 	private ListView mListView = null;
-	private ScheduleRCListAdapter mAdapter;
 	
 	private int mTitleResId;
 	private int mType;	//1=我的日程，2 =部门日程，3=领导日程，4=集团活动
@@ -68,10 +67,13 @@ public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnI
 				@Override
 				public void successAction(Object obj) {
 					List<RCListItem> list = (ArrayList<RCListItem>)obj;
+					resetPageState(list);
 					if(mAdapter == null) {
 						mAdapter = new ScheduleRCListAdapter(
 								ScheduleRCListActivity.this, 0, list);
 						mListView.setAdapter(mAdapter);
+					} else {
+						mAdapter.setData(list);
 					}
 				}
 			});
@@ -83,11 +85,14 @@ public class ScheduleRCListActivity extends CenterMsgBaseActivity implements OnI
 				@Override
 				public void successAction(Object obj) {
 					List<RCListItem> list = (ArrayList<RCListItem>)obj;
+					resetPageState(list);
 					if(mAdapter == null) {
 						mAdapter = new ScheduleRCListAdapter(
 								ScheduleRCListActivity.this, 0, list);
-						mAdapter.setShowRCFw(false);
+						((ScheduleRCListAdapter)mAdapter).setShowRCFw(false);
 						mListView.setAdapter(mAdapter);
+					} else {
+						mAdapter.setData(list);
 					}
 				}
 			});

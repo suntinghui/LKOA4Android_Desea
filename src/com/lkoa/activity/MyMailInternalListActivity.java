@@ -72,7 +72,7 @@ public class MyMailInternalListActivity
 				if(mAdapter == null) {
 					mAdapter = new MyMailListAdapter(MyMailInternalListActivity.this, 0, list);
 					mListView.setAdapter(mAdapter);
-					((MyMailListAdapter)mAdapter).setOnClickListener(mOnItemClickLis);
+					mAdapter.setOnClickListener(mOnItemClickListener);
 				} else {
 					mAdapter.setData(list);
 					mAdapter.notifyDataSetChanged();
@@ -124,19 +124,6 @@ public class MyMailInternalListActivity
 		intent.putExtra("mailJsId", item.jsId);
 		startActivity(intent);
 	}
-	
-	private OnClickListener mOnItemClickLis = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			MailItemInfo item = (MailItemInfo)v.getTag(R.string.key_tag);
-			String mailId = item.id;
-			Intent intent = new Intent(MyMailInternalListActivity.this, MyMailContentActivity.class);
-			intent.putExtra("mailId", mailId);
-			intent.putExtra("mailJsId", item.jsId);
-			startActivity(intent);
-		}
-	};
 	
 	private boolean checkValid() {
 		String s = buildIds();
@@ -274,6 +261,16 @@ public class MyMailInternalListActivity
 				}
 			}
 		};
+	}
+
+	@Override
+	protected void onListItemClicked(View v) {
+		MailItemInfo item = (MailItemInfo)v.getTag(R.string.key_tag);
+		String mailId = item.id;
+		Intent intent = new Intent(MyMailInternalListActivity.this, MyMailContentActivity.class);
+		intent.putExtra("mailId", mailId);
+		intent.putExtra("mailJsId", item.jsId);
+		startActivity(intent);
 	}
 	
 }

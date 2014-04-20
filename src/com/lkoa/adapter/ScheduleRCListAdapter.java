@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.lkoa.R;
 import com.lkoa.model.RCListItem;
 
-public class ScheduleRCListAdapter extends ArrayAdapter<RCListItem> {
+public class ScheduleRCListAdapter extends BaseListAdapter<RCListItem> {
 
 	private LayoutInflater mLayoutInflater;
 	private List<RCListItem> mDataList;
@@ -96,8 +96,9 @@ public class ScheduleRCListAdapter extends ArrayAdapter<RCListItem> {
 			holder.rcFwVal.setVisibility(View.INVISIBLE);
 		}
 		
+		position = getRealPosition(position);
 		RCListItem item = getItem(position);
-		holder.rcTitleN.setText(mRcTitle);
+		holder.rcTitleN.setText((position+1)+". "+mRcTitle);
 		holder.rcTitleVal.setText(item.title);
 		
 		holder.rcDateN.setText(mRcDate);

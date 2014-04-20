@@ -22,8 +22,8 @@ public class WebViewConfig {
 		WebSettings settings = webView.getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setUseWideViewPort(true);
-		settings.setLoadWithOverviewMode(true);
 		settings.setSupportZoom(true);
+		settings.setBuiltInZoomControls(true);
 		
 		webView.setDownloadListener(new DownloadListener() {
 			@Override

@@ -158,10 +158,5 @@ public class MyMailListAdapter extends BaseListAdapter<MailItemInfo> {
 			}
 		}
 	};
-	
-	private OnClickListener mOnClickListener;
-	public void setOnClickListener(OnClickListener listener) {
-		mOnClickListener = listener;
-	}
 
 }

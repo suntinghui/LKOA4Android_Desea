@@ -15,20 +15,11 @@ import com.lkoa.R;
 import com.lkoa.model.ProcessItem;
 import com.lkoa.model.SmsMessage;
 
-public class SmsMessageListAdapter extends ArrayAdapter<SmsMessage> {
-
-	private LayoutInflater mLayoutInflater;
-	private List<SmsMessage> mDataList;
+public class SmsMessageListAdapter extends BaseListAdapter<SmsMessage> {
 	
-	private Resources mRes;
-
 	public SmsMessageListAdapter(Context context, int resource,
 			List<SmsMessage> objects) {
 		super(context, resource, objects);
-		
-		mRes = context.getResources();
-		
-		mLayoutInflater = LayoutInflater.from(context);
 		mDataList = objects;
 	}
 	
@@ -60,25 +51,18 @@ public class SmsMessageListAdapter extends ArrayAdapter<SmsMessage> {
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_246);
 		}
 		
+		position = getRealPosition(position);
 		SmsMessage item = getItem(position);
 		if(TextUtils.isEmpty(item.jsrPhone)) {
-			holder.jsrAndPhone.setText(item.jsr);
+			holder.jsrAndPhone.setText((position+1) + ". "+item.jsr);
 		} else {
-			holder.jsrAndPhone.setText(mRes.getString(
+			holder.jsrAndPhone.setText((position+1) + ". "+mRes.getString(
 					R.string.my_sms_jsr_and_phone, item.jsr, item.jsrPhone));
 		}
 		holder.content.setText(item.content);
 		holder.date.setText(item.date);
 		
 		return convertView;
-	}
-	
-	public void setData(List<SmsMessage> data) {
-		this.mDataList = data;
-	}
-	
-	public List<SmsMessage> getData() {
-		return mDataList;
 	}
 	
 	private class ViewHolder {
