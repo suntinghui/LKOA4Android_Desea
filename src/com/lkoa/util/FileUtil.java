@@ -142,7 +142,7 @@ public class FileUtil {
 	// 定义用于检查要打开的文件的后缀是否在遍历后缀数组中
 	private static boolean checkEndsWithInStringArray(String checkItsEnd,  String[] fileEndings) {
 		for (String aEnd : fileEndings) {
-			if (checkItsEnd.endsWith(aEnd))
+			if (checkItsEnd.toUpperCase().endsWith(aEnd.toUpperCase()))
 				return true;
 		}
 		return false;
