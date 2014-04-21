@@ -838,7 +838,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 						public void successAction(Object obj) {
 							LogUtil.i(TAG, "setGLBD(), successAction obj="+obj);
 							if(obj != null) {
-								showDialog(MODAL_DIALOG, "保存表单成功!");
+								showDialog(MODAL_DIALOG, "流转成功!");
 							}
 						}
 				
