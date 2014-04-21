@@ -784,8 +784,12 @@ public class ParseResponseXML {
 					info.filedList.add(field);
 					field = null;
 				} else if("Item".equalsIgnoreCase(parser.getName())) {
-					field.optionList.add(option);
-					option = null;;
+					try {
+						field.optionList.add(option);
+						option = null;;
+					} catch(Exception e) {
+						Log.e(TAG, "Error: "+e.getMessage());
+					}
 				}
 				break;
 			}

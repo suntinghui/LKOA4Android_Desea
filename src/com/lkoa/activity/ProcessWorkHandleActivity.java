@@ -43,6 +43,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.lkoa.R;
+import com.lkoa.adapter.ProcessWorkGLLCListAdapter;
 import com.lkoa.adapter.ProcessWorkListAdapter;
 import com.lkoa.business.AttachmentManager;
 import com.lkoa.business.ProcessWorkManager;
@@ -126,7 +127,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private ProcessContentInfo mContentInfo;
 	
-	private ProcessWorkListAdapter mGLLCListAdapter;	//关联流程列表适配器
+	private ProcessWorkGLLCListAdapter mGLLCListAdapter;	//关联流程列表适配器
 	
 	private OnItemSelectedListener mSpinnerOnItemClickListener = new OnItemSelectedListener() {
 
@@ -713,7 +714,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		//TODO: 构建关联流程列表
 		if(mGLLCListAdapter == null) {
 			mGLLCCount.setText(getResources().getString(R.string.process_work_handle_gllc_count, count));
-			mGLLCListAdapter = new ProcessWorkListAdapter(
+			mGLLCListAdapter = new ProcessWorkGLLCListAdapter(
 					ProcessWorkHandleActivity.this, 0, list);
 			mGLLCListView.setAdapter(mGLLCListAdapter);
 			mGLLCListView.setOnItemClickListener(new OnItemClickListener() {
