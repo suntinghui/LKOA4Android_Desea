@@ -5,6 +5,8 @@ import java.io.Serializable;
 import android.text.TextUtils;
 
 public class ContactItem implements Serializable, Comparable<ContactItem> {
+	
+	public static final String ALPHA_U_SELECTED = "已选择人员";
 
 	private static final long serialVersionUID = 1L;
 	public String userId;	//用户序号
@@ -24,8 +26,8 @@ public class ContactItem implements Serializable, Comparable<ContactItem> {
 	
 	@Override
 	public int compareTo(ContactItem another) {
-		if(TextUtils.equals("已选人员", alphaU)) return -1;
-		if(TextUtils.equals("已选人员", another.alphaU)) return 1;
+		if(TextUtils.equals(ALPHA_U_SELECTED, alphaU)) return -1;
+		if(TextUtils.equals(ALPHA_U_SELECTED, another.alphaU)) return 1;
 		
 		if(TextUtils.equals("#", alphaU)) {
 			return 1;

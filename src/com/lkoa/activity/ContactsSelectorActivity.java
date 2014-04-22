@@ -191,7 +191,7 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity implements
 	private void initAlphaU(List<ContactItem> list) {
 		for (ContactItem item : list) {
 			if(item.checked) {
-				item.alphaU = "已选人员";
+				item.alphaU = ContactItem.ALPHA_U_SELECTED;
 				continue;
 			}
 			item.alphaU = String.valueOf(Pinyin4j.getHanyuPinyin(item.userName)
