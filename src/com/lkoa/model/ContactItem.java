@@ -24,6 +24,9 @@ public class ContactItem implements Serializable, Comparable<ContactItem> {
 	
 	@Override
 	public int compareTo(ContactItem another) {
+		if(TextUtils.equals("已选人员", alphaU)) return -1;
+		if(TextUtils.equals("已选人员", another.alphaU)) return 1;
+		
 		if(TextUtils.equals("#", alphaU)) {
 			return 1;
 		} else if(TextUtils.equals("#", another.alphaU)) {
