@@ -42,6 +42,8 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 	
 	@Override
 	public int getCount() {
+		if(mItemCount < 1) return 0;
+		
 		if(mCurrPage < mPageCount - 1) {
 			//0 -- (mPageCount-2)
 			return COUNT_PER_PAGE;

@@ -25,6 +25,7 @@ public class ProcessContentInfo implements Serializable {
 	public String processId;	//流程序号
 	public String handleId;		//办理序号
 	public String processTitle;	//流程标题
+	public List<String> cyyj;	//常用意见
 	
 	public List<Activity> activityList;
 	public List<Field> filedList;
@@ -32,6 +33,7 @@ public class ProcessContentInfo implements Serializable {
 	public ProcessContentInfo() {
 		activityList = new ArrayList<ProcessContentInfo.Activity>();
 		filedList = new ArrayList<ProcessContentInfo.Field>();
+		cyyj = new ArrayList<String>();
 	}
 	
 	public Activity newActivity() {
