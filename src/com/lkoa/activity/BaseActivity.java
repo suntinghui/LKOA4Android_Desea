@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Window;
 import android.widget.Toast;
@@ -169,15 +170,11 @@ public class BaseActivity extends Activity {
 			
 			this.createProgressDialog();
 			
-			progressDialog.setMessage(null==mMessage?"":mMessage);
-			/***
-			Activity activity = (Activity) ((ContextThemeWrapper)progressDialog.getContext()).getBaseContext();
-			//android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@438e7108 is not valid; is your activity running?
-			if (!activity.isFinishing()){
+			if(!TextUtils.isEmpty(mMessage)) {
+				//提示信息不为空时才显示进度dialog
+				progressDialog.setMessage(null==mMessage?"":mMessage);
 				progressDialog.create().show();
-			} 
-			***/
-			progressDialog.create().show();
+			}
 			
 		} catch(Exception e){
 			e.printStackTrace();

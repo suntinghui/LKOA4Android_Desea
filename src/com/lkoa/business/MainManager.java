@@ -27,7 +27,7 @@ public class MainManager {
 		
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)
-		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+		.executeQueue("", new LKHttpRequestQueueDone(){
 
 			@Override
 			public void onComplete() {

@@ -25,7 +25,7 @@ public class CenterMsgManager {
 		
 		LKHttpRequest req1 = new LKHttpRequest(map, handler);
 		new LKHttpRequestQueue().addHttpRequest(req1)
-		.executeQueue("正在获取数据..", new LKHttpRequestQueueDone(){
+		.executeQueue("", new LKHttpRequestQueueDone(){
 
 			@Override
 			public void onComplete() {
@@ -132,7 +132,7 @@ public class CenterMsgManager {
 	}
 	
 	/**
-	 * 信息中心-部门之窗条数
+	 * 信息中心-部门之窗列表选项
 	 */
 	public void getBMZC(String sUserId, final LKAsyncHttpResponseHandler handler) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
