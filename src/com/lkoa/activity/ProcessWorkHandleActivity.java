@@ -263,7 +263,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			mTvRight2.setText(R.string.process_work_handle_kslz);
 			mTvRight1.setOnClickListener(this);
 			mTvRight2.setOnClickListener(this);
-			
+			mIvBack.setVisibility(View.GONE);
+			mTvBack.setVisibility(View.VISIBLE);
 		}
 		
 		//初始化ViewPager

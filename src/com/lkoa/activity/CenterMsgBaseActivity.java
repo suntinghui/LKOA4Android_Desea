@@ -19,6 +19,7 @@ public class CenterMsgBaseActivity extends BaseActivity{
 	protected ImageView mIvBack;
 	protected TextView mTvTitle;
 	protected ImageView mIvRight;
+	protected TextView mTvBack;
 	
 	protected LinearLayout mLinearRight;
 	protected TextView mTvRight1, mTvRight2;
@@ -49,10 +50,12 @@ public class CenterMsgBaseActivity extends BaseActivity{
 		mLinearRight = (LinearLayout) findViewById(R.id.linear_right);
 		mTvRight1 = (TextView) findViewById(R.id.tv_right_1);
 		mTvRight2 = (TextView) findViewById(R.id.tv_right_2);
+		mTvBack = (TextView)findViewById(R.id.tv_back);
 	}
 	
 	protected void setupViews() {
 		mIvBack.setOnClickListener(mBackOnClickListener);
+		mTvBack.setOnClickListener(mBackOnClickListener);
 		mIvRight.setVisibility(View.GONE);
 		mLinearRight.setVisibility(View.GONE);
 	}
