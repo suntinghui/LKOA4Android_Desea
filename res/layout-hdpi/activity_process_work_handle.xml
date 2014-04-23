@@ -44,11 +44,20 @@
 	    </LinearLayout>
     </RelativeLayout>
     
-    <!-- 表单、正文、附件content -->
-    <android.support.v4.view.ViewPager
-        android:id="@+id/process_work_handle_content"
-        android:layout_below="@id/tabs"
+    <LinearLayout 
         android:layout_width="fill_parent"
-        android:persistentDrawingCache="animation"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tabs"
+        android:orientation="vertical" >
+	    <!-- 表单、正文、附件content -->
+	    <android.support.v4.view.ViewPager
+	        android:id="@+id/process_work_handle_content"
+	        android:layout_width="fill_parent"
+	        android:persistentDrawingCache="animation"
+	        android:layout_height="0dip"
+	        android:layout_weight="1" />
+	    
+	    <include layout="@layout/layout_process_work_bottom" />
+    </LinearLayout>
+    
 </RelativeLayout>
