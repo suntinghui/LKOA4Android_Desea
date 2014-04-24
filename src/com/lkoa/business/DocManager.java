@@ -23,7 +23,7 @@ public class DocManager {
 		paramMap.put("sUserId", sUserId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute("正在加载数据..", map, handler);
+		execute("", map, handler);
 	}
 	
 	private void execute(String dialogMsg, HashMap<String, Object> map, LKAsyncHttpResponseHandler handler) {

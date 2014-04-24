@@ -68,7 +68,7 @@ public abstract class CenterMsgBaseListActivity<T> extends CenterMsgBaseActivity
 			mCurrPageNo = 0;
 		}
 		updatePageControlState();
-		mAdapter.showPage(mCurrPageNo);
+		getAdapter().showPage(mCurrPageNo);
 	}
 	
 	protected void nextPage() {
@@ -77,7 +77,7 @@ public abstract class CenterMsgBaseListActivity<T> extends CenterMsgBaseActivity
 			mCurrPageNo = mPageCount - 1;
 		}
 		updatePageControlState();
-		mAdapter.showPage(mCurrPageNo);
+		getAdapter().showPage(mCurrPageNo);
 	}
 	
 	protected void updatePageControlState() {
@@ -115,9 +115,14 @@ public abstract class CenterMsgBaseListActivity<T> extends CenterMsgBaseActivity
 	protected void resetPageState(List<T> list) {
 		mPageCount = getPageCount(list);
 		mCurrPageNo = 0;
-		if(mAdapter != null)mAdapter.showPage(mCurrPageNo);
+		BaseListAdapter<T> adapter = getAdapter();
+		if(adapter != null)adapter.showPage(mCurrPageNo);
 		updatePageControlState();
 	}
 	
 	protected void onListItemClicked(View v) {};
+	
+	protected BaseListAdapter<T> getAdapter() {
+		return mAdapter;
+	}
 }

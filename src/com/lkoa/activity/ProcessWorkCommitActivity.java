@@ -165,6 +165,7 @@ public class ProcessWorkCommitActivity extends CenterMsgBaseActivity implements 
 					user.userName = showContent;
 					
 				} else {
+					mCurrActivity.cyrs.clear();
 					List<User> list = mCurrActivity.cyrs;
 					User user = null;
 					String [] userIds = userId.split(",");

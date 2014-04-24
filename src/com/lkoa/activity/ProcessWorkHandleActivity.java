@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -43,6 +44,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.lkoa.R;
+import com.lkoa.adapter.ProcessWorkGLLCListAdapter;
 import com.lkoa.adapter.ProcessWorkListAdapter;
 import com.lkoa.business.AttachmentManager;
 import com.lkoa.business.ProcessWorkManager;
@@ -71,6 +73,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	public static final String TYPE_SAVE = "0";
 	public static final String TYPE_COMMIT = "1";
+	public static final String TYPE_BACK_SOURCE = "2";
+	public static final String TYPE_REVOKE = "3";
 	
 	private static int [] mTabNameResIds = new int [] {
 		R.string.process_work_handle_forms,
@@ -87,6 +91,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	public static final int INDEX_GLLC_LIST = 4;	//关联流程
 	
 	private View [] mTabViews = new View[5];
+	
+	private Button mBtnSave, mBtnCommit, mBtnBackSource, mBtnRevoke;
 	
 	public enum ProcessWorkType {
 		TYPE_MY_TODO,
@@ -126,17 +132,26 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private ProcessContentInfo mContentInfo;
 	
-	private ProcessWorkListAdapter mGLLCListAdapter;	//关联流程列表适配器
+	private ProcessWorkGLLCListAdapter mGLLCListAdapter;	//关联流程列表适配器
 	
 	private OnItemSelectedListener mSpinnerOnItemClickListener = new OnItemSelectedListener() {
 
 		@Override
 		public void onItemSelected(AdapterView<?> adapterView, View view, int pos,
 				long arg3) {
-			Field field = (Field)adapterView.getTag();
-			Option opt = field.optionList.get(pos);
-			field.name = opt.text;
-			field.value = opt.value;
+			Object tag = adapterView.getTag();
+			if(tag instanceof Field) {
+				Field field = (Field)adapterView.getTag();
+				Option opt = field.optionList.get(pos);
+				field.name = opt.text;
+				field.value = opt.value;
+				
+			} else if(tag instanceof ArrayList<?>) {
+				List<String> list = (ArrayList<String>)tag;
+				String yj = list.get(pos);
+				TextView text = (TextView)adapterView.getTag(R.string.key_tag);
+				text.setText(yj);
+			}
 		}
 
 		@Override
@@ -177,6 +192,11 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	@Override
 	protected void findViews() {
 		super.findViews();
+		
+		mBtnSave = (Button)findViewById(R.id.btn_save);
+		mBtnCommit = (Button)findViewById(R.id.btn_commit);
+		mBtnBackSource = (Button)findViewById(R.id.btn_back_source);
+		mBtnRevoke = (Button)findViewById(R.id.btn_revoke);
 		
 		mTabViews[0] = findViewById(R.id.process_work_handle_forms);
 		mTabViews[1] = findViewById(R.id.process_work_handle_text);
@@ -248,12 +268,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		//导航栏
 		if(mShowSaveCommit) {
 			mTvTitle.setText(R.string.process_work_handle_title);
-			mLinearRight.setVisibility(View.VISIBLE);
+			/*mLinearRight.setVisibility(View.VISIBLE);
 			mTvRight1.setText(R.string.process_work_handle_save);
-			mTvRight2.setText(R.string.process_work_handle_commit);
+			mTvRight2.setText(R.string.process_work_handle_kslz);
 			mTvRight1.setOnClickListener(this);
-			mTvRight2.setOnClickListener(this);
-			
+			mTvRight2.setOnClickListener(this);*/
+			mIvBack.setVisibility(View.GONE);
+			mTvBack.setVisibility(View.VISIBLE);
 		}
 		
 		//初始化ViewPager
@@ -294,6 +315,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		
 		mFormsDataLoaded = true;
 		setActiveTab(INDEX_FORMS, true);
+		
+		//bottom
+		mBtnSave.setOnClickListener(this);
+		mBtnCommit.setOnClickListener(this);
+		mBtnBackSource.setOnClickListener(this);
+		mBtnRevoke.setOnClickListener(this);
 	}
 	
 	/**
@@ -334,6 +361,16 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		}
 	}
 	
+	private void buildCyyj(Spinner spinner, List<String> cyyj, TextView et) {
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				this, android.R.layout.simple_spinner_item, cyyj);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		spinner.setOnItemSelectedListener(mSpinnerOnItemClickListener);
+		spinner.setTag(cyyj);
+		spinner.setTag(R.string.key_tag, et);
+	}
+	
 	private void setupFormItem(final Field field) {
 		View view = mLayoutInflater.inflate(R.layout.process_work_handle_content_forms_item, null);
 		TextView title = (TextView)view.findViewById(R.id.title);
@@ -342,6 +379,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		TextView noEmpty = (TextView)view.findViewById(R.id.tv_no_empty);
 		ImageView toRightArrow = (ImageView)view.findViewById(R.id.to_right_arrow);
 		Spinner contentSpinner = (Spinner) view.findViewById(R.id.content_spinner);
+		Spinner bottomSpinner = (Spinner) view.findViewById(R.id.bottom_spinner);
 		
 		if(field.editMode == ProcessContentInfo.Field.EDIT_MODE_MUST) {
 			//必填
@@ -367,7 +405,9 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			contentText.setText(field.showContent);
 			contentText.setVisibility(View.VISIBLE);
 			contentEdit.setVisibility(View.VISIBLE);
+			bottomSpinner.setVisibility(View.VISIBLE);
 			contentEdit.setText(field.value);
+			buildCyyj(bottomSpinner, mContentInfo.cyyj, contentEdit);
 			
 		} else if(contentType == ContentType.PULLDOWNLIST) {
 			//TODO: 处理弹出选择dialog
@@ -604,17 +644,18 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			}
 		}
 		
-		mContentPager.setCurrentItem(index);
-		
 		if(loadData) {
 			loadData(index);
 		}
+		
+		mContentPager.setCurrentItem(index);
 	}
 	
 	private void loadData(int index) {
 		switch (index) {
 		case INDEX_FORMS:
 			//表单数据
+			mFormsDataLoaded = true;
 			mProcessWorkMgr.getLCBD(mType, mInfoId, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
@@ -622,13 +663,13 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 					LogUtil.i(TAG, "successAction(), obj="+obj);
 					mContentInfo = (ProcessContentInfo)obj;
 					buildBD(mContentInfo);
-					mFormsDataLoaded = true;
 				}
 			});
 			break;
 			
 		case INDEX_TEXT:
 			//正文数据
+			mTextDataLoaded = true;
 			mProcessWorkMgr.getLCZW(mInfoId, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 				
 				@Override
@@ -643,7 +684,6 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 					}
 					
 					mWebViewText.setVisibility(View.VISIBLE);
-					mTextDataLoaded = true;
 					//TODO: 加载流程正文链接文档
 					String url = mAttachmentMgr.getUrl(path);
 					mWebViewText.loadUrl(url);
@@ -653,12 +693,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case INDEX_ATTACHMENT:
 			//附件数据
+			mAttachmentLoaded = true;
 			mAttachmentMgr.getAttList(mInfoId, new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {
 					LogUtil.i(TAG, obj.toString());
-					mAttachmentLoaded = true;
 					List<Attachment> list = (ArrayList<Attachment>)obj;
 					mAttachmentCount.setText(getResources().getString(
 							R.string.process_work_handle_attachment_added, list.size()));
@@ -669,12 +709,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case INDEX_CB:
 			//表单从表 
+			mCBLoaded = true;
 			mProcessWorkMgr.getLCBDCB(mInfoId, mApp.getUserId(), mInnerType, 
 					new LKAsyncHttpResponseHandler() {
 				
 				@Override
 				public void successAction(Object obj) {
-					mCBLoaded = true;
 					LogUtil.i(TAG, "obj="+obj);
 					buildBDCB((ArrayList<BDCBTable>)obj);
 				}
@@ -683,10 +723,10 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case INDEX_GLLC_LIST:
 			//关联流程
+			mGLLCLoaded = true;
 			mProcessWorkMgr.getGLLCList(mInfoId, new LKAsyncHttpResponseHandler() {
 				@Override
 				public void successAction(Object obj) {
-					mGLLCLoaded = true;
 					LogUtil.i(TAG, "getGLLCList: obj="+obj);
 					buildGLLCList((ArrayList<ProcessItem>)obj);
 				}
@@ -713,7 +753,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		//TODO: 构建关联流程列表
 		if(mGLLCListAdapter == null) {
 			mGLLCCount.setText(getResources().getString(R.string.process_work_handle_gllc_count, count));
-			mGLLCListAdapter = new ProcessWorkListAdapter(
+			mGLLCListAdapter = new ProcessWorkGLLCListAdapter(
 					ProcessWorkHandleActivity.this, 0, list);
 			mGLLCListView.setAdapter(mGLLCListAdapter);
 			mGLLCListView.setOnItemClickListener(new OnItemClickListener() {
@@ -824,21 +864,21 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		return true;
 	}
 	
-	private void save() {
+	private void handleOpt(final String msg, String type) {
 		try {
 			if(!collectionData()) {
 				//采集数据失败，必填项没有填
 				Toast.makeText(this, "请检查必填项是否为空！", Toast.LENGTH_SHORT).show();
 				return;
 			}
-			mProcessWorkMgr.setGLBD(mApp.getUserId(), TYPE_SAVE, 
+			mProcessWorkMgr.setGLBD(mApp.getUserId(), type, 
 					mContentInfo.buildXml(false), new LKAsyncHttpResponseHandler() {
 
 						@Override
 						public void successAction(Object obj) {
 							LogUtil.i(TAG, "setGLBD(), successAction obj="+obj);
 							if(obj != null) {
-								showDialog(MODAL_DIALOG, "保存表单成功!");
+								showDialog(MODAL_DIALOG, msg);
 							}
 						}
 				
@@ -861,14 +901,26 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.btn_save:
 		case R.id.tv_right_1:
 			//保存
-			save();
+			handleOpt("保存成功！", TYPE_SAVE);
 			break;
 			
+		case R.id.btn_commit:
 		case R.id.tv_right_2:
 			//提交
 			commit();
+			break;
+			
+		case R.id.btn_back_source:
+			//退回来源
+			handleOpt("退回来源成功！", TYPE_BACK_SOURCE);
+			break;
+			
+		case R.id.btn_revoke:
+			//撤销
+			handleOpt("撤销成功！", TYPE_REVOKE);
 			break;
 			
 		default:

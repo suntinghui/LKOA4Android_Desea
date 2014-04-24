@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.text.TextUtils;
 
+import com.lkoa.activity.ProcessWorkHandleActivity;
 import com.lkoa.client.Constant;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.client.LKHttpRequest;
@@ -29,7 +30,7 @@ public class ProcessWorkManager {
 		paramMap.put("sUserId", sUserId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute("正在加载数据..", map, handler);
+		execute("", map, handler);
 	}
 	
 	/**
@@ -131,8 +132,12 @@ public class ProcessWorkManager {
 		map.put(Constant.kPARAMNAME, paramMap);
 		
 		String msg = "正在保存数据..";
-		if(TextUtils.equals("1", type)) {
+		if(TextUtils.equals(ProcessWorkHandleActivity.TYPE_COMMIT, type)) {
 			msg = "正在提交数据..";
+		} else if(TextUtils.equals(ProcessWorkHandleActivity.TYPE_BACK_SOURCE, type)) {
+			msg = "正在退回来源..";
+		} else if(TextUtils.equals(ProcessWorkHandleActivity.TYPE_REVOKE, type)) {
+			msg = "正在撤销..";
 		}
 		execute(msg ,map, handler);
 	}

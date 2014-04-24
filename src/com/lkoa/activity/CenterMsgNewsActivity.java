@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lkoa.R;
+import com.lkoa.adapter.BaseListAdapter;
 import com.lkoa.adapter.CenterMsgNewsAdapter;
 import com.lkoa.business.CenterMsgManager;
 import com.lkoa.client.LKAsyncHttpResponseHandler;
@@ -28,7 +29,7 @@ import com.lkoa.util.LogUtil;
 /**
  * 信息中心-集团新闻、集团公告、通知信息、部门之窗信息列表页
  */
-public class CenterMsgNewsActivity extends CenterMsgBaseActivity 
+public class CenterMsgNewsActivity extends CenterMsgBaseListActivity<CenterMsgNewsItem>
 	implements OnClickListener, OnItemClickListener {
 	private static final String TAG = "CenterMsgNewsActivity";
 	
@@ -173,7 +174,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 		return retArray;
 	}
 	
+	private int mActiveIdx = INDEX_MORE_NEWS;
 	private void switchTo(int activeIdx) {
+		mActiveIdx = activeIdx;
 		if(activeIdx == INDEX_MORE_NEWS) {
 			mTvLatestNews.setTextColor(mTextColorUnselected);
 			mTvMoreNews.setTextColor(mTextColorSelected);
@@ -182,6 +185,8 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 			if(mMoreNewsLoaded == false) {
 				loadNewsList(NEWS_READED);
 			}
+			mAdapter = getAdapter();
+			if(mAdapter != null) resetPageState(mAdapter.getData());
 			
 		} else {
 			mTvLatestNews.setTextColor(mTextColorSelected);
@@ -191,8 +196,19 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 			if(mLatestNewsLoaded == false) {
 				loadNewsList(NEWS_UNREAD);
 			}
+			mAdapter = getAdapter();
+			if(mAdapter != null) resetPageState(mAdapter.getData());
 		}
 		mViewPager.setCurrentItem(activeIdx);
+	}
+	
+	@Override
+	protected BaseListAdapter<CenterMsgNewsItem> getAdapter() {
+		if(mActiveIdx == INDEX_MORE_NEWS) {
+			return mMoreNewsAdapter;
+		} else {
+			return mLatestNewsAdapter;
+		}
 	}
 	
 	private void loadNewsList(String state) {
@@ -223,8 +239,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 					} else {
 						mLatestNewsAdapter.setData(list);
 					}
+					resetPageState(list);
 					setupAdapter();
-					mLatestNewsAdapter.notifyDataSetChanged();
+					mLatestNewsAdapter.showPage(0);
 					
 				} else {
 					//更多消息
@@ -236,8 +253,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 					} else {
 						mMoreNewsAdapter.setData(list);
 					}
+					resetPageState(list);
 					setupAdapter();
-					mMoreNewsAdapter.notifyDataSetChanged();
+					mMoreNewsAdapter.showPage(0);
 				}
 			}
 		};
@@ -322,11 +340,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseActivity
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
 		CenterMsgNewsItem item = null;
-		if(adapterView == mLatestNewsLv) {
-			item = mLatestNewsAdapter.getData().get(position);
-		} else if(adapterView == mMoreNewsLv) {
-			item = mMoreNewsAdapter.getData().get(position);
-		}
+		BaseListAdapter<CenterMsgNewsItem> adapter = getAdapter();
+		position = adapter.getRealPosition(position);
+		item = adapter.getItem(position);
 		
 		if(item != null) {
 			String id = item.id;

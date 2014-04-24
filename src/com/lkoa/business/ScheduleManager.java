@@ -26,7 +26,7 @@ public class ScheduleManager {
 		paramMap.put("sUserId", sUserId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute("正在加载数据..", map, handler);
+		execute("", map, handler);
 	}
 	
 	/**

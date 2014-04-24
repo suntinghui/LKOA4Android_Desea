@@ -1,6 +1,8 @@
 package com.lkoa.activity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -165,9 +167,10 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity implements
 			public void successAction(Object obj) {
 				LogUtil.i(TAG, "successAction(), " + obj.toString());
 				List<ContactItem> list = (ArrayList<ContactItem>) obj;
-				initAlphaU(list);
 				initSelect(list);
+				initAlphaU(list);
 				initContactAlphaIndexer(list);
+				Collections.sort(list);
 				if (mAdapter == null) {
 					mAdapter = new ContactsSelectorAdapter(
 							ContactsSelectorActivity.this, 0, list);
@@ -187,6 +190,10 @@ public class ContactsSelectorActivity extends CenterMsgBaseActivity implements
 
 	private void initAlphaU(List<ContactItem> list) {
 		for (ContactItem item : list) {
+			if(item.checked) {
+				item.alphaU = ContactItem.ALPHA_U_SELECTED;
+				continue;
+			}
 			item.alphaU = String.valueOf(Pinyin4j.getHanyuPinyin(item.userName)
 					.charAt(0));
 		}

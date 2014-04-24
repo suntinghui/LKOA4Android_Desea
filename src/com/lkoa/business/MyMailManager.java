@@ -23,7 +23,7 @@ public class MyMailManager {
 		paramMap.put("sUserId", sUserId);
 		map.put(Constant.kPARAMNAME, paramMap);
 		
-		execute(map, handler);
+		execute(map, handler, "");
 	}
 	
 	/**
