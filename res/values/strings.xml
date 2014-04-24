@@ -87,6 +87,7 @@
 	<string name="process_work_list_sender">&#160;&#160;&#160;&#160;发送人&#160;&#160;&#160;&#160;&#160;%1$s</string>
 	<string name="process_work_handle_save">保存</string>
 	<string name="process_work_handle_commit">提交</string>
+	<string name="process_work_handle_kslz">开始流转</string>
 	<string name="process_work_commit_title">操作提交</string>
 	<string name="process_work_node_next">下级节点</string>
 	<string name="process_work_node_dealtime">节点办理时限（工作日）</string>

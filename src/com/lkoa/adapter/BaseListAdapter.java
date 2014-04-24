@@ -28,6 +28,7 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 		mDataList = objects;		
 		mRes = context.getResources();
 		mLayoutInflater = LayoutInflater.from(context);
+		mCurrPage = 0;
 	}
 	
 	public void setOnClickListener(OnClickListener listener) {
@@ -41,10 +42,15 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 	
 	@Override
 	public int getCount() {
+		if(mItemCount < 1) return 0;
+		
 		if(mCurrPage < mPageCount - 1) {
+			//0 -- (mPageCount-2)
 			return COUNT_PER_PAGE;
 		}
 		
+		//最后一页
+		if(mItemCount % COUNT_PER_PAGE == 0) return COUNT_PER_PAGE;
 		return mItemCount % COUNT_PER_PAGE;
 	}
 	
@@ -65,12 +71,12 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 	
 	@Override
 	public void notifyDataSetChanged() {
+		super.notifyDataSetChanged();
 		mItemCount = mDataList.size();
 		mPageCount = (mItemCount + COUNT_PER_PAGE - 1) / COUNT_PER_PAGE;
-		super.notifyDataSetChanged();
 	}
 	
-	protected int getRealPosition(int position) {
+	public int getRealPosition(int position) {
 		return mCurrPage * COUNT_PER_PAGE + position;
 	}
 }

@@ -17,24 +17,12 @@ import com.lkoa.R;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.util.LogUtil;
 
-public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
-
-	private LayoutInflater mLayoutInflater;
-	private List<CenterMsgNewsItem> mDataList;
-	
+public class CenterMsgNewsAdapter extends BaseListAdapter<CenterMsgNewsItem> {
 	private boolean mShowIcon = true;
 
 	public CenterMsgNewsAdapter(Context context, int resource,
 			List<CenterMsgNewsItem> objects) {
 		super(context, resource, objects);
-		
-		mLayoutInflater = LayoutInflater.from(context);
-		mDataList = objects;
-	}
-	
-	@Override
-	public CenterMsgNewsItem getItem(int position) {
-		return mDataList.get(position);
 	}
 	
 	@Override
@@ -61,8 +49,9 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 			convertView.setBackgroundResource(R.drawable.center_msg_news_item_bg_246);
 		}
 		
+		position = getRealPosition(position);
 		CenterMsgNewsItem item = getItem(position);
-		holder.title.setText(item.title);
+		holder.title.setText((position+1)+". "+item.title);
 		if(TextUtils.equals(item.state, "0")) {
 			Paint p = holder.title.getPaint();
 			p.setTypeface(Typeface.DEFAULT_BOLD);
@@ -87,14 +76,6 @@ public class CenterMsgNewsAdapter extends ArrayAdapter<CenterMsgNewsItem> {
 		}
 		
 		return convertView;
-	}
-	
-	public void setData(List<CenterMsgNewsItem> data) {
-		this.mDataList = data;
-	}
-	
-	public List<CenterMsgNewsItem> getData() {
-		return mDataList;
 	}
 	
 	public void setShowIconFlag(boolean showIcon) {

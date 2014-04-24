@@ -765,6 +765,9 @@ public class ParseResponseXML {
 				} else if("DefaultFlag".equalsIgnoreCase(parser.getName())) {
 					//Option 是否默认选项
 					option.defaultFlag = Integer.parseInt(parser.nextText());
+				} else if("CYYJ".equalsIgnoreCase(parser.getName())) {
+					//Infor 常用意见
+					parseCYYJ(parser, info.cyyj);
 				}
 				break;
 				
@@ -784,8 +787,12 @@ public class ParseResponseXML {
 					info.filedList.add(field);
 					field = null;
 				} else if("Item".equalsIgnoreCase(parser.getName())) {
-					field.optionList.add(option);
-					option = null;;
+					try {
+						field.optionList.add(option);
+						option = null;;
+					} catch(Exception e) {
+						Log.e(TAG, "Error: "+e.getMessage());
+					}
 				}
 				break;
 			}
@@ -793,6 +800,26 @@ public class ParseResponseXML {
 		}
 		
 		return info;
+	}
+	
+	private static void parseCYYJ(XmlPullParser parser, List<String> outList) throws XmlPullParserException, IOException {
+			int eventType = parser.getEventType();// 产生第一个事件
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				switch (eventType) {
+				case XmlPullParser.START_TAG:
+					if ("Item".equalsIgnoreCase(parser.getName())) {
+						outList.add(parser.nextText());
+					}
+					break;
+					
+				case XmlPullParser.END_TAG:
+					if ("CYYJ".equalsIgnoreCase(parser.getName())) {
+						return;
+					}
+					break;
+				}
+				eventType = parser.next();
+			}
 	}
 	
 	/**
