@@ -174,7 +174,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseListActivity<CenterMsgNe
 		return retArray;
 	}
 	
-	private int mActiveIdx = INDEX_MORE_NEWS;
+	private int mActiveIdx = INDEX_LATEST_NEWS;
 	private void switchTo(int activeIdx) {
 		mActiveIdx = activeIdx;
 		if(activeIdx == INDEX_MORE_NEWS) {
