@@ -132,11 +132,11 @@ public class ProcessWorkManager {
 		map.put(Constant.kPARAMNAME, paramMap);
 		
 		String msg = "正在保存数据..";
-		if(TextUtils.equals(ProcessWorkHandleActivity.TYPE_COMMIT, type)) {
+		if(TextUtils.equals(ProcessWorkHandleActivity.OPT_TYPE_COMMIT, type)) {
 			msg = "正在提交数据..";
-		} else if(TextUtils.equals(ProcessWorkHandleActivity.TYPE_BACK_SOURCE, type)) {
+		} else if(TextUtils.equals(ProcessWorkHandleActivity.OPT_TYPE_BACK_SOURCE, type)) {
 			msg = "正在退回来源..";
-		} else if(TextUtils.equals(ProcessWorkHandleActivity.TYPE_REVOKE, type)) {
+		} else if(TextUtils.equals(ProcessWorkHandleActivity.OPT_TYPE_REVOKE, type)) {
 			msg = "正在撤销..";
 		}
 		execute(msg ,map, handler);

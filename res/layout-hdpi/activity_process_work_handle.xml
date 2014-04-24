@@ -57,7 +57,10 @@
 	        android:layout_height="0dip"
 	        android:layout_weight="1" />
 	    
-	    <include layout="@layout/layout_process_work_bottom" />
+	    <include 
+	        android:id="@+id/view_bottom"
+	        android:visibility="gone"
+	        layout="@layout/layout_process_work_bottom" />
     </LinearLayout>
     
 </RelativeLayout>

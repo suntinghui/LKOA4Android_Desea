@@ -71,10 +71,16 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	public static final String KEY_PROCESS_WORK_TYPE = "key_process_work_type";
 	
-	public static final String TYPE_SAVE = "0";
-	public static final String TYPE_COMMIT = "1";
-	public static final String TYPE_BACK_SOURCE = "2";
-	public static final String TYPE_REVOKE = "3";
+	public static final String OPT_TYPE_SAVE = "0";
+	public static final String OPT_TYPE_COMMIT = "1";
+	public static final String OPT_TYPE_BACK_SOURCE = "2";
+	public static final String OPT_TYPE_REVOKE = "3";
+	
+	public static final String TYPE_GET_LCBD_MY_PENDING = "0";	//我的待办
+	public static final String TYPE_GET_LCBD_PROCESS = "1";	//正在办理
+	public static final String TYPE_GET_LCBD_HISTORY = "2";	//历史记录
+	public static final String TYPE_GET_LCBD_FILE_PENDING = "3";	//待批文件
+	public static final String TYPE_GET_LCBD_UNDO_BOX = "4";	//撤销箱
 	
 	private static int [] mTabNameResIds = new int [] {
 		R.string.process_work_handle_forms,
@@ -92,6 +98,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	
 	private View [] mTabViews = new View[5];
 	
+	private View mViewBottom;
 	private Button mBtnSave, mBtnCommit, mBtnBackSource, mBtnRevoke;
 	
 	public enum ProcessWorkType {
@@ -193,6 +200,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 	protected void findViews() {
 		super.findViews();
 		
+		mViewBottom = findViewById(R.id.view_bottom);
 		mBtnSave = (Button)findViewById(R.id.btn_save);
 		mBtnCommit = (Button)findViewById(R.id.btn_commit);
 		mBtnBackSource = (Button)findViewById(R.id.btn_back_source);
@@ -317,6 +325,9 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		setActiveTab(INDEX_FORMS, true);
 		
 		//bottom
+		if(TextUtils.equals(mType, TYPE_GET_LCBD_PROCESS)) {
+			mViewBottom.setVisibility(View.VISIBLE);
+		}
 		mBtnSave.setOnClickListener(this);
 		mBtnCommit.setOnClickListener(this);
 		mBtnBackSource.setOnClickListener(this);
@@ -904,7 +915,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		case R.id.btn_save:
 		case R.id.tv_right_1:
 			//保存
-			handleOpt("保存成功！", TYPE_SAVE);
+			handleOpt("保存成功！", OPT_TYPE_SAVE);
 			break;
 			
 		case R.id.btn_commit:
@@ -915,12 +926,12 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			
 		case R.id.btn_back_source:
 			//退回来源
-			handleOpt("退回来源成功！", TYPE_BACK_SOURCE);
+			handleOpt("退回来源成功！", OPT_TYPE_BACK_SOURCE);
 			break;
 			
 		case R.id.btn_revoke:
 			//撤销
-			handleOpt("撤销成功！", TYPE_REVOKE);
+			handleOpt("撤销成功！", OPT_TYPE_REVOKE);
 			break;
 			
 		default:
