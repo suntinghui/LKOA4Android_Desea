@@ -153,5 +153,7 @@
 	<string name="attachment_show_title">附件详情</string>
 	
 	<string name="key_tag">key tag</string>
+	<string name="key_tag_def_val">key tag def val</string>
+	<string name="key_tag_first">first</string>
 	
 </resources>

@@ -156,8 +156,19 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			} else if(tag instanceof ArrayList<?>) {
 				List<String> list = (ArrayList<String>)tag;
 				String yj = list.get(pos);
-				TextView text = (TextView)adapterView.getTag(R.string.key_tag);
-				text.setText(yj);
+				boolean first = (Boolean)adapterView.getTag(R.string.key_tag_first);
+				if(first) {
+					adapterView.setTag(R.string.key_tag_first, false);
+					String defVal = (String)adapterView.getTag(R.string.key_tag_def_val);
+					int defIndex = list.indexOf(defVal);
+					if(defIndex > -1) {
+						((Spinner)adapterView).setSelection(defIndex);
+					}
+				} else {
+					TextView text = (TextView)adapterView.getTag(R.string.key_tag);
+					text.setText(yj);
+				}
+				
 			}
 		}
 
@@ -372,7 +383,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		}
 	}
 	
-	private void buildCyyj(Spinner spinner, List<String> cyyj, TextView et) {
+	private void buildCyyj(Spinner spinner, List<String> cyyj, TextView et, String defVal) {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				this, android.R.layout.simple_spinner_item, cyyj);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -380,6 +391,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		spinner.setOnItemSelectedListener(mSpinnerOnItemClickListener);
 		spinner.setTag(cyyj);
 		spinner.setTag(R.string.key_tag, et);
+		spinner.setTag(R.string.key_tag_def_val, defVal);
+		spinner.setTag(R.string.key_tag_first, true);
 	}
 	
 	private void setupFormItem(final Field field) {
@@ -418,7 +431,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			contentEdit.setVisibility(View.VISIBLE);
 			bottomSpinner.setVisibility(View.VISIBLE);
 			contentEdit.setText(field.value);
-			buildCyyj(bottomSpinner, mContentInfo.cyyj, contentEdit);
+			buildCyyj(bottomSpinner, mContentInfo.cyyj, contentEdit, field.value);
 			
 		} else if(contentType == ContentType.PULLDOWNLIST) {
 			//TODO: 处理弹出选择dialog
