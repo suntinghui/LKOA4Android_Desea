@@ -90,9 +90,12 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 				mTitleView.setText(item.title);
 				mDateView.setText(item.date);
 				String encoding = "utf-8";
+				mContentView.setInitialScale(40);
+				mContentView.getSettings().setUseWideViewPort(true);
 				mContentView.getSettings().setDefaultTextEncodingName(encoding);
 				String tmp = item.content.replaceAll("&amp;nbsp;", " ");
 				mContentView.loadDataWithBaseURL(null, tmp, "text/html",  encoding, null);
+				
 				
 				buildAttachment(item.attachments);
 			}
