@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -90,8 +91,11 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 				mTitleView.setText(item.title);
 				mDateView.setText(item.date);
 				String encoding = "utf-8";
-				mContentView.setInitialScale(40);
+				mContentView.setInitialScale(25);
 				mContentView.getSettings().setUseWideViewPort(true);
+
+				mContentView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.NORMAL);  
+//				mContentView.getSettings().setBuiltInZoomControls(true);
 				mContentView.getSettings().setDefaultTextEncodingName(encoding);
 				String tmp = item.content.replaceAll("&amp;nbsp;", " ");
 				mContentView.loadDataWithBaseURL(null, tmp, "text/html",  encoding, null);
