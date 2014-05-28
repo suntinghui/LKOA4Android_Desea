@@ -91,7 +91,7 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 				mTitleView.setText(item.title);
 				mDateView.setText(item.date);
 				String encoding = "utf-8";
-				mContentView.setInitialScale(25);
+//				mContentView.setInitialScale(25);
 				mContentView.getSettings().setUseWideViewPort(true);
 
 				mContentView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.NORMAL);  
