@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="50dip"
+    android:background="#F1F1F1"
+    android:paddingLeft="10dip"
+    android:paddingRight="18dip" >
+
+    <LinearLayout 
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+	    <TextView
+	        android:id="@+id/cq_time_pos"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="@dimen/margin_small"
+	        android:ellipsize="end"
+	        android:singleLine="true"
+	        android:text="出勤时间"
+	        android:textColor="#505050"
+	        android:textSize="14sp" />
+	    
+	    <TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="@dimen/margin_small"
+	        android:ellipsize="end"
+	        android:singleLine="true"
+	        android:text="出勤状态"
+	        android:textColor="#505050"
+	        android:textSize="14sp" />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
+	    <TextView
+	        android:id="@+id/cq_time"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="@dimen/margin_small"
+	        android:ellipsize="end"
+	        android:singleLine="true"
+	        android:text="出勤时间"
+	        android:textColor="#505050"
+	        android:textSize="14sp" />
+	    
+	    <TextView
+	        android:id="@+id/cq_state"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="@dimen/margin_small"
+	        android:ellipsize="end"
+	        android:singleLine="true"
+	        android:text="出勤状态"
+	        android:textColor="#505050"
+	        android:textSize="14sp" />
+    </LinearLayout>
+</RelativeLayout>

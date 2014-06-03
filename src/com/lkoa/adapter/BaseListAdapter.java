@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 
 public class BaseListAdapter<T> extends ArrayAdapter<T> {
-	public static final int COUNT_PER_PAGE = 10; 
+	public static int COUNT_PER_PAGE = 10; 
 	protected int mCurrPage;
 	protected int mItemCount;
 	protected int mPageCount;
@@ -63,6 +63,13 @@ public class BaseListAdapter<T> extends ArrayAdapter<T> {
 	public void setData(List<T> data) {
 		this.mDataList.clear();
 		mDataList.addAll(data);
+	}
+	
+	public void setCountPerPage(int coutPerPage) {
+		//设置每页显示item个数
+		if(coutPerPage > COUNT_PER_PAGE) {
+			COUNT_PER_PAGE = coutPerPage;
+		}
 	}
 	
 	public List<T> getData() {

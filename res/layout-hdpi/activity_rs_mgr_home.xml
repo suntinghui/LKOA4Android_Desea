@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/center_msg_home_bg" >
+
+    <!-- Navigation -->
+    <include layout="@layout/navigation" />
+    
+    <LinearLayout 
+        android:id="@+id/select_area"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dip"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="vertical">
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:layout_marginBottom="5dip">
+            <Button android:id="@+id/date_start"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/rs_mgr_btn_bg"
+                android:layout_weight="1"/>
+            <Button android:id="@+id/date_end"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:background="@drawable/rs_mgr_btn_bg"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="40dip">
+            <Button android:id="@+id/user_name"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="8dp"
+                android:textSize="18sp"
+                android:text="选择用户"
+                android:background="@drawable/rs_mgr_btn_bg"
+                android:layout_weight="1"/>
+            <Button android:id="@+id/search_start"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:background="@drawable/rs_mgr_btn_bg_btn"
+                android:text="检索数据"/>
+        </LinearLayout>
+        <TextView android:id="@+id/dept"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:textSize="18sp"
+            android:textColor="@color/gray"/>
+    </LinearLayout>
+    
+    <include layout="@layout/layout_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

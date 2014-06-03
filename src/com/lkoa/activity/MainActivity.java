@@ -210,6 +210,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			
 		case R.id.iv_mgr_people:
 			//人事管理
+			intent = new Intent(this, RSMgrHomeActivity.class);
+			startActivity(intent);
 			break;
 			
 		case R.id.tv_logout:
