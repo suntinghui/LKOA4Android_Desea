@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebSettings.LayoutAlgorithm;
+import android.webkit.WebSettings.TextSize;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -91,7 +92,8 @@ public class CenterMsgContentActivity extends CenterMsgBaseActivity {
 				mTitleView.setText(item.title);
 				mDateView.setText(item.date);
 				String encoding = "utf-8";
-//				mContentView.setInitialScale(25);
+				mContentView.setInitialScale(10);
+//				mContentView.getSettings().setTextSize(TextSize.SMALLEST);
 				mContentView.getSettings().setUseWideViewPort(true);
 
 				mContentView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.NORMAL);  

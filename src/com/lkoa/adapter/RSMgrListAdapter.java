@@ -44,7 +44,8 @@ public class RSMgrListAdapter extends BaseListAdapter<RSItem> {
 		
 		RSItem item = getItem(position);
 		if(item != null) {
-			holder.cqTimePos.setText((position+1) +". 出勤时间");
+//			holder.cqTimePos.setText((position+1) +". 出勤时间");
+			holder.cqTimePos.setText("出勤时间");
 			holder.cqTime.setText(item.dkTime);
 			holder.cqState.setText(item.dkType);
 		}
