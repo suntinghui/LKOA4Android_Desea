@@ -32,6 +32,7 @@ public class RSMgrHomeActivity extends CenterMsgBaseActivity implements OnClickL
 	private TextView mDeptName;
 	private ListView mListView;
 	private Button mCurrDatePending;
+	private TextView mNoDataView;
 	
 	private RSMgrListAdapter mAdapter;
 	
@@ -94,6 +95,7 @@ public class RSMgrHomeActivity extends CenterMsgBaseActivity implements OnClickL
 		mDateEnd = (Button) findViewById(R.id.date_end);
 		mUserName = (Button) findViewById(R.id.user_name);
 		mSearch = (Button) findViewById(R.id.search_start);
+		mNoDataView = (TextView) findViewById(R.id.no_data_view);
 		
 		mDeptName = (TextView) findViewById(R.id.dept);
 		mListView = (ListView) findViewById(android.R.id.list);
@@ -146,8 +148,12 @@ public class RSMgrHomeActivity extends CenterMsgBaseActivity implements OnClickL
 				mRSInfors = (RSInfors)obj;
 				if(mRSInfors.list.size() > 0) {
 					mDeptName.setText(mRSInfors.list.get(0).detpName);
+					mNoDataView.setVisibility(View.GONE);
+					mListView.setVisibility(View.VISIBLE);
 				} else {
 					mDeptName.setText("");
+					mNoDataView.setVisibility(View.VISIBLE);
+					mListView.setVisibility(View.GONE);
 				}
 				if(mAdapter == null) {
 					mAdapter = new RSMgrListAdapter(RSMgrHomeActivity.this, 0, mRSInfors.list);
