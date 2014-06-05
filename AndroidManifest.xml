@@ -12,28 +12,26 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
+
     <!-- 防止手机休眠 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    
+
     <!-- 手机访问网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    
+
     <!-- 以下是使用wifi访问网络所需要的权限 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+
     <!-- 允许一个程序安装packages -->
     <!-- <uses-permission android:name="android.permission.INSTALL_PACKAGES" /> -->
     <!-- 关闭整个应用程序，对２.１之前的有效 -->
@@ -41,16 +39,21 @@
     <!-- 开机自动启动 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-   <supports-screens android:anyDensity="true" android:largeScreens="true"
-       android:normalScreens="true" android:smallScreens="true" >
-   </supports-screens>
-   
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" >
+    </supports-screens>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-        <!-- <activity
+
+        <!--
+        <activity
             android:name="com.lkoa.activity.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
@@ -58,8 +61,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> -->
-       <activity
+        </activity>
+        -->
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent"
@@ -75,281 +79,282 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
             <intent-filter>
                 <action android:name="com.lkoa.LoginActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-      
-      <!-- 主界面 -->
-      <activity
+
+        <!-- 主界面 -->
+        <activity
             android:name=".activity.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      <activity android:name=".activity.AddressListActivity"  android:exported="true" android:launchMode="singleTask"
-          android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustPan">
-       		<intent-filter >
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.AddressListActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+            <intent-filter>
                 <action android:name="com.lkoa.AddressListActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-      </activity>
-      <!-- 信息中心首页 -->
-      <activity
+        </activity>
+        <!-- 信息中心首页 -->
+        <activity
             android:name=".activity.CenterMsgHomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 信息中心-集团新闻 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 信息中心-集团新闻 -->
+        <activity
             android:name=".activity.CenterMsgNewsActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 信息中心-通知信息 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 信息中心-通知信息 -->
+        <activity
             android:name=".activity.CenterMsgNoticeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 信息中心-部门之窗 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 信息中心-部门之窗 -->
+        <activity
             android:name=".activity.CenterMsgWindowDepartmentActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 信息中心-部门之窗-二级目录 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 信息中心-部门之窗-二级目录 -->
+        <activity
             android:name=".activity.CenterMsgWinDepartmentTwoActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      <!-- 信息中心-新闻内容 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 信息中心-新闻内容 -->
+        <activity
             android:name=".activity.CenterMsgContentActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      <!-- 流程办理-首页 -->
-      <activity
+            android:screenOrientation="sensor"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 流程办理-首页 -->
+        <activity
             android:name=".activity.ProcessWorkHomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 流程办理-列表页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 流程办理-列表页 -->
+        <activity
             android:name=".activity.ProcessWorkListActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 流程办理-详细页面 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 流程办理-详细页面 -->
+        <activity
             android:name=".activity.ProcessWorkHandleActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 流程办理-操作提交 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 流程办理-操作提交 -->
+        <activity
             android:name=".activity.ProcessWorkCommitActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 流程管理-节点选择 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 流程管理-节点选择 -->
+        <activity
             android:name=".activity.ProcessWorkNodeSelectActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 流程处理-部门选择 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 流程处理-部门选择 -->
+        <activity
             android:name=".activity.DepartmentSelectorActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      
-      <!-- 公文管理-首页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 公文管理-首页 -->
+        <activity
             android:name=".activity.DocMgrHomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      <!-- 我的短信-首页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 我的短信-首页 -->
+        <activity
             android:name=".activity.MyMessageHomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 我的短信-列表页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 我的短信-列表页 -->
+        <activity
             android:name=".activity.MyMessageListActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
             android:name=".activity.MyMessageWriteActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      <!-- 日程管理-首页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 日程管理-首页 -->
+        <activity
             android:name=".activity.ScheduleHomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 日程管理-列表页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 日程管理-列表页 -->
+        <activity
             android:name=".activity.ScheduleRCListActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 日程管理-内容页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 日程管理-内容页 -->
+        <activity
             android:name=".activity.ScheduleRCContentActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 日程管理-活动内容页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 日程管理-活动内容页 -->
+        <activity
             android:name=".activity.ScheduleActiveContentActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      
-      <!-- 我的邮件-首页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 我的邮件-首页 -->
+        <activity
             android:name=".activity.MyMailHomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 我的邮件-内部邮件-主界面 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 我的邮件-内部邮件-主界面 -->
+        <activity
             android:name=".activity.MyMailInternalMainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 我的邮件-内部邮件-列表页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 我的邮件-内部邮件-列表页 -->
+        <activity
             android:name=".activity.MyMailInternalListActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 我的邮件-内部邮件-内容页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 我的邮件-内部邮件-内容页 -->
+        <activity
             android:name=".activity.MyMailContentActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 我的邮件-写邮件 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 我的邮件-写邮件 -->
+        <activity
             android:name=".activity.MyMailWriteActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      
-      <!-- 通讯录-列表页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 通讯录-列表页 -->
+        <activity
             android:name=".activity.ContactsMainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 通讯录-联系人选择 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 通讯录-联系人选择 -->
+        <activity
             android:name=".activity.ContactsSelectorActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 通讯录-部门联系人 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 通讯录-部门联系人 -->
+        <activity
             android:name=".activity.ContactsDeptListActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      <!-- 通讯录-联系人详情 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 通讯录-联系人详情 -->
+        <activity
             android:name=".activity.ContactDetailsActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
-      <!-- 附件 - 内容页 -->
-      <activity
+        <!-- 附件 - 内容页 -->
+        <activity
             android:name=".activity.AttachmentShowActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
-      <!-- 人事管理 - 主页 -->
-      <activity
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- 人事管理 - 主页 -->
+        <activity
             android:name=".activity.RSMgrHomeActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:theme="@android:style/Theme.NoTitleBar" />
-      
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
     </application>
 
 </manifest>

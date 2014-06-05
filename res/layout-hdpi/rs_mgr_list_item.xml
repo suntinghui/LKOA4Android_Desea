@@ -38,7 +38,7 @@
     
     <LinearLayout 
         android:id="@+id/text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
         android:layout_alignParentRight="true"
@@ -52,6 +52,7 @@
 	        android:singleLine="true"
 	        android:text="出勤时间"
 	        android:textColor="#505050"
+	        android:gravity="right"
 	        android:textSize="14sp" />
 	    
 	    <TextView

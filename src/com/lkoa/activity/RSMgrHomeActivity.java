@@ -155,6 +155,7 @@ public class RSMgrHomeActivity extends CenterMsgBaseActivity implements OnClickL
 					mNoDataView.setVisibility(View.VISIBLE);
 					mListView.setVisibility(View.GONE);
 				}
+				
 				if(mAdapter == null) {
 					mAdapter = new RSMgrListAdapter(RSMgrHomeActivity.this, 0, mRSInfors.list);
 					mAdapter.setCountPerPage(mRSInfors.list.size());
