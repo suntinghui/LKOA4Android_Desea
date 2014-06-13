@@ -336,7 +336,8 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 		setActiveTab(INDEX_FORMS, true);
 		
 		//bottom
-		if(TextUtils.equals(mType, TYPE_GET_LCBD_PROCESS)) {
+		if(TextUtils.equals(mType, TYPE_GET_LCBD_PROCESS)
+				|| TextUtils.equals(mType, TYPE_GET_LCBD_MY_PENDING)) {
 			mViewBottom.setVisibility(View.VISIBLE);
 		}
 		mBtnSave.setOnClickListener(this);
