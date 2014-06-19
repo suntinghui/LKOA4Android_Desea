@@ -32,7 +32,6 @@
     	    android:layout_toLeftOf="@id/to_right_arrow"
     	    android:layout_marginLeft="@dimen/margin_middle_extra"
     	    android:layout_marginRight="@dimen/margin_middle_extra"
-    	    android:layout_centerVertical="true"
     	    android:text="内部"
     	    android:visibility="visible"
     	    style="@style/ProcessWorkFormsTitle" />

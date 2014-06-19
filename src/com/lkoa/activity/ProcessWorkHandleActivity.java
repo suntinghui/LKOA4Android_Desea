@@ -16,6 +16,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -429,6 +430,7 @@ public class ProcessWorkHandleActivity extends CenterMsgBaseActivity implements 
 			//先显示showContent的值，再在下面显示文本框让用户输入
 			contentText.setText(field.showContent);
 			contentText.setVisibility(View.VISIBLE);
+			contentText.setMovementMethod(ScrollingMovementMethod.getInstance());
 			contentEdit.setVisibility(View.VISIBLE);
 			bottomSpinner.setVisibility(View.VISIBLE);
 			contentEdit.setText(field.value);
