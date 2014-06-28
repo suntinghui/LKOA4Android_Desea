@@ -43,6 +43,7 @@ public class CenterMsgNewsActivity extends CenterMsgBaseListActivity<CenterMsgNe
 	public static final int LIST_TYPE_PUBLIC = 1;	//集团公告
 	public static final int LIST_TYPE_NOTICE = 2;	//通知信息
 	public static final int LIST_TYPE_WIN_DEPARTMENT = 3;	//部门之窗
+	public static final int LIST_TYPE_DOC = 4;	//文档中心
 	
 	private int mListType = LIST_TYPE_NEWS;
 	
@@ -163,11 +164,15 @@ public class CenterMsgNewsActivity extends CenterMsgBaseListActivity<CenterMsgNe
 			retArray[1] = R.string.more_notice;
 			break;
 			
+		case LIST_TYPE_DOC:
+			//文档中心
 		case LIST_TYPE_WIN_DEPARTMENT:
-		default:
 			//部门之窗
 			retArray[0] = R.string.latest_msg;
 			retArray[1] = R.string.more_msg;
+			break;
+			
+		default:
 			break;
 		}
 		
@@ -263,8 +268,9 @@ public class CenterMsgNewsActivity extends CenterMsgBaseListActivity<CenterMsgNe
 	
 	private void setupAdapter() {
 		if(mListType == LIST_TYPE_PUBLIC 
-				|| mListType == LIST_TYPE_WIN_DEPARTMENT) {
-			//集团公告和部门之窗不显示图标
+				|| mListType == LIST_TYPE_WIN_DEPARTMENT
+				|| mListType == LIST_TYPE_DOC) {
+			//集团公告、文档中心、部门之窗不显示图标
 			if(mLatestNewsAdapter != null) mLatestNewsAdapter.setShowIconFlag(false);
 			if(mMoreNewsAdapter != null) mMoreNewsAdapter.setShowIconFlag(false);
 		}

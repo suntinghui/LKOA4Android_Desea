@@ -22,13 +22,12 @@ import com.lkoa.model.BDCBTable.Row;
 import com.lkoa.model.CenterMsgNewsItem;
 import com.lkoa.model.ContactItem;
 import com.lkoa.model.DepartmentItem;
+import com.lkoa.model.DocItem;
 import com.lkoa.model.IdCountItem;
 import com.lkoa.model.JTHDContentItem;
 import com.lkoa.model.MailContentItemInfo;
 import com.lkoa.model.MailItemInfo;
 import com.lkoa.model.ProcessContentInfo;
-import com.lkoa.model.RSInfors;
-import com.lkoa.model.RSItem;
 import com.lkoa.model.ProcessContentInfo.Activity;
 import com.lkoa.model.ProcessContentInfo.Field;
 import com.lkoa.model.ProcessContentInfo.Option;
@@ -36,6 +35,8 @@ import com.lkoa.model.ProcessContentInfo.User;
 import com.lkoa.model.ProcessItem;
 import com.lkoa.model.RCContentItem;
 import com.lkoa.model.RCListItem;
+import com.lkoa.model.RSInfors;
+import com.lkoa.model.RSItem;
 import com.lkoa.model.SmsMessage;
 import com.lkoa.model.WindowDepartmentItem;
 import com.lkoa.util.LogUtil;
@@ -91,6 +92,10 @@ public class ParseResponseXML {
 			case TransferRequestTag.GET_BMZC:
 				//信息中心-部门之窗条数
 				return getBMZC();
+				
+			case TransferRequestTag.GET_WDZX:
+				//信息中心-文档中心
+				return getWDZX();
 				
 			case TransferRequestTag.GET_LCGL_COUNT:
 				//流程管理-条数
@@ -531,6 +536,63 @@ public class ParseResponseXML {
 		parseWinDept(parser, list);
 		
 		return list;
+	}
+	
+	/**
+	 * 信息中心-部门之窗条数
+	 */
+	private static Object getWDZX() throws XmlPullParserException, IOException{
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		
+		List<DocItem> list = new ArrayList<DocItem>();
+		parseDocCenter(parser, list);
+		
+		return list;
+	}
+	
+	private static void parseDocCenter(XmlPullParser parser, List<DocItem> list) throws XmlPullParserException, IOException {
+		int eventType = parser.getEventType();
+		if(eventType == XmlPullParser.END_DOCUMENT) return;
+		
+		DocItem item = null;
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				if ("Infors".equalsIgnoreCase(parser.getName())) {
+					if(item != null) {
+						parseDocCenter(parser, item.list);
+					}
+					
+				} else if ("Infor".equalsIgnoreCase(parser.getName())) {
+					item = new DocItem();
+					
+				} else if("id".equalsIgnoreCase(parser.getName())) {
+					//栏目序号
+					item.id = parser.nextText();
+					
+				} else if("name".equalsIgnoreCase(parser.getName())) {
+					//栏目名称
+					item.name = parser.nextText();
+					
+				} else if("count".equalsIgnoreCase(parser.getName())) {
+					//数量
+					item.count = parser.nextText();
+				}
+				break;
+				
+			case XmlPullParser.END_TAG:
+				if("Infors".equalsIgnoreCase(parser.getName())) {
+					return;
+					
+				} else if("Infor".equalsIgnoreCase(parser.getName())) {
+					list.add(item);
+					item = null;
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
 	}
 	
 	private static void parseWinDept(XmlPullParser parser, List<WindowDepartmentItem> list) throws XmlPullParserException, IOException {

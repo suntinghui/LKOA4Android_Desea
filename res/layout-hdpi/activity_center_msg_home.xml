@@ -23,6 +23,11 @@
         android:id="@+id/center_msg_notice"
         layout="@layout/center_msg_home_item" />
     
+    <!-- 文档中心 -->
+    <include 
+        android:id="@+id/center_msg_doc"
+        layout="@layout/center_msg_home_item" />
+    
     <!-- 部门之窗 -->
     <include 
         android:id="@+id/center_msg_window_department"

@@ -153,4 +153,27 @@ public class CenterMsgManager {
 			}
 		});
 	}
+	
+	/**
+	 * 信息中心-文档中心
+	 */
+	public void getWDZX(String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.GET_WDZX);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		LKHttpRequest req1 = new LKHttpRequest(map, handler);
+		new LKHttpRequestQueue().addHttpRequest(req1)
+		.executeQueue("正在加载数据..", new LKHttpRequestQueueDone(){
+
+			@Override
+			public void onComplete() {
+				super.onComplete();
+			}
+		});
+	}
 }
