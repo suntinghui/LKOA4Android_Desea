@@ -148,6 +148,23 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 信息中心-文档中心 -->
+        <activity
+            android:name=".activity.CenterMsgDocActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <!-- 信息中心-文档中心-二级目录 -->
+        <activity
+            android:name=".activity.CenterMsgDocTwoActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        
 
         <!-- 信息中心-新闻内容 -->
         <activity

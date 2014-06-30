@@ -27,6 +27,7 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 		R.string.center_msg_news,
 		R.string.center_msg_public,
 		R.string.center_msg_notice,
+		R.string.center_msg_doc,
 		R.string.center_msg_window_department
 	};
 	
@@ -34,6 +35,7 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 		R.drawable.ic_center_msg_news,
 		R.drawable.ic_center_msg_public,
 		R.drawable.ic_center_msg_notice,
+		R.drawable.ic_window_d_planning_design,
 		R.drawable.ic_center_msg_window_department,
 	};
 	
@@ -42,10 +44,11 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 		R.drawable.center_msg_public_item_bg,
 		R.drawable.center_msg_notice_item_bg,
 		R.drawable.center_msg_window_dep_item_bg,
+		R.drawable.process_w_revocation_box_bg, 
 	};
 	
 	private CenterMsgManager mCenterMsgMgr;
-	private View [] mItemViews = new View[4];
+	private View [] mItemViews = new View[5];
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,8 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 		mItemViews[0] = findViewById(R.id.center_msg_news);
 		mItemViews[1] = findViewById(R.id.center_msg_public);
 		mItemViews[2] = findViewById(R.id.center_msg_notice);
-		mItemViews[3] = findViewById(R.id.center_msg_window_department);
+		mItemViews[3] = findViewById(R.id.center_msg_doc);
+		mItemViews[4] = findViewById(R.id.center_msg_window_department);
 	}
 	
 	@Override
@@ -145,6 +149,11 @@ public class CenterMsgHomeActivity extends CenterMsgBaseActivity implements OnCl
 			//集团通知
 			CenterMsgNewsActivity.start(this, R.string.center_msg_notice, 
 					null, CenterMsgNewsActivity.LIST_TYPE_NOTICE);
+			break;
+			
+		case R.id.center_msg_doc:
+			//文档中心
+			startActivity(new Intent(this, CenterMsgDocActivity.class));
 			break;
 			
 		case R.id.center_msg_window_department:
