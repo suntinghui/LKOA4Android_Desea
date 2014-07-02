@@ -105,6 +105,10 @@ public class ParseResponseXML {
 				//流程管理-列表
 				return getLCList();
 				
+			case TransferRequestTag.ALL_RECEIVE:
+				//流程管理-我的待办-一键接收
+				return allReceive();
+				
 			case TransferRequestTag.GET_LCBD:
 				//流程管理-流程表单
 				return getLCBD();
@@ -712,6 +716,29 @@ public class ParseResponseXML {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * 流程管理-我的待办-一键接收
+	 */
+	private static Object allReceive() throws XmlPullParserException, IOException{
+		String retVal = "0";
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(inStream, "UTF-8");
+		int eventType = parser.getEventType();// 产生第一个事件
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			switch (eventType) {
+			case XmlPullParser.START_TAG:
+				//TODO: 设置retVal的值
+				if ("AllReceiveResult".equalsIgnoreCase(parser.getName())) {
+					retVal = parser.nextText();
+				}
+				break;
+			}
+			eventType = parser.next();
+		}
+		
+		return retVal;
 	}
 	
 	/**

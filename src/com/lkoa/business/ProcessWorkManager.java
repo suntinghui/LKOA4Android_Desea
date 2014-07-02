@@ -50,6 +50,21 @@ public class ProcessWorkManager {
 	}
 	
 	/**
+	 * 流程管理-列表
+	 */
+	public void allReceive(String sUserId, final LKAsyncHttpResponseHandler handler) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(Constant.kWEBSERVICENAME, "WebService.asmx");
+		map.put(Constant.kMETHODNAME, TransferRequestTag.ALL_RECEIVE);
+		
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("sUserId", sUserId);
+		map.put(Constant.kPARAMNAME, paramMap);
+		
+		execute("正在加载数据..", map, handler);
+	}
+	
+	/**
 	 * 流程管理-流程表单
 	 */
 	public void getLCBD(String sType, String infoId, String sUserId, final LKAsyncHttpResponseHandler handler) {

@@ -100,6 +100,7 @@
 	<string name="process_work_node_mode_dr">单人签发模式</string>
 	<string name="process_work_next_node_select">下级节点选择</string>
 	<string name="process_work_department_select">部门选择</string>
+	<string name="process_work_one_key">一键接收</string>
 	
 	<!-- 公文办理 -->
 	<string name="doc_mgr_title">公文管理</string>

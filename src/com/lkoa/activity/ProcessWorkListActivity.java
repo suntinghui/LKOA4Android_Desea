@@ -6,10 +6,13 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.lkoa.R;
 import com.lkoa.adapter.BaseListAdapter;
@@ -19,6 +22,8 @@ import com.lkoa.client.LKAsyncHttpResponseHandler;
 import com.lkoa.model.ProcessItem;
 
 public class ProcessWorkListActivity extends CenterMsgBaseListActivity<ProcessItem> implements OnItemClickListener {
+	
+	private static final String TYPE_TODO = "0";
 	
 	private ListView mListView = null;
 	
@@ -42,11 +47,8 @@ public class ProcessWorkListActivity extends CenterMsgBaseListActivity<ProcessIt
 		findViews();
 		setupViews();
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
+	
+	private void loadData() {
 		mProcessWorkMgr.getLCList(mType, mApp.getUserId(), new LKAsyncHttpResponseHandler() {
 			
 			@Override
@@ -66,8 +68,19 @@ public class ProcessWorkListActivity extends CenterMsgBaseListActivity<ProcessIt
 					mAdapter.notifyDataSetInvalidated();
 					mAdapter.notifyDataSetChanged();
 				}
+				if(list.size() < 1) {
+					mTvRight2.setClickable(false);
+				} else {
+					mTvRight2.setClickable(true);
+				}
 			}
 		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		loadData();
 	}
 	
 	@Override
@@ -80,8 +93,35 @@ public class ProcessWorkListActivity extends CenterMsgBaseListActivity<ProcessIt
 	@Override
 	protected void setupViews() {
 		super.setupViews();
-		
 		mTvTitle.setText(mTitleResId);
+		
+		if(TextUtils.equals(mType, TYPE_TODO)) {
+			mLinearRight.setVisibility(View.VISIBLE);
+			mTvRight1.setVisibility(View.INVISIBLE);
+			mTvRight2.setText(R.string.process_work_one_key);
+			mTvRight2.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//一键接收
+					mProcessWorkMgr.allReceive(mApp.getUserId(), new LKAsyncHttpResponseHandler() {
+						
+						@Override
+						public void successAction(Object obj) {
+							String result = (String) obj;
+							if(TextUtils.equals(result, "1")) {
+								//接收成功
+								showToast("一键接收成功！");
+								mAdapter.clear();
+							} else {
+								//接收失败
+								showToast("一键接收失败！");
+							}
+						}
+					});
+				}
+			});
+			mTvRight2.setClickable(false);
+		}
 	}
 
 	@Override
