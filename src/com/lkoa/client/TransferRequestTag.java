@@ -41,6 +41,7 @@ public class TransferRequestTag {
 	public static final int DEL_MAIL = 32;	//我的邮件-内部邮件-删除
 	public static final int GET_KAO_QIN = 33;	//人事管理-考勤记录
 	public static final int GET_WDZX = 34;	//信息中心-文档中心
+	public static final int ALL_RECEIVE = 35;	//我的待办-一键接收
 	
 	private static HashMap<Integer, String> requestTagMap 	= null;
 	
@@ -82,6 +83,7 @@ public class TransferRequestTag {
 			requestTagMap.put(GET_GLLC_LIST, "GetGLLCList");
 			requestTagMap.put(GET_KAO_QIN, "GetKaoQin");
 			requestTagMap.put(GET_WDZX, "GetWDZX");
+			requestTagMap.put(ALL_RECEIVE, "AllReceive");
 			
 		}
 		
