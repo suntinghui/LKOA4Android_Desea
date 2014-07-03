@@ -4,7 +4,7 @@ public class Constant {
 	
 	// 要相应的更新string.xml中的 versionstr 字段
 	// 当前系统的版本号
-	public static final int VERSION				= 19;
+	public static final int VERSION				= 20;
 	
 	// http://124.205.53.178:9596/lkoa5/WapService/
 	public static final String DEFAULTHOST		= "http://oa.desea.cn:8080/LKOA6/";
